@@ -7,7 +7,15 @@ function Public:update()
     self.obj:setState('running')
   end
 
+  if self.obj.attacking then self.obj:setState('attacking') end
 
+
+end
+
+function Public:start()
+end
+
+function Public:exit()
 end
 
 return Public
