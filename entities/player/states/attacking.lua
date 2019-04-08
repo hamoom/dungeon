@@ -6,12 +6,12 @@ Public.attackTimer = 0
 
 function Public:update()
 
-  self.obj.vx = 0
-  self.obj.vy = 0
+  self.ent.vx = 0
+  self.ent.vy = 0
 
   self.attackTimer = self.attackTimer - m.dt
   if self.attackTimer <= 0 then
-    self.obj:setState('stopped')
+    self.ent:setState('stopped')
   end
 end
 
@@ -19,15 +19,15 @@ function Public:start()
   self.attackTimer = 2
 
 
-  self.obj.sword.active = true
-  self.obj.sword.isVisible = true
+  self.ent.sword.active = true
+  self.ent.sword.isVisible = true
 
 end
 
 function Public:exit()
-  self.obj.sword.active = false
-  self.obj.sword.isVisible = false
-  self.obj.attacking = false
+  self.ent.sword.active = false
+  self.ent.sword.isVisible = false
+  self.ent.attacking = false
 end
 
 

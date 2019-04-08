@@ -6,7 +6,8 @@ local widget = require('widget')
 
 local scene = composer.newScene()
 
-local Player = require('objects.player.object')
+local Player = require('entities.player.entity')
+local Blob = require('entities.blob.entity')
 
 
 local physics = require('physics')
@@ -20,7 +21,10 @@ dusk.setPreference('enableObjectCulling', false)
 dusk.setPreference('cullingMargin', 2)
 
 local mapContainer = display.newGroup()
-local map = dusk.buildMap('levels/test.json')
+m.map = dusk.buildMap('levels/test.json')
+
+-- TODO FIX THIS I GUESS
+local map = m.map
 
 --------------------------------------------
 
@@ -31,7 +35,7 @@ local screenW, screenH, halfW = display.actualContentWidth, display.actualConten
 
 local joystick, joystickBase, joystickKnob, attackBtn
 local joystickPos = p.new(0,0)
-local player, blob
+local blob
 local easeX, easeY
 local lastUpdate = 0
 local screenTouched, joystickMoved, joystickStopped, update, getDeltaTime
@@ -49,16 +53,10 @@ function scene:create(event)
 	local sceneGroup = self.view
 	sceneGroup:insert(mapContainer)
 	player = Player.new(map.layer['meh'], screenW/2, screenH/2)
-
-
 	player:addEventListener('collision', onCollision)
 
-	blob = display.newRect(map.layer['meh'], screenW/2+100, screenH/2+100, 32, 32)
-	blob:setFillColor(1,1,0)
-  physics.addBody(blob, 'dynamic', {
-    bounce = 0
-  })
-  blob.isFixedRotation = true
+
+	blob = Blob.new(map.layer['meh'], screenW/2+100, screenH/2+100)
 
 	map.setCameraFocus(player)
 	map.setTrackingLevel(0.07)
@@ -215,6 +213,8 @@ function update()
 		display.remove(blob)
 		blob = nil
 	end
+
+	if blob then blob:update(player) end
 
  	map.updateView()
 end

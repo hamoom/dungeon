@@ -2,7 +2,7 @@ local p = require('lib.point')
 local physics = require('physics')
 local Public = {}
 local player
-local stateList = require('objects.player.states.list')
+local stateList = require('entities.player.states.list')
 local states
 
 function Public.new(group, x, y)
@@ -24,7 +24,6 @@ function Public.new(group, x, y)
   player.sword:setFillColor(1,0,0)
 
   function player:setState(state)
-
     local newState = states:getState(state)
     if player.state.name ~= newState.name then
       player.state:exit(newState)

@@ -1,10 +1,10 @@
-local stopped = require('objects.player.states.stopped')
-local running = require('objects.player.states.running')
-local attacking = require('objects.player.states.attacking')
+local stopped = require('entities.player.states.stopped')
+local running = require('entities.player.states.running')
+local attacking = require('entities.player.states.attacking')
 
 local Public = {}
 
-function Public.new(obj)
+function Public.new(ent)
 
   local list = {
     stopped = stopped,
@@ -13,7 +13,7 @@ function Public.new(obj)
   }
 
   for _, v in pairs(list) do
-    v.obj = obj
+    v.ent = ent
   end
 
   function list:getState(state)
@@ -22,6 +22,5 @@ function Public.new(obj)
 
   return list
 end
-
 
 return Public
