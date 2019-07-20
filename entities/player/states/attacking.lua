@@ -5,29 +5,35 @@ Public.name = 'attacking'
 Public.attackTimer = 0
 
 function Public:update()
+  local ent = self.ent
 
-  self.ent.vx = 0
-  self.ent.vy = 0
+  ent.speed = ent.speed * 0.8
+  ent:setLinearVelocity(ent.vx * ent.speed, ent.vy * ent.speed)
 
   self.attackTimer = self.attackTimer - m.dt
   if self.attackTimer <= 0 then
-    self.ent:setState('stopped')
+    ent:setState('stopped')
   end
 end
 
 function Public:start()
-  self.attackTimer = 2
+  local ent = self.ent
 
 
-  self.ent.sword.active = true
-  self.ent.sword.isVisible = true
+  -- ent:setLinearVelocity(0,0)
 
+  ent.sword.active = true
+  ent.sword.isVisible = true
+
+  self.attackTimer = 0.25
 end
 
 function Public:exit()
-  self.ent.sword.active = false
-  self.ent.sword.isVisible = false
-  self.ent.attacking = false
+  local ent = self.ent
+
+  ent.sword.active = false
+  ent.sword.isVisible = false
+  ent.attacking = false
 end
 
 

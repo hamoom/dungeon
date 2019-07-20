@@ -8,20 +8,25 @@ local states
 
 function Public.new(group, x, y)
 
-  local blob = display.newCircle(group, x, x, 16)
+
+  local blob = display.newRect(group, 100, 100, 32, 32)
   blob:setFillColor(0,1,0)
 
   physics.addBody(blob, 'dynamic', {
-    bounce = 0
+    bounce = 1,
   })
+  blob.name = 'blob'
+  blob.linearDamping = 8
   blob.isFixedRotation = true
+  blob.running = false
 
 
-  function blob:setState(state)
+  function blob:setState(state, player)
+
     local newState = states:getState(state)
     if blob.state.name ~= newState.name then
       blob.state:exit(newState)
-      newState:start()
+      newState:start(player)
       blob.state = newState
     end
   end

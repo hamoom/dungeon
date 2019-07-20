@@ -1,6 +1,6 @@
 local wandering = require('entities.blob.states.wandering')
--- local running = require('entities.player.states.running')
--- local attacking = require('entities.player.states.attacking')
+local injured = require('entities.blob.states.injured')
+local attacking = require('entities.blob.states.attacking')
 
 local Public = {}
 
@@ -8,8 +8,8 @@ function Public.new(ent)
 
   local list = {
     wandering = wandering,
-    -- running = running,
-    -- attacking = attacking
+    injured = injured,
+    attacking = attacking
   }
 
   for _, v in pairs(list) do

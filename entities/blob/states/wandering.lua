@@ -6,33 +6,44 @@ Public.name = 'wandering'
 
 local coord
 local velocity
+local speed = 100
 
-function Public:findCoord(player)
+function Public:findCoord()
+  local ent = self.ent
   return p.new(
-    h.clamp(self.ent.x + math.random(-100, 100), 64, m.map.data.width-64),
-    h.clamp(self.ent.y + math.random(-100, 100), 64, m.map.data.height-64)
+    h.clamp(ent.x + math.random(-100, 100), 64, m.map.data.width-64),
+    h.clamp(ent.y + math.random(-100, 100), 64, m.map.data.height-64)
   )
 end
 
 function Public:update(player)
+  local ent = self.ent
+
   if not coord then
-    coord = self:findCoord(player)
-    velocity = p.newFromSubtraction(coord, self.ent):normalized():multiply(100)
+    coord = self:findCoord()
+    velocity = p.newFromSubtraction(coord, ent):normalized():multiply(speed)
   end
 
-  local hits = physics.rayCast(self.ent.x, self.ent.y, coord.x, coord.y, 'closest')
-  if hits then coord = nil end
+  local hits = physics.rayCast(ent.x, ent.y, coord.x, coord.y, 'closest')
+
+  if hits then
+    coord = nil
+  end
 
   if velocity and not hits then
     local vx, vy = velocity:getPosition()
-    self.ent:setLinearVelocity(vx, vy)
+    ent:setLinearVelocity(vx, vy)
 
-    local distanceToCoord = p.new(self.ent):distanceTo(coord)
+    local distanceToCoord = p.new(ent):distanceTo(coord)
 
     if distanceToCoord < 2 then
       coord = nil
       velocity = nil
     end
+  end
+
+  if p.new(ent):distanceTo(player) < 120 then
+      ent:setState('attacking', player)
   end
 
 end

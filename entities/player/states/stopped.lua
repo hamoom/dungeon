@@ -3,11 +3,20 @@ Public.name = 'stopped'
 
 function Public:update()
 
-  if self.ent.vx > 0 or self.ent.vy > 0 then
-    self.ent:setState('running')
+  local ent = self.ent
+  ent.speed = ent.speed * 0.9
+
+
+  if math.abs(ent.vx) > 0 or math.abs(ent.vy) > 0 then
+    ent:setState('running')
   end
 
-  if self.ent.attacking then self.ent:setState('attacking') end
+  ent:setLinearVelocity(
+    ent.lastVx * ent.speed,
+    ent.lastVy * ent.speed
+  )
+
+  if ent.attacking then ent:setState('attacking') end
 
 
 end

@@ -31,14 +31,13 @@ local map = m.map
 -- forward declarations and other locals
 local screenW, screenH, halfW = display.actualContentWidth, display.actualContentHeight, display.contentCenterX
 
-
-
 local joystick, joystickBase, joystickKnob, attackBtn
+local direction = { x = nil, y = nil }
 local joystickPos = p.new(0,0)
 local blob
 local easeX, easeY
 local lastUpdate = 0
-local screenTouched, joystickMoved, joystickStopped, update, getDeltaTime
+local screenTouched, joystickMoved, joystickStopped, update, getDeltaTime, keysPressed
 
 
 
@@ -54,18 +53,20 @@ function scene:create(event)
 	sceneGroup:insert(mapContainer)
 	player = Player.new(map.layer['meh'], screenW/2, screenH/2)
 	player:addEventListener('collision', onCollision)
+	player:addEventListener('preCollision', preCollision)
 
 
 	blob = Blob.new(map.layer['meh'], screenW/2+100, screenH/2+100)
 
 	map.setCameraFocus(player)
 	map.setTrackingLevel(0.07)
+	local padding = 30
 
 	map.setCameraBounds({
-		xMin = display.contentWidth/2,
-		xMax = map.data.width - display.contentWidth/2,
-		yMin = display.contentHeight/2,
-		yMax = map.data.height - display.contentHeight/2
+		xMin = display.contentWidth/2 - padding,
+		xMax = map.data.width - display.contentWidth/2 + padding,
+		yMin = display.contentHeight/2 - padding,
+		yMax = map.data.height - display.contentHeight/2 + padding
 	})
 
 	mapContainer:insert(map)
@@ -140,9 +141,29 @@ function scene:destroy(event)
 	physics = nil
 end
 
+function preCollision(event)
+	if event.phase == 'began' then
+		if event.other.name == 'blob' then
+			if not event.other.isAttacking then
+				print('meh')
+				player:setLinearVelocity(0,0)
+			end
+		end
+	end
+end
+
 function onCollision(event)
 	if event.phase == 'began' then
-		print(event.object1, event.object2)
+		if event.other.name == 'blob' then
+
+			if event.other.isAttacking then
+				player:setState('injured', event.other)
+
+			end
+
+		end
+
+		-- print(event.object1, event.object2)
 	end
 end
 
@@ -159,9 +180,11 @@ function screenTouched(event)
 end
 
 function joystickMoved(event)
+
 	joystickPos
 		:setPosition(event.x, event.y)
 		:subtract(joystickBase)
+
 
 	local length = joystickPos:length()
 	local maxDist = 40
@@ -181,6 +204,8 @@ function joystickMoved(event)
     joystickPos:
 	    normalized():
 	    multiply(lengthDiff, lengthDiff)
+
+
   end
 
 end
@@ -188,6 +213,7 @@ end
 function joystickStopped()
 	joystickKnob.x, joystickKnob.y = joystickBase.x, joystickBase.y
 	joystickPos:setPosition(0,0)
+	player:setState('stopped')
 end
 
 function getDeltaTime()
@@ -203,15 +229,25 @@ function getDeltaTime()
     end
 end
 
+function keysPressed(event)
+
+	if event.phase == 'down' then
+		if event.keyName == 'space' then
+			player.attacking = true
+		end
+	end
+end
+
 function update()
 	getDeltaTime()
 
-	local vx, vy = joystickPos:normalized():multiply(200):getPosition()
-	player:update(vx, vy)
+	local vx, vy = joystickPos:normalized():getPosition()
+	player:update(vx, vy, blob)
 
 	if h.hasCollided(player.sword, blob) and player.sword.active then
-		display.remove(blob)
-		blob = nil
+		-- display.remove(blob)
+		-- blob = nil
+		blob:setState('injured', player)
 	end
 
 	if blob then blob:update(player) end
@@ -227,6 +263,7 @@ scene:addEventListener('show', scene)
 scene:addEventListener('hide', scene)
 scene:addEventListener('destroy', scene)
 
+Runtime:addEventListener('key', keysPressed)
 Runtime:addEventListener('touch', screenTouched)
 
 -----------------------------------------------------------------------------------------
