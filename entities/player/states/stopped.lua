@@ -16,6 +16,11 @@ function Public:update()
     ent.lastVy * ent.speed
   )
 
+  -- ent:setLinearVelocity(
+  --   0,
+  --   0
+  -- )
+
   if ent.attacking then ent:setState('attacking') end
 
 

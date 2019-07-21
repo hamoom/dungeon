@@ -4,7 +4,7 @@ local h = require('lib.helper')
 local Public = {}
 Public.name = 'attacking'
 
-
+local impulseSpeed = 100
 function Public:update(player)
   local ent = self.ent
   -- ent:setLinearVelocity(0, 0)
@@ -16,16 +16,16 @@ function Public:start(player)
   ent:setLinearVelocity(0, 0)
 
   local diff
-  timer.performWithDelay(500, function()
+  timer.performWithDelay(1500, function()
     diff = p.newFromSubtraction(player, ent):normalize()
   end, 1)
 
 
   self.attackTimer = timer.performWithDelay(2000, function()
-    ent:applyLinearImpulse(0.4 * diff.x, 0.4 * diff.y, ent.x, ent.y)
     ent.isAttacking = true
+    ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
-    timer.performWithDelay(1000, function()
+    timer.performWithDelay(500, function()
       ent:setState('wandering')
     end, 1)
 
@@ -34,6 +34,7 @@ function Public:start(player)
 end
 
 function Public:exit()
+
   local ent = self.ent
   ent.isAttacking = false
   timer.cancel(self.attackTimer)

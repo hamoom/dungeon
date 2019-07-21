@@ -13,7 +13,8 @@ function Public.new(group, x, y)
   blob:setFillColor(0,1,0)
 
   physics.addBody(blob, 'dynamic', {
-    bounce = 1,
+    bounce = 0.5,
+    density = 2
   })
   blob.name = 'blob'
   blob.linearDamping = 8

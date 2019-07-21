@@ -6,11 +6,13 @@ local widget = require('widget')
 
 local scene = composer.newScene()
 
+local joystick =  require('ui.joystick'):new()
 local Player = require('entities.player.entity')
 local Blob = require('entities.blob.entity')
 
 
 local physics = require('physics')
+-- physics.setDrawMode('hybrid')
 physics.start()
 
 
@@ -30,14 +32,11 @@ local map = m.map
 
 -- forward declarations and other locals
 local screenW, screenH, halfW = display.actualContentWidth, display.actualContentHeight, display.contentCenterX
-
-local joystick, joystickBase, joystickKnob, attackBtn
-local direction = { x = nil, y = nil }
-local joystickPos = p.new(0,0)
+local attack
 local blob
 local easeX, easeY
 local lastUpdate = 0
-local screenTouched, joystickMoved, joystickStopped, update, getDeltaTime, keysPressed
+local screenTouched, update, getDeltaTime, keysPressed, resetLinearVelocity
 
 
 
@@ -71,12 +70,8 @@ function scene:create(event)
 
 	mapContainer:insert(map)
 
-	joystick = display.newGroup()
-	sceneGroup:insert(joystick)
-	joystick.alpha = 0.3
-	joystickBase = display.newCircle(joystick, 70, screenH-50, 40)
-	joystickKnob = display.newCircle(joystick, joystickBase.x, joystickBase.y, 25)
-	joystickKnob:setFillColor(1,0,0)
+
+	sceneGroup:insert(joystick.group)
 
 	attackBtn = widget.newButton({
 		width = 60,
@@ -142,28 +137,32 @@ function scene:destroy(event)
 end
 
 function preCollision(event)
-	if event.phase == 'began' then
+	if player.state.name == 'running' then
+		event.contact.bounce = 0
 		if event.other.name == 'blob' then
-			if not event.other.isAttacking then
-				print('meh')
-				player:setLinearVelocity(0,0)
+			if event.other.isAttacking then
+				event.contact.bounce = 1
+			else
+				event.contact.bounce = 0
 			end
 		end
 	end
 end
 
+
+
 function onCollision(event)
+
 	if event.phase == 'began' then
+
+
 		if event.other.name == 'blob' then
-
 			if event.other.isAttacking then
-				player:setState('injured', event.other)
 
+				-- player:setState('injured', event.other)
 			end
 
 		end
-
-		-- print(event.object1, event.object2)
 	end
 end
 
@@ -171,50 +170,15 @@ function screenTouched(event)
   local left = (event.x < display.contentWidth/2) and true or false
 	if left then
 		if event.phase == 'began' or event.phase == 'moved' then
-		  joystickMoved(event)
+		  joystick:moved(event.x, event.y)
 		elseif event.phase == 'ended' then
-			joystickStopped()
+			joystick:stopped()
+			player:setState('stopped')
 		end
 	end
 
 end
 
-function joystickMoved(event)
-
-	joystickPos
-		:setPosition(event.x, event.y)
-		:subtract(joystickBase)
-
-
-	local length = joystickPos:length()
-	local maxDist = 40
-	local adjustedLength = h.clamp(length, 0, maxDist)
-
-	joystickKnob.x, joystickKnob.y = joystickPos
-																		:normalized()
-																		:multiply(adjustedLength)
-																		:getPosition()
-
-	joystickKnob.x = joystickKnob.x + joystickBase.x
-	joystickKnob.y = joystickKnob.y + joystickBase.y
-
-  if length > maxDist then
-    local lengthDiff = length - adjustedLength
-
-    joystickPos:
-	    normalized():
-	    multiply(lengthDiff, lengthDiff)
-
-
-  end
-
-end
-
-function joystickStopped()
-	joystickKnob.x, joystickKnob.y = joystickBase.x, joystickBase.y
-	joystickPos:setPosition(0,0)
-	player:setState('stopped')
-end
 
 function getDeltaTime()
     if lastUpdate == 0 then
@@ -241,16 +205,18 @@ end
 function update()
 	getDeltaTime()
 
-	local vx, vy = joystickPos:normalized():getPosition()
+	local vx, vy = joystick.pos:normalized():getPosition()
 	player:update(vx, vy, blob)
 
+	if blob then blob:update(player) end
 	if h.hasCollided(player.sword, blob) and player.sword.active then
-		-- display.remove(blob)
-		-- blob = nil
 		blob:setState('injured', player)
 	end
 
-	if blob then blob:update(player) end
+	if h.hasCollided(player, blob) and blob.isAttacking then
+		player:setState('injured', player)
+	end
+
 
  	map.updateView()
 end

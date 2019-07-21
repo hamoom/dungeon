@@ -18,6 +18,7 @@ end
 
 function Public:update(player)
   local ent = self.ent
+  
 
   if not coord then
     coord = self:findCoord()

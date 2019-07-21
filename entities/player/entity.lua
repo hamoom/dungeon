@@ -16,7 +16,7 @@ function Public.new(group, x, y)
   -- player.physicsBody:setFillColor(1,0,0)
   player.name = 'player'
   player.speed = 0
-  player.maxSpeed = 100
+  player.maxSpeed = 150
   player.x, player.y = x,y
   player.lastX, player.lastY = x,y
 
@@ -28,7 +28,8 @@ function Public.new(group, x, y)
 
 
   physics.addBody(player, 'dynamic', {
-    bounce = 1
+    bounce = 1,
+    radius = 14
   })
   player.isFixedRotation = true
   player.linearDamping = 8
@@ -50,10 +51,11 @@ function Public.new(group, x, y)
 
   function player:update(vx, vy, blob)
     player.vx, player.vy = vx, vy
+
+
     self.state:update(blob)
 
 
-    -- end
 
 
 

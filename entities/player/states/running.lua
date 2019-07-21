@@ -23,34 +23,29 @@ end
 function Public:update(blob)
 
   local ent = self.ent
-  if ent.speed < 30 then
+  if ent.speed <= 30 then
     ent.speed = 30
   end
 
   ent.speed = ent.speed * 1.1
   if ent.speed > ent.maxSpeed then ent.speed = ent.maxSpeed end
 
+
   ent:setLinearVelocity(
     ent.vx * ent.speed,
     ent.vy * ent.speed
   )
 
+  -- ent.
 
-  -- local hits = physics.rayCast(ent.x, ent.y, ent.x+30, ent.y+30, 'closest')
+  -- local liney = display.newLine(ent.parent, ent.x, ent.y, ent.x + ent.vx*17, ent.y + ent.vy*17)
+  -- liney:setStroke(1,0,0)
+  -- local hits = physics.rayCast(ent.x, ent.y, ent.x + ent.vx*17, ent.y + ent.vy*17, 'closest')
 
-  -- local mag = getMagnitudeInRect(p.new(ent.vx, ent.vy):angleRad(), ent.width, ent.height)
-  -- print(mag)
-  local liney = display.newLine(ent.parent, ent.x, ent.y, ent.x + ent.vx*21, ent.y + ent.vy*21)
-  liney:setStroke(1,0,0)
-  local hits = physics.rayCast(ent.x, ent.y, ent.x + ent.vx*21, ent.y + ent.vy*21, 'closest')
+  -- if hits then ent:setLinearVelocity(0,0) end
 
 
-  -- print(hits)
-  if hits then
-    print('here')
-     ent:setLinearVelocity(0,0)
-   end
-
+   -- ent.blee = false
   local real_vx, real_vy = ent.x - ent.lastX, ent.y - ent.lastY
   -- if math.abs(real_vx) > 0 and math.abs(real_vy) > 0 then
 
