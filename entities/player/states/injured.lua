@@ -1,30 +1,36 @@
 local p = require('lib.point')
 local Public = {}
-Public.name = 'injured'
 
-function Public:update()
 
-  local ent = self.ent
+function Public:new(ent)
+  local State = {}
+  State.name = 'injured'
+
+
+  function State:update()
+  end
+
+  function State:start(enemy)
+
+    local diff = p.newFromSubtraction(ent, enemy):normalize()
+    diff.x = diff.x + (math.random(-100, 100) / 100)
+    diff.y = diff.y + (math.random(-100, 100) / 100)
+
+    ent:setLinearVelocity(0,0)
+    ent:applyLinearImpulse(0.2 * diff.x, 0.2  * diff.y, ent.x, ent.y)
+    ent.alpha = 0.3
+    timer.performWithDelay(500, function()
+      ent.alpha = 1
+      ent:setState('stopped')
+    end, 1)
+  end
+
+  function State:exit()
+    ent.attacking = false
+  end
+
+  return State
 end
 
-function Public:start(enemy)
-  local ent = self.ent
-  ent.speed = 0
-  local diff = p.newFromSubtraction(ent, enemy):normalize()
-  -- local diff = {x = math.random(), y = math.random()}
-
-  -- ent:setLinearVelocity(0,0)
-  ent:applyLinearImpulse(0.6 * diff.x, 0.6  * diff.y, ent.x, ent.y)
-  ent.alpha = 0.3
-  timer.performWithDelay(500, function()
-    ent.alpha = 1
-    ent:setState('stopped')
-  end, 1)
-end
-
-function Public:exit()
-  local ent = self.ent
-  ent.attacking = false
-end
 
 return Public

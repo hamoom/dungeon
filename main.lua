@@ -5,6 +5,8 @@
 -----------------------------------------------------------------------------------------
 
 -- hide the status bar
+
+system.activate('multitouch')
 display.setStatusBar(display.HiddenStatusBar)
 
 -- include the Corona "composer" module

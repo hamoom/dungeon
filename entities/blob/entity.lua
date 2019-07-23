@@ -1,15 +1,12 @@
 local p = require('lib.point')
 local physics = require('physics')
 local Public = {}
-local blob
-local stateList = require('entities.blob.states.list')
-local states
+local stateList = require('entities.create-states')
 
+function Public.new(group, x, y, player, id)
 
-function Public.new(group, x, y)
-
-
-  local blob = display.newRect(group, 100, 100, 32, 32)
+  local blob = display.newRect(group, x, y, 32, 32)
+  blob.id = id
   blob:setFillColor(0,1,0)
 
   physics.addBody(blob, 'dynamic', {
@@ -20,6 +17,12 @@ function Public.new(group, x, y)
   blob.linearDamping = 8
   blob.isFixedRotation = true
   blob.running = false
+
+  local stateNames = {'attacking', 'injured', 'stopped'}
+  local states = stateList.new(blob, stateNames)
+
+  blob.state = states:getState('stopped')
+  blob.state:start(player)
 
 
   function blob:setState(state, player)
@@ -36,9 +39,10 @@ function Public.new(group, x, y)
     self.state:update(player)
   end
 
-  states = stateList.new(blob)
-  blob.state = states:getState('wandering')
+
   return blob
+
+
 end
 
 

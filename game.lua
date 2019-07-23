@@ -12,8 +12,9 @@ local Blob = require('entities.blob.entity')
 
 
 local physics = require('physics')
--- physics.setDrawMode('hybrid')
+
 physics.start()
+physics.setGravity(0, 0)
 
 
 local dusk = require('Dusk.Dusk')
@@ -25,7 +26,6 @@ dusk.setPreference('cullingMargin', 2)
 local mapContainer = display.newGroup()
 m.map = dusk.buildMap('levels/test.json')
 
--- TODO FIX THIS I GUESS
 local map = m.map
 
 --------------------------------------------
@@ -33,20 +33,12 @@ local map = m.map
 -- forward declarations and other locals
 local screenW, screenH, halfW = display.actualContentWidth, display.actualContentHeight, display.contentCenterX
 local attack
-local blob
+local blobs = {}
 local easeX, easeY
 local lastUpdate = 0
 local screenTouched, update, getDeltaTime, keysPressed, resetLinearVelocity
 
-
-
 function scene:create(event)
-
-	physics.setGravity(0, 0)
-	-- Called when the scene's view does not exist.
-	--
-	-- INSERT code here to initialize the scene
-	-- e.g. add display objects to 'sceneGroup', add touch listeners, etc.
 
 	local sceneGroup = self.view
 	sceneGroup:insert(mapContainer)
@@ -55,7 +47,23 @@ function scene:create(event)
 	player:addEventListener('preCollision', preCollision)
 
 
-	blob = Blob.new(map.layer['meh'], screenW/2+100, screenH/2+100)
+	local validLocations = {}
+	for tile in m.map.layer['ground'].tilesInRange(0, 0, m.map.data.width, m.map.data.height) do
+		if tile.gid ~= 51 then
+			validLocations[#validLocations+1] = tile
+		end
+	end
+
+
+	for i = 1, 3, 1 do
+		local location = math.random(1, #validLocations)
+		local tile = validLocations[location]
+		local newNum = #blobs+1
+		local blob = Blob.new(map.layer['meh'], tile.x, tile.y, player, newNum)
+
+		blobs[newNum] = blob
+
+	end
 
 	map.setCameraFocus(player)
 	map.setTrackingLevel(0.07)
@@ -138,13 +146,17 @@ end
 
 function preCollision(event)
 	if player.state.name == 'running' then
-		event.contact.bounce = 0
-		if event.other.name == 'blob' then
-			if event.other.isAttacking then
-				event.contact.bounce = 1
-			else
-				event.contact.bounce = 0
+		if event.contact then
+			event.contact.bounce = 0
+
+			if event.other.name == 'blob' then
+				if event.other.isAttacking then
+					event.contact.bounce = 1
+				else
+					event.contact.bounce = 0
+				end
 			end
+
 		end
 	end
 end
@@ -206,15 +218,24 @@ function update()
 	getDeltaTime()
 
 	local vx, vy = joystick.pos:normalized():getPosition()
-	player:update(vx, vy, blob)
+	player:update(vx, vy)
 
-	if blob then blob:update(player) end
-	if h.hasCollided(player.sword, blob) and player.sword.active then
-		blob:setState('injured', player)
-	end
+	if #blobs > 0 then
+			for _, blob in pairs(blobs) do
 
-	if h.hasCollided(player, blob) and blob.isAttacking then
-		player:setState('injured', player)
+				blob:update(player)
+
+				if h.hasCollided(player.sword, blob) and player.sword.active then
+					blob:setState('injured', player)
+				end
+
+				if h.hasCollided(player, blob) and blob.isAttacking then
+					player:setState('injured', blob)
+				end
+
+			end
+
+
 	end
 
 
