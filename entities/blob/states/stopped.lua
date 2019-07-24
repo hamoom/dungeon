@@ -6,13 +6,12 @@ local Public = {}
 function Public:new(ent)
   local State = {}
   State.name = 'stopped'
-  State.ent = ent
 
   function State:update(player)
 
   end
 
-  function State:start(player)
+  function State:start(player)    
     if not self.firstRun then self.firstRun = math.random(2000, 4000) end
     local timeLimit = self.firstRun or 2000
     self.timer = timer.performWithDelay(timeLimit, function()

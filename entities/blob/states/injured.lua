@@ -10,15 +10,12 @@ function Public:new(ent)
 
   local State = {}
   State.name = 'injured'
-  State.ent = ent
 
   function State:update()
 
   end
 
   function State:start(player)
-    local ent = State.ent
-
     ent.alpha = 0.3
     ent:setLinearVelocity(0, 0)
 
@@ -31,7 +28,7 @@ function Public:new(ent)
     end, 1)
   end
 
-  function State:exit()    
+  function State:exit()
     ent.alpha = 1
   end
 

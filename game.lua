@@ -229,7 +229,7 @@ function update()
 					blob:setState('injured', player)
 				end
 
-				if h.hasCollided(player, blob) and blob.isAttacking then
+				if h.hasCollided(player.display, blob) and blob.isAttacking then
 					player:setState('injured', blob)
 				end
 

@@ -50,8 +50,8 @@ function Public:new(ent)
         ent.isAttacking = true
         ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
-        timer.performWithDelay(500, function()
-          ent:setState('stopped', player)
+        timer.performWithDelay(200, function()
+          ent:setState('stopped', player)          
         end, 1)
       end
 
