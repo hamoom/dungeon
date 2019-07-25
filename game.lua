@@ -43,7 +43,6 @@ function scene:create(event)
 	local sceneGroup = self.view
 	sceneGroup:insert(mapContainer)
 	player = Player.new(map.layer['meh'], screenW/2, screenH/2)
-	player:addEventListener('collision', onCollision)
 	player:addEventListener('preCollision', preCollision)
 
 
@@ -161,19 +160,23 @@ function preCollision(event)
 	end
 end
 
-
-
 function onCollision(event)
-
 	if event.phase == 'began' then
+		local obj1, obj2 = event.object1, event.object2
+		if obj1.name == 'blob' and not obj1.isColliding then
+			obj1.isColliding = true
+			obj1.coord = nil
+			timer.performWithDelay(200, function()
+				obj1.isColliding = false
+			end, 1)
 
-
-		if event.other.name == 'blob' then
-			if event.other.isAttacking then
-
-				-- player:setState('injured', event.other)
-			end
-
+		end
+		if obj2.name == 'blob' and not obj2.isColliding then
+			obj2.isColliding = true
+			obj2.coord = nil
+			timer.performWithDelay(200, function()
+				obj2.isColliding = false
+			end, 1)
 		end
 	end
 end
@@ -252,6 +255,8 @@ scene:addEventListener('destroy', scene)
 
 Runtime:addEventListener('key', keysPressed)
 Runtime:addEventListener('touch', screenTouched)
+
+Runtime:addEventListener('collision', onCollision)
 
 -----------------------------------------------------------------------------------------
 

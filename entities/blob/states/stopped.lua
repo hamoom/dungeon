@@ -11,11 +11,13 @@ function Public:new(ent)
 
   end
 
-  function State:start(player)    
-    if not self.firstRun then self.firstRun = math.random(2000, 4000) end
-    local timeLimit = self.firstRun or 2000
-    self.timer = timer.performWithDelay(timeLimit, function()
-      ent:setState('attacking', player)
+  function State:start(player)
+    self.timer = timer.performWithDelay(1000, function()
+      if p.new(ent):distanceTo(player) < ent.attackDistance then
+        ent:setState('attacking', player)
+      else
+        ent:setState('wandering', player)
+      end
     end, 1)
   end
 

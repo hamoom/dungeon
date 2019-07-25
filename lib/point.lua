@@ -15,8 +15,8 @@ local function createXAndY(arg)
         end
     elseif arg.n == 2 then
         x,y = arg[1], arg[2]
-    else 
-        error("incorrect parameter count")
+    else
+        error("incorrect parameter count, check you used colon")
     end
     return x,y
 end
@@ -25,12 +25,12 @@ local function createXandYNonMut(arg)
     local x1,y1,x2,y2
     if arg.n == 2 then
         x1,y1 = arg[1].x, arg[1].y
-        x2,y2 = arg[2].x, arg[2].y   
+        x2,y2 = arg[2].x, arg[2].y
     elseif arg.n == 4 then
         x1,y1 = arg[1], arg[2]
         x2,y2 = arg[3], arg[4]
     else
-        error("incorrect parameter count")
+        error("incorrect parameter count, check you used colon")
     end
     return x1,y1,x2,y2
 end
@@ -151,22 +151,20 @@ function Point:getPositionRounded()
 end
 
 function Point:setPosition(...)
-    self.x, self.y = createXAndY(arg) 
+    self.x, self.y = createXAndY(arg)
     return self
 end
 
 function Point.shortestAngleBetween(target, source)
    local a = target - source
-   
+
    if (a > 180) then
       a = a - 360
    elseif (a < -180) then
       a = a + 360
    end
-   
+
    return a
 end
 
 return Point
-
-
