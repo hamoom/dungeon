@@ -6,28 +6,23 @@ local widget = require('widget')
 
 local scene = composer.newScene()
 
-local health =  require('ui.health'):new()
-local joystick = require('ui.joystick'):new()
+local health =  require('ui.health')
+local joystick = require('ui.joystick').new()
 local Player = require('entities.player.entity')
 local Blob = require('entities.blob.entity')
 
 
 local physics = require('physics')
-
 physics.start()
 physics.setGravity(0, 0)
-
 
 local dusk = require('Dusk.Dusk')
 dusk.setPreference('virtualObjectsVisible', false)
 dusk.setPreference('enableObjectCulling', false)
-
 dusk.setPreference('cullingMargin', 2)
-
-local mapContainer = display.newGroup()
 m.map = dusk.buildMap('levels/test.json')
 
-local map = m.map
+local mapContainer = display.newGroup()
 
 --------------------------------------------
 
@@ -41,30 +36,58 @@ local screenTouched, update, getDeltaTime, keysPressed, resetLinearVelocity
 
 function scene:create(event)
 
+
 	local sceneGroup = self.view
 	sceneGroup:insert(mapContainer)
-	health.x, health.y = 0, 20
+
+	health = health.new()
 	sceneGroup:insert(health)
 	sceneGroup:insert(joystick)
 
-	mapContainer:insert(map)
+	local pauseButton = widget.newButton({
+			x=display.contentWidth-40,
+			y=30,
+			width=30,
+			height=30,
+			shape="rect",
+			onPress=function(event)
+				scene:pauseToggle()
+				event.target:setEnabled(false)
+				timer.performWithDelay(1000, function()
+					event.target:setEnabled(true)
+				end,1)
+			end
+	})
+
+	-- lets not spam pausing
+	pauseButton:setEnabled(false)
+	timer.performWithDelay(1200, function()
+		pauseButton:setEnabled(true)
+	end,1)
+
+	pauseButton:setFillColor(1,1,1)
+	sceneGroup:insert(pauseButton)
+
+	mapContainer:insert(m.map)
 
 
 	local padding = 30
 
-	map.setCameraBounds({
+	m.map.setCameraBounds({
 		xMin = display.contentWidth/2 - padding,
-		xMax = map.data.width - display.contentWidth/2 + padding,
+		xMax = m.map.data.width - display.contentWidth/2 + padding,
 		yMin = display.contentHeight/2 - padding,
-		yMax = map.data.height - display.contentHeight/2 + padding
+		yMax = m.map.data.height - display.contentHeight/2 + padding
 	})
 
 
-	player = Player.new(map.layer['meh'], screenW/2, screenH/2)
+	player = Player.new(m.map.layer['meh'], screenW/2, screenH/2)
 	player:addEventListener('preCollision', preCollision)
 
-	map.setCameraFocus(player)
-	map.setTrackingLevel(0.07)
+	health:setHealth(player.health)
+
+	m.map.setCameraFocus(player)
+	m.map.setTrackingLevel(0.07)
 
 	local validLocations = {}
 	for tile in m.map.layer['ground'].tilesInRange(0, 0, m.map.data.width, m.map.data.height) do
@@ -78,7 +101,7 @@ function scene:create(event)
 		local location = math.random(1, #validLocations)
 		local tile = validLocations[location]
 		local newNum = #blobs+1
-		local blob = Blob.new(map.layer['meh'], tile.x, tile.y, player, newNum)
+		local blob = Blob.new(m.map.layer['meh'], tile.x, tile.y, player, newNum)
 
 		blobs[newNum] = blob
 
@@ -101,6 +124,20 @@ function scene:create(event)
 
 end
 
+function scene:pauseToggle()
+	m.pause()
+	if m.paused then
+		joystick.isVisible = false
+		Runtime:removeEventListener("enterFrame", update)
+		Runtime:removeEventListener("touch", screenTouched)
+		Runtime:removeEventListener('key', keysPressed)
+	else
+		joystick.isVisible = true
+		Runtime:addEventListener("enterFrame", update)
+		Runtime:addEventListener("touch", screenTouched)
+		Runtime:addEventListener('key', keysPressed)
+	end
+end
 
 function scene:show(event)
 	local sceneGroup = self.view
@@ -126,6 +163,8 @@ function scene:hide(event)
 	if event.phase == 'will' then
 		Runtime:removeEventListener('enterFrame', update)
 		Runtime:removeEventListener('collision', onCollision)
+		Runtime:removeEventListener('key', keysPressed)
+		Runtime:removeEventListener('touch', screenTouched)
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
 		physics.stop()
@@ -137,14 +176,21 @@ end
 
 function scene:destroy(event)
 
-	-- Called prior to the removal of scene's 'view' (sceneGroup)
-	--
-	-- INSERT code here to cleanup the scene
-	-- e.g. remove display objects, remove touch listeners, save state, etc.
 	local sceneGroup = self.view
 
-	package.loaded[physics] = nil
-	physics = nil
+	m.cancelAllTimers()
+
+	for _, blob in pairs(blobs) do
+		if blob.destroy then blob:destroy() end
+	end
+
+	health:destroy()
+	player:destroy()
+	m.map.destroy()
+
+	-- package.loaded[physics] = nil
+	-- physics = nil
+
 end
 
 function preCollision(event)
@@ -224,6 +270,12 @@ function keysPressed(event)
 	end
 end
 
+function gameOver(event)
+	m.addTimer(100, function()
+		composer.gotoScene('retry', { time = 0, params = { fadeTime = 500 }})
+	end)
+end
+
 function update()
 	getDeltaTime()
 
@@ -249,7 +301,7 @@ function update()
 	end
 
 
- 	map.updateView()
+ 	m.map.updateView()
 end
 
 ---------------------------------------------------------------------------------
@@ -264,6 +316,8 @@ Runtime:addEventListener('key', keysPressed)
 Runtime:addEventListener('touch', screenTouched)
 
 Runtime:addEventListener('collision', onCollision)
+
+Runtime:addEventListener('gameOver', gameOver)
 
 -----------------------------------------------------------------------------------------
 

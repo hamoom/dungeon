@@ -39,6 +39,11 @@ function Public.new(group, x, y, player, id)
     self.state:update(player)
   end
 
+  function blob:destroy()
+    transition.cancel(self)
+    display.remove(self)
+  end
+
   return blob
 end
 

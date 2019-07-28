@@ -45,14 +45,14 @@ function Public:new(ent)
         else
           ent:setFillColor(0,1,0)
         end
-        self.attackTimer = timer.performWithDelay(totalTime, flash, 1)
+        self.attackTimer = m.addTimer(totalTime, flash)
       else
         ent.isAttacking = true
         ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
-        timer.performWithDelay(200, function()
+        m.addTimer(200, function()
           ent:setState('stopped', player)
-        end, 1)
+        end)
       end
 
     end
@@ -63,7 +63,7 @@ function Public:new(ent)
   end
 
   function State:exit()
-    timer.cancel(self.attackTimer)
+    m.cancelTimer(self.attackTimer)
     ent:setFillColor(0,1,0)
     ent.isLit = false
     ent.isAttacking = false

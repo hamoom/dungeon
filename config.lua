@@ -6,6 +6,7 @@
 
 local aspectRatio = display.pixelWidth / display.pixelHeight
 local mult = 10^(2)
+local scaleDown = 1.5
 aspectRatio = math.floor(aspectRatio * mult + 0.5) / mult
 
 local height = (aspectRatio >= 0.75) and 512 or 568
@@ -13,13 +14,15 @@ if (aspectRatio < 0.48) then
   height = 660
 end
 
+local width = (aspectRatio >= 0.75) and 384 or 320
+
  application =
 {
 
 	content =
 	{
-        width = (aspectRatio >= 0.75) and 384 or 320,
-        height = height,
+        width = width * scaleDown,
+        height = height * scaleDown,
         scale = (aspectRatio >= 0.75) and "letterbox" or "dynamic",
         xAlign = "center",
         yAlign = "center",

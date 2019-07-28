@@ -19,9 +19,9 @@ function Public:new(ent)
 
     ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
-    timer.performWithDelay(1000, function()
+    m.addTimer(1000, function()
       ent:setState('stopped', player)
-    end, 1)
+    end)
   end
 
   function State:exit()

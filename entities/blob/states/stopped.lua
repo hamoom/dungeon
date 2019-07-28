@@ -10,17 +10,17 @@ function Public:new(ent)
   end
 
   function State:start(player)
-    self.timer = timer.performWithDelay(1000, function()
+    self.timer = m.addTimer(1000, function()
       if p.new(ent):distanceTo(player) < ent.attackDistance then
         ent:setState('attacking', player)
       else
         ent:setState('wandering', player)
       end
-    end, 1)
+    end)
   end
 
   function State:exit(player)
-    timer.cancel(self.timer)
+    m.cancelTimer(self.timer)
   end
 
 
