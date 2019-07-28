@@ -5,10 +5,8 @@ local Public = {}
 
 function Public:new(ent)
   local State = {}
-  State.name = 'stopped'
 
   function State:update(player)
-
   end
 
   function State:start(player)

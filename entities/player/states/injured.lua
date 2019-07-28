@@ -4,7 +4,6 @@ local Public = {}
 
 function Public:new(ent)
   local State = {}
-  State.name = 'injured'
 
 
   function State:update()
@@ -28,6 +27,7 @@ function Public:new(ent)
   function State:exit()
     ent.attacking = false
   end
+
 
   return State
 end

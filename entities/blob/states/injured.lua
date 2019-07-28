@@ -3,19 +3,15 @@ local p = require('lib.point')
 local h = require('lib.helper')
 local Public = {}
 
-
-local impulseSpeed = 100
-
 function Public:new(ent)
-
   local State = {}
-  State.name = 'injured'
 
   function State:update()
-
   end
 
   function State:start(player)
+    local impulseSpeed = 100
+
     ent.alpha = 0.3
     ent:setLinearVelocity(0, 0)
 

@@ -4,9 +4,8 @@ local Public = {}
 
 function Public:new(ent)
   local State = {}
-  State.name = 'attacking'
-  State.attackTimer = 0
 
+  State.attackTimer = 0
 
   function State:update()
 
@@ -20,10 +19,6 @@ function Public:new(ent)
   end
 
   function State:start()
-
-
-    -- ent:setLinearVelocity(0,0)
-
     ent.sword.active = true
     ent.sword.isVisible = true
 
@@ -36,6 +31,7 @@ function Public:new(ent)
     ent.sword.isVisible = false
     ent.attacking = false
   end
+
 
   return State
 end

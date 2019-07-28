@@ -6,7 +6,8 @@ local widget = require('widget')
 
 local scene = composer.newScene()
 
-local joystick =  require('ui.joystick'):new()
+local health =  require('ui.health'):new()
+local joystick = require('ui.joystick'):new()
 local Player = require('entities.player.entity')
 local Blob = require('entities.blob.entity')
 
@@ -42,9 +43,28 @@ function scene:create(event)
 
 	local sceneGroup = self.view
 	sceneGroup:insert(mapContainer)
+	health.x, health.y = 0, 20
+	sceneGroup:insert(health)
+	sceneGroup:insert(joystick)
+
+	mapContainer:insert(map)
+
+
+	local padding = 30
+
+	map.setCameraBounds({
+		xMin = display.contentWidth/2 - padding,
+		xMax = map.data.width - display.contentWidth/2 + padding,
+		yMin = display.contentHeight/2 - padding,
+		yMax = map.data.height - display.contentHeight/2 + padding
+	})
+
+
 	player = Player.new(map.layer['meh'], screenW/2, screenH/2)
 	player:addEventListener('preCollision', preCollision)
 
+	map.setCameraFocus(player)
+	map.setTrackingLevel(0.07)
 
 	local validLocations = {}
 	for tile in m.map.layer['ground'].tilesInRange(0, 0, m.map.data.width, m.map.data.height) do
@@ -63,22 +83,6 @@ function scene:create(event)
 		blobs[newNum] = blob
 
 	end
-
-	map.setCameraFocus(player)
-	map.setTrackingLevel(0.07)
-	local padding = 30
-
-	map.setCameraBounds({
-		xMin = display.contentWidth/2 - padding,
-		xMax = map.data.width - display.contentWidth/2 + padding,
-		yMin = display.contentHeight/2 - padding,
-		yMax = map.data.height - display.contentHeight/2 + padding
-	})
-
-	mapContainer:insert(map)
-
-
-	sceneGroup:insert(joystick.group)
 
 	attackBtn = widget.newButton({
 		width = 60,
@@ -184,7 +188,10 @@ end
 function screenTouched(event)
   local left = (event.x < display.contentWidth/2) and true or false
 	if left then
-		if event.phase == 'began' or event.phase == 'moved' then
+		if event.phase == 'began' then
+			joystick.x, joystick.y = event.x, event.y
+			joystick:makeJoystick()
+		elseif event.phase == 'moved' then
 		  joystick:moved(event.x, event.y)
 		elseif event.phase == 'ended' then
 			joystick:stopped()

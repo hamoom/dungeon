@@ -1,53 +1,64 @@
 local p = require('lib.point')
 local h = require('lib.helper')
-local Joystick = {}
+local Public = {}
 
-function Joystick:new()
-  self.group = display.newGroup()
+function Public:new()
+  local joystick = display.newGroup()
 
-  local screenH = display.actualContentHeight
-	self.group.alpha = 0.3
-	self.base = display.newCircle(self.group, 70, screenH-50, 40)
-	self.knob = display.newCircle(self.group, self.base.x, self.base.y, 25)
-	self.knob:setFillColor(1,0,0)
-  self.pos = p.new(0,0)
+  function joystick:moved(x, y)
 
-  return self
-end
-
-function Joystick:moved(x, y)
-
-  self.pos
-    :setPosition(x, y)
-    :subtract(self.base)
+    joystick.pos
+      :setPosition(x, y)
+      :subtract(self)
 
 
-  local length = self.pos:length()
-  local maxDist = 40
-  local adjustedLength = h.clamp(length, 0, maxDist)
+    local length = self.pos:length()
+    local maxDist = 40
+    local adjustedLength = h.clamp(length, 0, maxDist)
 
-  self.knob.x, self.knob.y = self.pos
-                              :normalized()
-                              :multiply(adjustedLength)
-                              :getPosition()
+    self.knob.x, self.knob.y =
+      self.pos
+        :normalized()
+        :multiply(adjustedLength)
+        :getPosition()
 
-  self.knob.x = self.knob.x + self.base.x
-  self.knob.y = self.knob.y + self.base.y
 
-  if length > maxDist then
-    local lengthDiff = length - adjustedLength
+    if length > maxDist then
+      local lengthDiff = length - adjustedLength
 
-  self.pos:
-    normalized():
-    multiply(lengthDiff, lengthDiff)
+      self.pos
+        :normalized()
+        :multiply(lengthDiff, lengthDiff)
+
+      self.x, self.y =
+        p.new(self)
+          :add(self.pos)
+          :getPosition()
+    end
+
+  end
+
+  function joystick:makeJoystick()
+      self.pos:setPosition(0, 0)
+      transition.to(self, {alpha=0.7, time=500})
+  end
+
+  function joystick:stopped()
+    self.knob.x, self.knob.y = self.base.x, self.base.y
+    self.pos:setPosition(0,0)
+    transition.fadeOut(self, {time=500})
   end
 
 
+  joystick.alpha = 0
+	joystick.base = display.newCircle(joystick, 0, 0, 40)
+	joystick.knob = display.newCircle(joystick, 0, 0, 25)
+	joystick.knob:setFillColor(1,0,0)
+  joystick.pos = p.new(0,0)
+  return joystick
 end
 
-function Joystick:stopped()
-  self.knob.x, self.knob.y = self.base.x, self.base.y
-  self.pos:setPosition(0,0)
-end
 
-return Joystick
+
+
+return Public

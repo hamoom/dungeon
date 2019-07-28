@@ -5,10 +5,8 @@ local p = require('lib.point')
 
 function Public:new(ent)
   local State = {}
-  State.name = 'running'
 
   function State:update()
-
 
     if ent.speed <= 30 then
       ent.speed = 30
@@ -62,6 +60,7 @@ function Public:new(ent)
     ent.lastVx = ent.vx
     ent.lastVy = ent.vy
   end
+
 
   return State
 end

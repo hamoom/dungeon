@@ -6,8 +6,9 @@ local stateList = require('entities.create-states')
 function Public.new(group, x, y, player, id)
 
   local blob = display.newRect(group, x, y, 32, 32)
+
   blob.id = id
-  blob.attackDistance = 100
+  blob.attackDistance = 170
   blob:setFillColor(0,1,0)
 
   physics.addBody(blob, 'dynamic', {
@@ -21,13 +22,10 @@ function Public.new(group, x, y, player, id)
 
   local stateNames = {'attacking', 'injured', 'stopped', 'wandering', 'colliding'}
   local states = stateList.new(blob, stateNames)
-
   blob.state = states:getState('wandering')
   blob.state:start(player)
 
-
   function blob:setState(state, player)
-
     local newState = states:getState(state)
 
     if blob.state.name ~= newState.name then
@@ -41,10 +39,7 @@ function Public.new(group, x, y, player, id)
     self.state:update(player)
   end
 
-
   return blob
-
-
 end
 
 

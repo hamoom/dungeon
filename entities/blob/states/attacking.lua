@@ -7,7 +7,7 @@ local Public = {}
 function Public:new(ent)
 
   local State = {}
-  State.name = 'attacking'
+
   State.initialTime = 1
   State.flashTime = 1
 
@@ -23,7 +23,7 @@ function Public:new(ent)
     ent.isLit = false
     ent:setLinearVelocity(0, 0)
 
-    local totalTime = 500
+    local totalTime = 300
 
     local diff
 
@@ -51,7 +51,7 @@ function Public:new(ent)
         ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
         timer.performWithDelay(200, function()
-          ent:setState('stopped', player)          
+          ent:setState('stopped', player)
         end, 1)
       end
 
