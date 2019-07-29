@@ -25,11 +25,7 @@ function Public.new(group, x, y)
 
   physics.addBody(player, 'dynamic', {
     bounce = 1,
-    radius = 14,
-    filter = {
-      -- categoryBits = 1,
-      -- maskBits = 2
-    }
+    radius = 14
   })
   player.isFixedRotation = true
   player.linearDamping = 8
