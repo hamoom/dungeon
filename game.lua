@@ -37,7 +37,6 @@ local screenTouched, update, getDeltaTime, keysPressed, resetLinearVelocity
 
 function scene:create(event)
 
-
 	local sceneGroup = self.view
 	sceneGroup:insert(mapContainer)
 
@@ -84,11 +83,11 @@ function scene:create(event)
 	for object in m.map.layer['entities'].objects() do
 
 		if object.type == 'player' then
-			player = Player.new(m.map.layer['meh'], object.x, object.y)
+			player = Player.new(m.map.layer['entities'], object.x, object.y)
 			player:addEventListener('preCollision', preCollision)
 		elseif object.type == 'blob' then
 			local newNum = #blobs+1
-			local blob = Blob.new(m.map.layer['meh'], object.x, object.y, player, newNum)
+			local blob = Blob.new(m.map.layer['entities'], object.x, object.y, player, newNum)
 			blobs[newNum] = blob
 		end
 	end
@@ -100,8 +99,8 @@ function scene:create(event)
 	m.map.setTrackingLevel(0.07)
 
 	attackBtn = widget.newButton({
-		width = 60,
-		height = 60,
+		width = 90,
+		height = 90,
 		onPress = function(event)
 			if event.phase == 'began' then
 				player.attacking = true
@@ -109,11 +108,12 @@ function scene:create(event)
 		end
 	})
 
-	attackBtn.x = display.contentWidth - 70
-	attackBtn.y = screenH-50
+	attackBtn.x = display.contentWidth - 90
+	attackBtn.y = screenH-80
 	sceneGroup:insert(attackBtn)
-	attackBtn.visual = display.newRect(sceneGroup, attackBtn.x, attackBtn.y, attackBtn.width, attackBtn.height)
 
+	attackBtn.visual = display.newRect(sceneGroup, attackBtn.x, attackBtn.y, attackBtn.width, attackBtn.height)
+	attackBtn.visual.alpha = 0.4
 end
 
 function scene:pauseToggle()
