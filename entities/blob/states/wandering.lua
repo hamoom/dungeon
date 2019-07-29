@@ -5,12 +5,13 @@ local Public = {}
 
 function Public:new(ent)
   local State = {}
-  
+
   State.curAngle = nil
   State.rotationSpeed = 200
-  State.speed = 50
+  State.speed = 80
   State.range = 300
 
+  local line
   function State:update(player)
     local entLocation = p.new(ent)
 
@@ -18,6 +19,7 @@ function Public:new(ent)
       ent:setLinearVelocity(0,0)
       ent.coord = h.findValidCoord(ent, m.map, self.range)
     else
+      -- if line then display.remove(line) end
 
       if not self.curAngle then
         self.curAngle = p.newFromSubtraction(ent.coord, ent):angle()
@@ -38,9 +40,11 @@ function Public:new(ent)
 
       local direction = p.newFromAng(self.curAngle)
 
+      -- line = display.newLine(ent.parent, ent.x, ent.y, ent.coord.x, ent.coord.y)
+
       ent:setLinearVelocity(direction.x * self.speed, direction.y * self.speed)
       if entLocation:distanceTo(ent.coord) < 32 then
-        ent.coord = h.findValidCoord(ent, m.map, self.range)
+        ent.coord = nil
       end
     end
 

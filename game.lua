@@ -19,6 +19,7 @@ physics.setGravity(0, 0)
 local dusk = require('Dusk.Dusk')
 dusk.setPreference('virtualObjectsVisible', false)
 dusk.setPreference('enableObjectCulling', false)
+-- dusk.setPreference('enableTileCulling', false)
 dusk.setPreference('cullingMargin', 2)
 m.map = dusk.buildMap('levels/test.json')
 
@@ -80,32 +81,23 @@ function scene:create(event)
 		yMax = m.map.data.height - display.contentHeight/2 + padding
 	})
 
+	for object in m.map.layer['entities'].objects() do
 
-	player = Player.new(m.map.layer['meh'], screenW/2, screenH/2)
-	player:addEventListener('preCollision', preCollision)
+		if object.type == 'player' then
+			player = Player.new(m.map.layer['meh'], object.x, object.y)
+			player:addEventListener('preCollision', preCollision)
+		elseif object.type == 'blob' then
+			local newNum = #blobs+1
+			local blob = Blob.new(m.map.layer['meh'], object.x, object.y, player, newNum)
+			blobs[newNum] = blob
+		end
+	end
+
 
 	health:setHealth(player.health)
 
 	m.map.setCameraFocus(player)
 	m.map.setTrackingLevel(0.07)
-
-	local validLocations = {}
-	for tile in m.map.layer['ground'].tilesInRange(0, 0, m.map.data.width, m.map.data.height) do
-		if tile.gid ~= 51 then
-			validLocations[#validLocations+1] = tile
-		end
-	end
-
-
-	for i = 1, 3, 1 do
-		local location = math.random(1, #validLocations)
-		local tile = validLocations[location]
-		local newNum = #blobs+1
-		local blob = Blob.new(m.map.layer['meh'], tile.x, tile.y, player, newNum)
-
-		blobs[newNum] = blob
-
-	end
 
 	attackBtn = widget.newButton({
 		width = 60,
@@ -161,6 +153,8 @@ function scene:hide(event)
 	local phase = event.phase
 
 	if event.phase == 'will' then
+
+		m.cancelAllTimers()
 		Runtime:removeEventListener('enterFrame', update)
 		Runtime:removeEventListener('collision', onCollision)
 		Runtime:removeEventListener('key', keysPressed)
@@ -177,8 +171,6 @@ end
 function scene:destroy(event)
 
 	local sceneGroup = self.view
-
-	m.cancelAllTimers()
 
 	for _, blob in pairs(blobs) do
 		if blob.destroy then blob:destroy() end
@@ -212,22 +204,20 @@ end
 
 function onCollision(event)
 	if event.phase == 'began' then
-		local obj1, obj2 = event.object1, event.object2
-		if obj1.name == 'blob' and not obj1.isColliding then
-			obj1.isColliding = true
-			obj1.coord = nil
-			timer.performWithDelay(200, function()
-				obj1.isColliding = false
-			end, 1)
 
+		local function findNewCoord(obj)
+			if obj.name == 'blob' and not obj.isColliding then
+				obj.isColliding = true
+				obj.coord = nil
+				timer.performWithDelay(300, function()
+					obj.isColliding = false
+				end, 1)
+			end
 		end
-		if obj2.name == 'blob' and not obj2.isColliding then
-			obj2.isColliding = true
-			obj2.coord = nil
-			timer.performWithDelay(200, function()
-				obj2.isColliding = false
-			end, 1)
-		end
+
+		local obj1, obj2 = event.object1, event.object2
+		findNewCoord(obj1)
+		findNewCoord(obj2)
 	end
 end
 
@@ -283,20 +273,25 @@ function update()
 	player:update(vx, vy)
 
 	if #blobs > 0 then
-			for _, blob in pairs(blobs) do
+		for k, blob in pairs(blobs) do
 
-				blob:update(player)
+			blob:update(player)
 
-				if h.hasCollided(player.sword, blob) and player.sword.active then
-					blob:setState('injured', player)
-				end
-
-				if h.hasCollided(player.display, blob) and blob.isAttacking then
-					player:setState('injured', blob)
-				end
-
+			if h.hasCollided(player.sword, blob) and player.sword.active then
+				blob:setState('injured', player)
 			end
 
+			if h.hasCollided(player.display, blob) and blob.isAttacking then
+				player:setState('injured', blob)
+			end
+
+			if blob.health <= 0 then
+				local thisBlob = table.remove(blobs, k)
+				if thisBlob then
+					thisBlob:destroy()
+				end
+			end
+		end
 
 	end
 

@@ -13,8 +13,13 @@ function Public.new(group, x, y, player, id)
 
   physics.addBody(blob, 'dynamic', {
     bounce = 0.5,
-    density = 2
+    density = 2,
+    filter = {
+      categoryBits = 2,
+      maskBits = 1
+    }
   })
+  blob.health = 2
   blob.name = 'blob'
   blob.linearDamping = 8
   blob.isFixedRotation = true
@@ -40,6 +45,7 @@ function Public.new(group, x, y, player, id)
   end
 
   function blob:destroy()
+    self.state:exit()
     transition.cancel(self)
     display.remove(self)
   end

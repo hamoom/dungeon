@@ -252,26 +252,10 @@ function Helper.findValidCoord(ent, map, range)
   }
 
   local indices = {7,1,3,5,0,2,6,8}
-  local validTile = true
-  for i=1, #indices do
-    local tileIndex = indices[i]
 
-    local coorx, coory = map.pixelsToTiles(randomPt.x, randomPt.y)
-
-    local tileCol = math.floor(tileIndex % 3)
-    local tileRow = math.floor(tileIndex / 3)
-
-    local tileCoord = {
-      x = coorx + (tileCol - 1),
-      y = coory + (tileRow - 1)
-    }
-
-    local tile = map.layer["ground"].tile(tileCoord.x, tileCoord.y)
-    if validTile and tile then
-      validTile = tile.gid ~= 51
-      -- print(validTile)
-    end
-  end
+  local coorx, coory = map.pixelsToTiles(randomPt.x, randomPt.y)
+  local tile = map.layer["ground"].tile(coorx, coory)
+  local validTile = tile and tile.gid ~= 51
 
   local hits = physics.rayCast(ent.x, ent.y, randomPt.x, randomPt.y, 'closest')
   -- line = display.newLine(m.map.layer['ground'], ent.x, ent.y, randomPt.x, randomPt.y)

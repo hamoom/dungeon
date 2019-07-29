@@ -10,7 +10,9 @@ function Public:new(ent)
   end
 
   function State:start(player)
-    local impulseSpeed = 100
+
+
+    local impulseSpeed = 50
 
     ent.alpha = 0.3
     ent:setLinearVelocity(0, 0)
@@ -20,8 +22,12 @@ function Public:new(ent)
     ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
     m.addTimer(1000, function()
-      ent:setState('stopped', player)
+      ent.health = ent.health - 1
+      if ent.health > 0 then
+        ent:setState('stopped', player)
+      end
     end)
+
   end
 
   function State:exit()

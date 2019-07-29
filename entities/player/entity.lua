@@ -10,9 +10,7 @@ function Public.new(group, x, y)
   player.display = display.newRect(player, 0, 0, 32, 32)
   player.dirInd = display.newRect(player, 0, 0, 10, 10)
   player.dirInd:setFillColor(0,1,1)
-  -- player.directionIndicator.anchorX = 1
-  -- player.physicsBody = display.newRect(player, 0, 0, 26, 26)
-  -- player.physicsBody:setFillColor(1,0,0)
+
   player.name = 'player'
   player.speed = 0
   player.maxSpeed = 150
@@ -27,7 +25,11 @@ function Public.new(group, x, y)
 
   physics.addBody(player, 'dynamic', {
     bounce = 1,
-    radius = 14
+    radius = 14,
+    filter = {
+      -- categoryBits = 1,
+      -- maskBits = 2
+    }
   })
   player.isFixedRotation = true
   player.linearDamping = 8
