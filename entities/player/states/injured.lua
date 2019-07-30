@@ -10,7 +10,7 @@ function Public:new(ent)
   end
 
   function State:start(enemy)
-    ent.health = ent.health - 1
+    -- ent.health = ent.health - 1
     Runtime:dispatchEvent({ name = 'changeHealth', params = { health = ent.health }})
 
     if ent.health <= 0 then
@@ -18,9 +18,15 @@ function Public:new(ent)
       Runtime:dispatchEvent({ name = 'gameOver' })
     else
 
-      local diff = p.newFromSubtraction(ent, enemy):normalize()
-      diff.x = diff.x + (math.random(-100, 100) / 100)
-      diff.y = diff.y + (math.random(-100, 100) / 100)
+      local diff = {}
+      if not enemy then
+        diff.x = math.random() + (math.random(-100, 100) / 100)
+        diff.y = math.random() + (math.random(-100, 100) / 100)
+      else
+        diff = p.newFromSubtraction(ent, enemy):normalize()
+        diff.x = diff.x + (math.random(-100, 100) / 100)
+        diff.y = diff.y + (math.random(-100, 100) / 100)
+      end
 
       ent:setLinearVelocity(0,0)
       ent:applyLinearImpulse(0.1 * diff.x, 0.1  * diff.y, ent.x, ent.y)

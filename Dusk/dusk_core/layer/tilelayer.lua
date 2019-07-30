@@ -64,7 +64,7 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 	local useTileImageSheetFill = getSetting("useTileImageSheetFill")
 
 	local layer = display_newGroup()
-	
+
 	layer._leftmostTile = mapData._dusk.layers[dataIndex].leftTile - 1
 	layer._rightmostTile = mapData._dusk.layers[dataIndex].rightTile + 1
 	layer._highestTile = mapData._dusk.layers[dataIndex].topTile - 1
@@ -74,7 +74,7 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 	layer._layerType = "tile"
 
 	local mapWidth, mapHeight = mapData.width, mapData.height
-	
+
 	layer.edgeModeLeft, layer.edgeModeRight = "stop", "stop"
 	layer.edgeModeTop, layer.edgeModeBottom = "stop", "stop"
 
@@ -146,7 +146,7 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 		gid = data.data[id]
 
 		if gid == 0 then return false end
-		
+
 		if gid % (gid + flipX) >= flipX then gid = gid - flipX end
 		if gid % (gid + flipY) >= flipY then gid = gid - flipY end
 		if gid % (gid + flipD) >= flipD then gid = gid - flipD end
@@ -157,12 +157,12 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 	------------------------------------------------------------------------------
 	function layer._constructTileData(x, y)
 		local gid, tilesetGID, tileProps, isSprite, isAnimated, flippedX, flippedY, rotated, pixelX, pixelY
-		
+
 		if layerTiles[x] ~= nil and layerTiles[x][y] ~= nil then
 			local tile = layerTiles[x][y]
 
 			gid = tile.gid
-			
+
 			tilesetGID = tile.tilesetGID
 
 			local sheetIndex = tile.tileset
@@ -210,7 +210,7 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 			gid = data.data[id]
 
 			if gid == 0 then return false end
-			
+
 			if gid % (gid + flipX) >= flipX then flippedX = true gid = gid - flipX end
 			if gid % (gid + flipY) >= flipY then flippedY = true gid = gid - flipY end
 			if gid % (gid + flipD) >= flipD then rotated = true gid = gid - flipD end
@@ -269,7 +269,7 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 	------------------------------------------------------------------------------
 	function layer._drawTile(x, y, source)
 		if locked[x] and locked[x][y] == "e" then return false end
-		
+
 		if not (layerTiles[x] and layerTiles[x][y]) then
 			local idX, idY = x, y
 
@@ -352,9 +352,9 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 					tile = display_newImageRect(imageSheets[sheetIndex], tileGID, mapData.stats.tileWidth, mapData.stats.tileHeight)
 				end
 			end
-			
+
 			tile.props = {}
-			
+
 			tile.x, tile.y = mapData.stats.tileWidth * (x - 0.5), mapData.stats.tileHeight * (y - 0.5)
 			-- tile.xScale, tile.yScale = screen.zoomX, screen.zoomY
 
@@ -364,7 +364,7 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 			tile.layerIndex = dataIndex
 			tile.tileX, tile.tileY = x, y
 			tile.hash = tostring(tile)
-						
+
 			if source then
 				tile._drawers = {[source.hash] = true}
 				tile._drawCount = 1
@@ -412,7 +412,7 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 						physics_addBody(tile, unpack(physicsParameters))
 					end
 				end
-				
+
 				for k, v in pairs(layerProps.object) do
 					if (dotImpliesTable or layerProps.options.usedot[k]) and not layerProps.options.nodot[k] then setProperty(tile, k, v) else tile[k] = v end
 				end
@@ -435,7 +435,7 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 						physics_addBody(tile, unpack(layerProps.physics))
 					end
 				end
-				
+
 				for k, v in pairs(layerProps.object) do
 					if (dotImpliesTable or layerProps.options.usedot[k]) and not layerProps.options.nodot[k] then setProperty(tile, k, v) else tile[k] = v end
 				end
@@ -445,7 +445,7 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 			layerTiles[x][y] = tile
 			layer:insert(tile)
 			tile:toBack()
-			
+
 			if tile.isAnimated and map._animManager then map._animManager.animatedTileCreated(tile) end
 
 			if tileDrawListeners[gid] then
@@ -458,7 +458,7 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 			end
 		elseif source then
 			local tile = layerTiles[x][y]
-			if not tile._drawers[source.hash] then
+			if tile._drawers and not tile._drawers[source.hash] then
 				tile._drawers[source.hash] = true
 				tile._drawCount = tile._drawCount + 1
 			end
@@ -487,10 +487,10 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 		elseif tile and not source then
 			shouldErase = true
 		end
-		
+
 		if shouldErase then
 			if tile.isAnimated and map._animManager then map._animManager.animatedTileRemoved(tile) end
-			
+
 			if tileEraseListeners[tile.gid] then
 				for i = 1, #tileEraseListeners[tile.gid] do
 					tileEraseListeners[tile.gid][i]({
@@ -694,20 +694,20 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 
 	function layer.tilesInBlock(x1, y1, x2, y2)
 		if x1 == nil or y1 == nil or x2 == nil or y2 == nil then error("Missing argument(s).") end
-		
+
 		if x1 > x2 then x1, x2 = x2, x1 end
 		if y1 > y2 then y1, y2 = y2, y1 end
-	
+
 		local w = x2 - x1
 		local h = y2 - y1
-		
+
 		if w == 0 then
 			w = 1
 		end
 		if h == 0 then
 			h = 1
 		end
-	
+
 		local tiles = layer._getTilesInRange(x1, y1, w, h)
 
 		local i = 0

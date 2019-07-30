@@ -23,8 +23,11 @@ function Public:new(ent)
 
     m.addTimer(1000, function()
       ent.health = ent.health - 1
+
       if ent.health > 0 then
         ent:setState('stopped', player)
+      elseif ent.health <= 0 and ent.item then
+        ent:dropItem()
       end
     end)
 

@@ -12,6 +12,7 @@ function Public.new(group, x, y)
   player.dirInd:setFillColor(0,1,1)
 
   player.name = 'player'
+  player.item = nil
   player.speed = 0
   player.maxSpeed = 150
   player.x, player.y = x, y

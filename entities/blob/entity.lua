@@ -1,14 +1,16 @@
+
 local p = require('lib.point')
 local physics = require('physics')
 local Public = {}
 local stateList = require('entities.create-states')
 
-function Public.new(group, x, y, player, id)
+function Public.new(group, ogObj, player, id)
 
-  local blob = display.newRect(group, x, y, 32, 32)
+  local blob = display.newRect(group, ogObj.x, ogObj.y, 32, 32)
 
   blob.id = id
   blob.attackDistance = 170
+  blob.item = ogObj.item
   blob:setFillColor(0,1,0)
 
   physics.addBody(blob, 'dynamic', {
@@ -42,6 +44,24 @@ function Public.new(group, x, y, player, id)
 
   function blob:update(player)
     self.state:update(player)
+  end
+
+  function blob:dropItem()
+    local item = display.newRect(group, self.x, self.y, 16, 16)
+
+    item:setFillColor(1,1,0)
+    item.name = self.item
+    physics.addBody(item, 'dynamic', {
+      bounce = 0.5,
+      filter = {
+        categoryBits = 2,
+        maskBits = 1
+      }
+    })
+    item.isFixedRotation = true
+    item.linearDamping = 10
+    local x, y = math.random(), math.random()
+    item:applyLinearImpulse(x * 0.02, y * 0.02, item.x, item.y)
   end
 
   function blob:destroy()

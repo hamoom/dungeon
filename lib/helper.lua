@@ -254,8 +254,7 @@ function Helper.findValidCoord(ent, map, range)
   local indices = {7,1,3,5,0,2,6,8}
 
   local coorx, coory = map.pixelsToTiles(randomPt.x, randomPt.y)
-  local tile = map.layer["ground"].tile(coorx, coory)
-  local validTile = tile and tile.gid ~= 51
+  local validTile = map.layer["ground"].tile(coorx, coory)
 
   local hits = physics.rayCast(ent.x, ent.y, randomPt.x, randomPt.y, 'closest')
   -- line = display.newLine(m.map.layer['ground'], ent.x, ent.y, randomPt.x, randomPt.y)

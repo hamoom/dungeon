@@ -11,6 +11,7 @@ local joystick = require('ui.joystick').new()
 local Player = require('entities.player.entity')
 local Blob = require('entities.blob.entity')
 
+local Spike = require('objects.spike')
 
 local physics = require('physics')
 physics.start()
@@ -31,9 +32,11 @@ local mapContainer = display.newGroup()
 local screenW, screenH, halfW = display.actualContentWidth, display.actualContentHeight, display.contentCenterX
 local attack
 local blobs = {}
+local objects = {}
 local easeX, easeY
 local lastUpdate = 0
 local screenTouched, update, getDeltaTime, keysPressed, resetLinearVelocity
+local gameEnded = false
 
 function scene:create(event)
 
@@ -86,9 +89,17 @@ function scene:create(event)
 			player = Player.new(m.map.layer['entities'], object.x, object.y)
 			player:addEventListener('preCollision', preCollision)
 		elseif object.type == 'blob' then
+
 			local newNum = #blobs+1
-			local blob = Blob.new(m.map.layer['entities'], object.x, object.y, player, newNum)
+			local blob = Blob.new(m.map.layer['entities'], object, player, newNum)
 			blobs[newNum] = blob
+		end
+	end
+
+	for object in m.map.layer['objects'].objects() do
+
+		if object.name == 'spike' then
+			objects[#objects+1] = Spike.new(m.map.layer['objects'], object)
 		end
 	end
 
@@ -206,7 +217,7 @@ function onCollision(event)
 	if event.phase == 'began' then
 
 		local function findNewCoord(obj)
-			if obj.name == 'blob' and not obj.isColliding then
+			if not obj.isColliding then
 				obj.isColliding = true
 				obj.coord = nil
 				timer.performWithDelay(300, function()
@@ -216,9 +227,37 @@ function onCollision(event)
 		end
 
 		local obj1, obj2 = event.object1, event.object2
-		findNewCoord(obj1)
-		findNewCoord(obj2)
+
+		if obj1.name == 'blob' then findNewCoord(obj1) end
+		if obj2.name == 'blob' then findNewCoord(obj2) end
+
+		if obj1.name == 'player' or obj2.name == 'player' then
+			local player
+			local otherObj
+			if obj1.name == 'player' then
+				player = obj1
+				otherObj = obj2
+			else
+				player = obj2
+				otherObj = obj1
+			end
+
+			if otherObj.name == 'key' then
+				display.remove(otherObj)
+				player.item = 'key'
+			-- elseif otherObj.name == 'spike' then
+			-- 	timer.performWithDelay(1, function() otherObj.isBodyActive = true end, 1)
+			-- 	if otherObj.isAttacking then
+			-- 		player:setState('injured', otherObj)
+			-- 	end
+
+			elseif otherObj.name == 'door' and player.item == 'key' then
+				gameOver()
+			end
+		end
 	end
+
+
 end
 
 function screenTouched(event)
@@ -260,10 +299,13 @@ function keysPressed(event)
 	end
 end
 
-function gameOver(event)
-	m.addTimer(100, function()
-		composer.gotoScene('retry', { time = 0, params = { fadeTime = 500 }})
-	end)
+function gameOver()
+	if not gameEnded then
+		gameEnded = true
+		m.addTimer(100, function()
+			composer.gotoScene('retry', { time = 0, params = { fadeTime = 500 }})
+		end)
+	end
 end
 
 function update()
@@ -272,29 +314,51 @@ function update()
 	local vx, vy = joystick.pos:normalized():getPosition()
 	player:update(vx, vy)
 
-	if #blobs > 0 then
-		for k, blob in pairs(blobs) do
+	local activeEnemies = {}
+	local activeObjects = {}
 
-			blob:update(player)
+	for _, blob in pairs(blobs) do
+		if h.isActive(blob) then activeEnemies[#activeEnemies+1] = blob end
+	end
 
-			if h.hasCollided(player.sword, blob) and player.sword.active then
-				blob:setState('injured', player)
+	for _, object in pairs(objects) do
+		if h.isActive(object) then activeObjects[#activeObjects+1] = object end
+	end
+
+	for _, obj in pairs(activeObjects) do
+		if obj.isAttacking then
+
+			if h.hasCollided(obj, player.display) then
+				player:setState('injured', obj)
 			end
 
-			if h.hasCollided(player.display, blob) and blob.isAttacking then
-				player:setState('injured', blob)
-			end
-
-			if blob.health <= 0 then
-				local thisBlob = table.remove(blobs, k)
-				if thisBlob then
-					thisBlob:destroy()
+			for _, blob in pairs(activeEnemies) do
+				if h.hasCollided(obj, blob) then
+					blob:setState('injured', obj)
 				end
 			end
 		end
-
 	end
 
+	for k, blob in pairs(activeEnemies) do
+		blob:update(player)
+
+		if h.hasCollided(player.sword, blob) and player.sword.active then
+			blob:setState('injured', player)
+		end
+
+		if h.hasCollided(player.display, blob) and blob.isAttacking then
+			player:setState('injured', blob)
+		end
+
+		if blob.health <= 0 then
+
+			local thisBlob = table.remove(blobs, k)
+			if thisBlob then
+				thisBlob:destroy()
+			end
+		end
+	end
 
  	m.map.updateView()
 end
