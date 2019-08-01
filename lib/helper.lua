@@ -203,12 +203,23 @@ function Helper.hasCollided(obj1, obj2)
         return false
     end
 
-    local left = obj1.contentBounds.xMin <= obj2.contentBounds.xMin and obj1.contentBounds.xMax >= obj2.contentBounds.xMin
-    local right = obj1.contentBounds.xMin >= obj2.contentBounds.xMin and obj1.contentBounds.xMin <= obj2.contentBounds.xMax
-    local up = obj1.contentBounds.yMin <= obj2.contentBounds.yMin and obj1.contentBounds.yMax >= obj2.contentBounds.yMin
-    local down = obj1.contentBounds.yMin >= obj2.contentBounds.yMin and obj1.contentBounds.yMin <= obj2.contentBounds.yMax
+    local function left()
+      return obj1.contentBounds.xMin <= obj2.contentBounds.xMin and obj1.contentBounds.xMax >= obj2.contentBounds.xMin
+    end
 
-    return (left or right) and (up or down)
+    local function right()
+      return obj1.contentBounds.xMin >= obj2.contentBounds.xMin and obj1.contentBounds.xMin <= obj2.contentBounds.xMax
+    end
+
+    local function up()
+      return obj1.contentBounds.yMin <= obj2.contentBounds.yMin and obj1.contentBounds.yMax >= obj2.contentBounds.yMin
+    end
+
+    local function down()
+      return obj1.contentBounds.yMin >= obj2.contentBounds.yMin and obj1.contentBounds.yMin <= obj2.contentBounds.yMax
+    end
+
+    return (left() or right()) and (up() or down())
 end
 
 function Helper.dumpvar(data)
@@ -263,5 +274,55 @@ function Helper.findValidCoord(ent, map, range)
 
   return (validTile and clearPath) and randomPt or nil
 end
+
+function Helper.getAngle(x, lastX, y, lastY)
+
+  local real_vx, real_vy = x - lastX, y - lastY
+  local avx, avy = math.abs(real_vx), math.abs(real_vy)
+  local angle
+
+  if avy > avx then
+    if real_vy < 0 then
+      angle = -180
+      -- print('top')
+    elseif real_vy > 0 then
+      angle = 0
+      -- print('bottom')
+    end
+  elseif avx > avy then
+    if real_vx > 0 then
+      angle = -90
+      -- print('right')
+    elseif real_vx < 0 then
+      angle = 90
+      -- print('left')
+    end
+  end
+
+  return angle
+end
+
+function Helper.rotateToward(obj1, obj2)
+  local angle
+
+  local absX, absY = math.abs(obj1.x - obj2.x), math.abs(obj1.y - obj2.y)
+
+  if absY > absX then
+    if obj1.y > obj2.y then
+      angle = -180
+    else
+      angle = 0
+    end
+  else
+    if obj1.x < obj2.x then
+      angle = -90
+    else
+      angle = 90
+    end
+  end
+
+  return angle
+end
+
 
 return Helper

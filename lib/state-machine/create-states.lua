@@ -3,6 +3,7 @@ local Public = {}
 function Public.new(ent, states)
 
   local list = {}
+
   for _, v in pairs(states) do
     list[v] = require('entities.' .. ent.name .. '.states.' .. v):new(ent)
     list[v].name = v

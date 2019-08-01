@@ -29,7 +29,6 @@ function Public:new(ent)
 
     ent.sword.active = false
     ent.sword.isVisible = false
-    ent.attacking = false
   end
 
 

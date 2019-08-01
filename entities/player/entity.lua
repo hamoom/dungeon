@@ -1,75 +1,82 @@
 local p = require('lib.point')
+local h = require('lib.helper')
 local physics = require('physics')
 local Public = {}
-local stateList = require('entities.create-states')
+local stateList = require('lib.state-machine.create-states')
 
 function Public.new(group, x, y)
-  local player = display.newGroup()
-  group:insert(player)
+  local Player = display.newGroup()
+  group:insert(Player)
 
-  player.display = display.newRect(player, 0, 0, 32, 32)
-  player.dirInd = display.newRect(player, 0, 0, 10, 10)
-  player.dirInd:setFillColor(0,1,1)
+  Player.display = display.newRect(Player, 0, 0, 32, 32)
+  Player.dirInd = display.newRect(Player, 0, 0, 10, 10)
+  Player.dirInd:setFillColor(0,1,1)
 
-  player.name = 'player'
-  player.item = nil
-  player.speed = 0
-  player.maxSpeed = 150
-  player.x, player.y = x, y
-  player.lastX, player.lastY = x, y
+  Player.name = 'Player'
+  Player.item = nil
+  Player.speed = 0
+  Player.maxSpeed = 150
+  Player.x, Player.y = x, y
+  Player.lastX, Player.lastY = x, y
 
-  player.vx, player.vy = 0, 0
-  player.lastVx, player.lastVy = 0, 0
-  player.attacking = false
+  Player.vx, Player.vy = 0, 0
+  Player.lastVx, Player.lastVy = 0, 0
 
-  player.health = 3
+  Player.health = 3
 
-  physics.addBody(player, 'dynamic', {
+  physics.addBody(Player, 'dynamic', {
     bounce = 1,
     radius = 14
   })
-  player.isFixedRotation = true
-  player.linearDamping = 8
+  Player.isFixedRotation = true
+  Player.linearDamping = 8
 
-  player.sword = display.newRect(player, 0, 0, 56, 32)
-  player.sword.active = false
-  player.sword.isVisible = false
-  player.sword:setFillColor(1,0,0)
+  Player.sword = display.newRect(Player, 0, 0, 56, 32)
+  Player.sword.active = false
+  Player.sword.isVisible = false
+  Player.sword:setFillColor(1,0,0)
 
   local stateNames = {'attacking', 'injured', 'running', 'stopped'}
-  local states = stateList.new(player, stateNames)
-  player.state = states:getState('stopped')
+  local states = stateList.new(Player, stateNames)
+  Player.state = states:getState('stopped')
 
   -----------------------------
   -- METHODS
   -----------------------------
 
-  function player:setState(state, enemy)
+  function Player:setState(state, enemy)
     local newState = states:getState(state)
 
-    if player.state.name ~= newState.name then
-      player.state:exit(newState)
+    if self.state.name ~= newState.name then
+      local prevStateName = self.state.name
+      newState.prevStateName = prevStateName
+      self.state:exit(newState)
       newState:start(enemy)
-      player.state = newState
+      self.state = newState
     end
   end
 
-  function player:update(vx, vy)
-    player.vx, player.vy = vx, vy
-
-    self.state:update()
-
-    player.sword.x, player.sword.y = player.display.x, player.display.y + player.height/4
-    player.dirInd.x, player.dirInd.y = player.display.x, player.display.y + player.height/4
-    player.lastX, player.lastY = player.x, player.y
+  function Player:attack()
+    if self.state.name ~= 'injured' then self:setState('attacking') end
   end
 
-  function player:destroy()
+  function Player:update(vx, vy)
+    self.vx, self.vy = vx, vy
+
+    self.state:update()
+    self.rotation = h.getAngle(self.x, self.lastX, self.y, self.lastY)
+
+    self.sword.x, self.sword.y = self.display.x, self.display.y + self.height/4
+    self.dirInd.x, self.dirInd.y = self.display.x, self.display.y + self.height/4
+    self.lastX, self.lastY = self.x, self.y
+  end
+
+  function Player:destroy()
     transition.cancel(self)
     display.remove(self)
   end
 
-  return player
+  return Player
 
 end
 

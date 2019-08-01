@@ -9,11 +9,16 @@ local scene = composer.newScene()
 local health =  require('ui.health')
 local joystick = require('ui.joystick').new()
 local Player = require('entities.player.entity')
-local Blob = require('entities.blob.entity')
+
+local Enemies = {
+	blob = require('entities.blob.entity'),
+	orc = require('entities.orc.entity'),
+}
 
 local Spike = require('objects.spike')
 
 local physics = require('physics')
+-- physics.setDrawMode('hybrid')
 physics.start()
 physics.setGravity(0, 0)
 
@@ -22,23 +27,21 @@ dusk.setPreference('virtualObjectsVisible', false)
 dusk.setPreference('enableObjectCulling', false)
 -- dusk.setPreference('enableTileCulling', false)
 dusk.setPreference('cullingMargin', 2)
-m.map = dusk.buildMap('levels/test.json')
 
 local mapContainer = display.newGroup()
 
 --------------------------------------------
 
 -- forward declarations and other locals
-local screenW, screenH, halfW = display.actualContentWidth, display.actualContentHeight, display.contentCenterX
-local attack
-local blobs = {}
+local enemies = {}
 local objects = {}
-local easeX, easeY
+
 local lastUpdate = 0
-local screenTouched, update, getDeltaTime, keysPressed, resetLinearVelocity
+local screenTouched, update, getDeltaTime, keysPressed
 local gameEnded = false
 
 function scene:create(event)
+	m.map = dusk.buildMap('levels/another.json')
 
 	local sceneGroup = self.view
 	sceneGroup:insert(mapContainer)
@@ -88,11 +91,9 @@ function scene:create(event)
 		if object.type == 'player' then
 			player = Player.new(m.map.layer['entities'], object.x, object.y)
 			player:addEventListener('preCollision', preCollision)
-		elseif object.type == 'blob' then
-
-			local newNum = #blobs+1
-			local blob = Blob.new(m.map.layer['entities'], object, player, newNum)
-			blobs[newNum] = blob
+		else
+			local newNum = #enemies+1
+			enemies[newNum] = Enemies[object.type].new(m.map.layer['entities'], object, player, newNum)
 		end
 	end
 
@@ -107,20 +108,20 @@ function scene:create(event)
 	health:setHealth(player.health)
 
 	m.map.setCameraFocus(player)
-	m.map.setTrackingLevel(0.07)
+	m.map.setTrackingLevel(0.05)
 
 	attackBtn = widget.newButton({
 		width = 90,
 		height = 90,
 		onPress = function(event)
 			if event.phase == 'began' then
-				player.attacking = true
+				player:attack()
 			end
 		end
 	})
 
 	attackBtn.x = display.contentWidth - 90
-	attackBtn.y = screenH-80
+	attackBtn.y = display.contentHeight - 80
 	sceneGroup:insert(attackBtn)
 
 	attackBtn.visual = display.newRect(sceneGroup, attackBtn.x, attackBtn.y, attackBtn.width, attackBtn.height)
@@ -183,8 +184,12 @@ function scene:destroy(event)
 
 	local sceneGroup = self.view
 
-	for _, blob in pairs(blobs) do
-		if blob.destroy then blob:destroy() end
+	for _, enemy in pairs(enemies) do
+		if enemy.destroy then enemy:destroy() end
+	end
+
+	for _, object in pairs(objects) do
+		if object.destroy then object:destroy() end
 	end
 
 	health:destroy()
@@ -228,8 +233,8 @@ function onCollision(event)
 
 		local obj1, obj2 = event.object1, event.object2
 
-		if obj1.name == 'blob' then findNewCoord(obj1) end
-		if obj2.name == 'blob' then findNewCoord(obj2) end
+		if obj1.type == 'enemy' then findNewCoord(obj1) end
+		if obj2.type == 'enemy' then findNewCoord(obj2) end
 
 		if obj1.name == 'player' or obj2.name == 'player' then
 			local player
@@ -246,7 +251,7 @@ function onCollision(event)
 				display.remove(otherObj)
 				player.item = 'key'
 			-- elseif otherObj.name == 'spike' then
-			-- 	timer.performWithDelay(1, function() otherObj.isBodyActive = true end, 1)
+			--
 			-- 	if otherObj.isAttacking then
 			-- 		player:setState('injured', otherObj)
 			-- 	end
@@ -294,7 +299,7 @@ function keysPressed(event)
 
 	if event.phase == 'down' then
 		if event.keyName == 'space' then
-			player.attacking = true
+			player:attack()
 		end
 	end
 end
@@ -317,8 +322,16 @@ function update()
 	local activeEnemies = {}
 	local activeObjects = {}
 
-	for _, blob in pairs(blobs) do
-		if h.isActive(blob) then activeEnemies[#activeEnemies+1] = blob end
+
+	for k, enemy in pairs(enemies) do
+
+		if enemy.health <= 0 then
+			local thisEnemy = table.remove(enemies, k)
+			if thisEnemy then thisEnemy:destroy() end
+		elseif h.isActive(enemy) then
+			activeEnemies[#activeEnemies+1] = enemy
+		end
+
 	end
 
 	for _, object in pairs(objects) do
@@ -332,32 +345,26 @@ function update()
 				player:setState('injured', obj)
 			end
 
-			for _, blob in pairs(activeEnemies) do
-				if h.hasCollided(obj, blob) then
-					blob:setState('injured', obj)
+			for _, enemy in pairs(activeEnemies) do
+				if h.hasCollided(obj, enemy) then
+					enemy:setState('injured', obj)
 				end
 			end
 		end
 	end
 
-	for k, blob in pairs(activeEnemies) do
-		blob:update(player)
+	for k, enemy in pairs(activeEnemies) do
+		enemy:update(player)
 
-		if h.hasCollided(player.sword, blob) and player.sword.active then
-			blob:setState('injured', player)
+		if player.sword.active and h.hasCollided(player.sword, enemy) then
+			enemy:setState('injured', player)
 		end
 
-		if h.hasCollided(player.display, blob) and blob.isAttacking then
-			player:setState('injured', blob)
+		if enemy.isAttacking and h.hasCollided(player.display, enemy)
+		or enemy.weapon and enemy.weapon.isAttacking and h.hasCollided(player.display, enemy.weapon) then
+			player:setState('injured', enemy)
 		end
 
-		if blob.health <= 0 then
-
-			local thisBlob = table.remove(blobs, k)
-			if thisBlob then
-				thisBlob:destroy()
-			end
-		end
 	end
 
  	m.map.updateView()

@@ -21,6 +21,11 @@ function Public.new(group, obj)
     end)
   end
 
+  function spike:destroy()
+    transition.cancel(self)
+    display.remove(self)    
+  end
+
   spike:toggleSpikes()
 
   return spike
