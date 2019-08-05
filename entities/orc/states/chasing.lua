@@ -1,16 +1,16 @@
 local m = require("myapp")
 local p = require('lib.point')
 local h = require('lib.helper')
-
+local rand = math.random
 local Public = {}
 
 function Public:new(ent)
   local State = {}
 
   State.curAngle = nil
-  State.rotationSpeed = 100
-  State.speed = 80
-  State.range = 150
+  State.rotationSpeed = 130
+  State.speed = 120
+  State.range = 180
 
 
   function State:update(player)
@@ -37,8 +37,12 @@ function Public:new(ent)
 
     local entPt = p.new(ent)
 
-    if entPt:distanceTo(player) > 200 then ent:setState('wandering', player)
-    elseif entPt:distanceTo(player) <= ent.attackDistance + 10 then ent:setState('blocking', player) end
+    if entPt:distanceTo(player) > 200 then
+      ent:setState('wandering', player)
+    elseif entPt:distanceTo(player) <= ent.attackDistance + 10
+    and rand() < 0.75 then
+        ent:setState('blocking', player)
+    end
   end
 
   function State:start(player)

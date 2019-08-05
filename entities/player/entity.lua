@@ -12,7 +12,7 @@ function Public.new(group, x, y)
   Player.dirInd = display.newRect(Player, 0, 0, 10, 10)
   Player.dirInd:setFillColor(0,1,1)
 
-  Player.name = 'Player'
+  Player.name = 'player'
   Player.item = nil
   Player.speed = 0
   Player.maxSpeed = 150
@@ -36,7 +36,7 @@ function Public.new(group, x, y)
   Player.sword.isVisible = false
   Player.sword:setFillColor(1,0,0)
 
-  local stateNames = {'attacking', 'injured', 'running', 'stopped'}
+  local stateNames = {'attacking', 'injured', 'running', 'stopped', 'dashing'}
   local states = stateList.new(Player, stateNames)
   Player.state = states:getState('stopped')
 
@@ -60,11 +60,18 @@ function Public.new(group, x, y)
     if self.state.name ~= 'injured' then self:setState('attacking') end
   end
 
+  function Player:dash()
+    if self.state.name ~= 'injured' and self.state.name ~= 'attacking' then self:setState('dashing') end
+  end
+
   function Player:update(vx, vy)
     self.vx, self.vy = vx, vy
 
     self.state:update()
-    self.rotation = h.getAngle(self.x, self.lastX, self.y, self.lastY)
+
+    if not self.fixedRotation then
+      self.rotation = h.getAngle(self.x, self.lastX, self.y, self.lastY)
+    end
 
     self.sword.x, self.sword.y = self.display.x, self.display.y + self.height/4
     self.dirInd.x, self.dirInd.y = self.display.x, self.display.y + self.height/4

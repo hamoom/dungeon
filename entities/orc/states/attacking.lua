@@ -13,7 +13,7 @@ function Public:new(ent)
     ent.weapon.isAttacking = false
     ent.weapon:setFillColor(1,1,0)
 
-    if self.attackTimer <= 2 and self.attackTimer >= 1 then
+    if self.attackTimer <= 1.75 and self.attackTimer >= 1.5 then
       ent.weapon.isAttacking = true
       ent.weapon:setFillColor(1,0,1)
     elseif self.attackTimer <= 0 then
@@ -26,7 +26,7 @@ function Public:new(ent)
 
   function State:start(player)
 
-    print('here')
+
     ent.rotation = h.rotateToward(ent, player)
 
     ent.fixedRotation = true

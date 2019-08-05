@@ -275,6 +275,14 @@ function Helper.findValidCoord(ent, map, range)
   return (validTile and clearPath) and randomPt or nil
 end
 
+function Helper.isFacing(obj1, obj2)
+  print(obj1.rotation, obj2.rotation)  
+  return (obj1.rotation == -180 and obj2.rotation == 0)
+    or (obj1.rotation == 0 and obj2.rotation == -180)
+    or (obj1.rotation == 90 and obj2.rotation == -90)
+    or (obj1.rotation == -90 and obj2.rotation == 90)
+end
+
 function Helper.getAngle(x, lastX, y, lastY)
 
   local real_vx, real_vy = x - lastX, y - lastY

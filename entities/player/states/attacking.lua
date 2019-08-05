@@ -19,6 +19,7 @@ function Public:new(ent)
   end
 
   function State:start()
+    ent.fixedRotation = true
     ent.sword.active = true
     ent.sword.isVisible = true
 
@@ -26,7 +27,7 @@ function Public:new(ent)
   end
 
   function State:exit()
-
+    ent.fixedRotation = false
     ent.sword.active = false
     ent.sword.isVisible = false
   end

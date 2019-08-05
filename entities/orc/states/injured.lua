@@ -12,7 +12,7 @@ function Public:new(ent)
   function State:start(player)
 
 
-    local impulseSpeed = 25
+    local impulseSpeed = 15
     local diff = p.newFromSubtraction(ent, player):normalize()
 
     ent:setLinearVelocity(0, 0)
@@ -23,7 +23,7 @@ function Public:new(ent)
     m.addTimer(600, function()
 
       if self.prevStateName == 'blocking' then
-        ent:setState('attacking', player)
+        ent:setState('chasing', player)
       else
         ent.health = ent.health - 1
 

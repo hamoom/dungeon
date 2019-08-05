@@ -22,12 +22,12 @@ function Public.new(group, ogObj, player, id)
 
 
   Orc.attackDistance = 40
-  Orc.weapon = display.newRect(Orc, 0, 0, 56, 32)
+  Orc.weapon = display.newRect(Orc, 0, 0, 56, 46)
   Orc.weapon.active = false
   Orc.weapon.isVisible = false
   Orc.weapon:setFillColor(1,1,0)
 
-  Orc.display:setFillColor(0,1,0)
+  Orc.display:setFillColor(0.4,0.3,0)
 
 
 

@@ -31,7 +31,7 @@ function Public:new(ent)
 
       totalTime = totalTime * 0.8
 
-      if totalTime < 100 and not diff then
+      if totalTime < 50 and not diff then
         diff = p.newFromSubtraction(player, ent):normalize()
       end
 

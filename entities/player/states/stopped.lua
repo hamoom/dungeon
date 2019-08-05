@@ -21,9 +21,11 @@ function Public:new(ent)
   end
 
   function State:start()
+    ent.fixedRotation = true
   end
 
   function State:exit()
+    ent.fixedRotation = false
   end
 
 

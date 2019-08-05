@@ -15,7 +15,11 @@ local Enemies = {
 	orc = require('entities.orc.entity'),
 }
 
-local Spike = require('objects.spike')
+local Objects = {
+	spike = require('objects.spike'),
+	door = require('objects.door')
+}
+local Spike
 
 local physics = require('physics')
 -- physics.setDrawMode('hybrid')
@@ -35,13 +39,14 @@ local mapContainer = display.newGroup()
 -- forward declarations and other locals
 local enemies = {}
 local objects = {}
+local theDoor
 
 local lastUpdate = 0
 local screenTouched, update, getDeltaTime, keysPressed
 local gameEnded = false
 
 function scene:create(event)
-	m.map = dusk.buildMap('levels/another.json')
+	m.map = dusk.buildMap('levels/level1.json')
 
 	local sceneGroup = self.view
 	sceneGroup:insert(mapContainer)
@@ -88,20 +93,21 @@ function scene:create(event)
 
 	for object in m.map.layer['entities'].objects() do
 
-		if object.type == 'player' then
+		if object.name == 'player' then
 			player = Player.new(m.map.layer['entities'], object.x, object.y)
 			player:addEventListener('preCollision', preCollision)
 		else
 			local newNum = #enemies+1
-			enemies[newNum] = Enemies[object.type].new(m.map.layer['entities'], object, player, newNum)
+			enemies[newNum] = Enemies[object.name].new(m.map.layer['entities'], object, player, newNum)
 		end
 	end
 
 	for object in m.map.layer['objects'].objects() do
-
-		if object.name == 'spike' then
-			objects[#objects+1] = Spike.new(m.map.layer['objects'], object)
-		end
+			if object.name == 'door' then
+				theDoor = Objects[object.name].new(m.map.layer['objects'], object)
+			else
+				objects[#objects+1] = Objects[object.name].new(m.map.layer['objects'], object)
+			end
 	end
 
 
@@ -110,9 +116,9 @@ function scene:create(event)
 	m.map.setCameraFocus(player)
 	m.map.setTrackingLevel(0.05)
 
-	attackBtn = widget.newButton({
-		width = 90,
-		height = 90,
+	local attackBtn = widget.newButton({
+		width = 140,
+		height = 110,
 		onPress = function(event)
 			if event.phase == 'began' then
 				player:attack()
@@ -120,12 +126,34 @@ function scene:create(event)
 		end
 	})
 
-	attackBtn.x = display.contentWidth - 90
+	attackBtn.x = display.contentWidth - 140
 	attackBtn.y = display.contentHeight - 80
 	sceneGroup:insert(attackBtn)
 
 	attackBtn.visual = display.newRect(sceneGroup, attackBtn.x, attackBtn.y, attackBtn.width, attackBtn.height)
 	attackBtn.visual.alpha = 0.4
+
+	local dashBtn = widget.newButton({
+		width = 140,
+		height = 110,
+		onPress = function(event)
+			if event.phase == 'began' then
+				player:dash()
+				event.target:setEnabled(false)
+				timer.performWithDelay(400, function()
+					event.target:setEnabled(true)
+				end,1)
+
+			end
+		end
+	})
+
+	dashBtn.x = display.contentWidth - 140
+	dashBtn.y = attackBtn.y - 140
+	sceneGroup:insert(dashBtn)
+
+	dashBtn.visual = display.newRect(sceneGroup, dashBtn.x, dashBtn.y, dashBtn.width, dashBtn.height)
+	dashBtn.visual.alpha = 0.4
 end
 
 function scene:pauseToggle()
@@ -250,13 +278,14 @@ function onCollision(event)
 			if otherObj.name == 'key' then
 				display.remove(otherObj)
 				player.item = 'key'
+				theDoor:open()
 			-- elseif otherObj.name == 'spike' then
 			--
 			-- 	if otherObj.isAttacking then
 			-- 		player:setState('injured', otherObj)
 			-- 	end
 
-			elseif otherObj.name == 'door' and player.item == 'key' then
+			elseif otherObj.name == 'door' and otherObj.isOpen and player.item == 'key' then
 				gameOver()
 			end
 		end
@@ -298,8 +327,11 @@ end
 function keysPressed(event)
 
 	if event.phase == 'down' then
+
 		if event.keyName == 'space' then
 			player:attack()
+		elseif event.keyName == 'c' then
+			player:dash()
 		end
 	end
 end

@@ -16,7 +16,7 @@ function Public:new(ent)
   function State:start(player)
     ent.rotation = h.rotateToward(ent, player)
     ent.fixedRotation = true
-    self.attackTimer = m.addTimer(400, function()
+    self.attackTimer = m.addTimer(200, function()
       ent:setState('attacking', player)
     end)
   end
