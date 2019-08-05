@@ -1,6 +1,3 @@
-local m = require("myapp")
-local p = require('lib.point')
-local h = require('lib.helper')
 local rand = math.random
 local Public = {}
 
@@ -15,27 +12,27 @@ function Public:new(ent)
 
   function State:update(player)
     if not self.curAngle then
-      self.curAngle = p.newFromSubtraction(player, ent):angle()
+      self.curAngle = _G.p.newFromSubtraction(player, ent):angle()
     end
 
-    local offsetAngle = p.newFromSubtraction(player, ent):angle()
+    local offsetAngle = _G.p.newFromSubtraction(player, ent):angle()
 
-    local differenceAngle = p.shortestAngleBetween(self.curAngle, offsetAngle)
+    local differenceAngle = _G.p.shortestAngleBetween(self.curAngle, offsetAngle)
 
-    local amtToRotate = self.rotationSpeed * m.dt
+    local amtToRotate = self.rotationSpeed * _G.m.dt
 
     if math.abs(differenceAngle) < amtToRotate then
       amtToRotate = math.abs(differenceAngle)
     end
 
-    amtToRotate = -h.sign(differenceAngle) * amtToRotate
+    amtToRotate = -_G.h.sign(differenceAngle) * amtToRotate
     self.curAngle = self.curAngle + amtToRotate
 
-    local direction = p.newFromAng(self.curAngle)
+    local direction = _G.p.newFromAng(self.curAngle)
 
     ent:setLinearVelocity(direction.x * self.speed, direction.y * self.speed)
 
-    local entPt = p.new(ent)
+    local entPt = _G.p.new(ent)
 
     if entPt:distanceTo(player) > 200 then
       ent:setState('wandering', player)

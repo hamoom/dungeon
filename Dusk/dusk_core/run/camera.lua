@@ -195,10 +195,11 @@ function lib_camera.addControl(map)
 
 			local mapXScale, mapYScale = map.xScale, map.yScale
 
-			if mapXScale ~= camera.xScale or mapYScale ~= camera.yScale then
-				camera.updateAddXY()
-			end
-
+			-- TAMEEM HACKY STUFF
+			-- if mapXScale ~= camera.xScale or mapYScale ~= camera.yScale then
+			-- 	camera.updateAddXY()
+			-- end
+			--
 			if mapXScale ~= camera.xScale then
 				camera.xScale = mapXScale
 				camera.scaleBounds(true, false)

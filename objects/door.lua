@@ -1,4 +1,3 @@
-local m = require("myapp")
 local Public = {}
 
 function Public.new(group, obj)

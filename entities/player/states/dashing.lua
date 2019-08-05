@@ -1,5 +1,3 @@
-local m = require("myapp")
-
 local Public = {}
 
 function Public:new(ent)
@@ -10,7 +8,7 @@ function Public:new(ent)
     local dash = ent.maxSpeed * 9
     ent:setLinearVelocity(self.lockedVx * dash, self.lockedVy * dash)
 
-    self.dashTimer = self.dashTimer - m.dt
+    self.dashTimer = self.dashTimer - _G.m.dt
     if self.dashTimer <= 0 then ent:setState('running') end
 
   end
@@ -22,7 +20,6 @@ function Public:new(ent)
 
   function State:exit()
   end
-
 
   return State
 end

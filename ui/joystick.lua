@@ -1,5 +1,3 @@
-local p = require('lib.point')
-local h = require('lib.helper')
 local Public = {}
 
 function Public:new()
@@ -31,7 +29,7 @@ function Public:new()
         :multiply(lengthDiff, lengthDiff)
 
       self.x, self.y =
-        p.new(self)
+        _G.p.new(self)
           :add(self.pos)
           :getPosition()
     end
@@ -54,7 +52,7 @@ function Public:new()
 	joystick.base = display.newCircle(joystick, 0, 0, 40)
 	joystick.knob = display.newCircle(joystick, 0, 0, 25)
 	joystick.knob:setFillColor(1,0,0)
-  joystick.pos = p.new(0,0)
+  joystick.pos = _G.p.new(0,0)
   return joystick
 end
 

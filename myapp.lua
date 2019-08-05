@@ -4,6 +4,7 @@ local MyApp = {}
 MyApp.dt = 0
 MyApp.paused = false
 MyApp.timers = {}
+MyApp.map = nil
 
 function MyApp.cancelTimer(t)
   timer.cancel(t)

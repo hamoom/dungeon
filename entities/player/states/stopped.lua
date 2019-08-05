@@ -1,6 +1,5 @@
 local Public = {}
 
-
 function Public:new(ent)
   local State = {}
 

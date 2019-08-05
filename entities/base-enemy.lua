@@ -1,4 +1,3 @@
-local h = require('lib.helper')
 local stateList = require('lib.state-machine.create-states')
 local Public = {}
 
@@ -49,7 +48,7 @@ function Public.new(obj, stateNames, name)
     self.state:update(player)
 
     if not self.fixedRotation then
-      self.rotation = h.getAngle(self.x, self.lastX, self.y, self.lastY)
+      self.rotation = _G.h.getAngle(self.x, self.lastX, self.y, self.lastY)
     end
     self.lastX, self.lastY = self.x, self.y
   end

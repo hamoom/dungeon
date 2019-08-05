@@ -1,8 +1,5 @@
 local physics = require('physics')
 local Public = {}
-local p = require('lib.point')
-
-
 
 function Public:new(ent)
   local State = {}

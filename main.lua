@@ -1,10 +1,6 @@
------------------------------------------------------------------------------------------
---
--- main.lua
---
------------------------------------------------------------------------------------------
-
--- hide the status bar
+_G.m = require("myapp")
+_G.p = require('lib.point')
+_G.h = require('lib.helper')
 
 system.activate('multitouch')
 display.setStatusBar(display.HiddenStatusBar)

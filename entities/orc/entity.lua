@@ -1,5 +1,3 @@
-
-local p = require('lib.point')
 local physics = require('physics')
 local BaseEnemy = require('entities.base-enemy')
 local Public = {}

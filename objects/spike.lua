@@ -1,4 +1,3 @@
-local m = require("myapp")
 local Public = {}
 
 function Public.new(group, obj)
@@ -16,7 +15,7 @@ function Public.new(group, obj)
     else
       self.alpha = 0.2
     end
-    m.addTimer(2000, function()
+    _G.m.addTimer(2000, function()
       self:toggleSpikes()
     end)
   end

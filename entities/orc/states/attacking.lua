@@ -1,7 +1,3 @@
-local m = require("myapp")
-local p = require('lib.point')
-local h = require('lib.helper')
-
 local Public = {}
 
 function Public:new(ent)
@@ -9,7 +5,7 @@ function Public:new(ent)
 
 
   function State:update(player)
-    self.attackTimer = self.attackTimer - m.dt
+    self.attackTimer = self.attackTimer - _G.m.dt
     ent.weapon.isAttacking = false
     ent.weapon:setFillColor(1,1,0)
 
@@ -18,7 +14,7 @@ function Public:new(ent)
       ent.weapon:setFillColor(1,0,1)
     elseif self.attackTimer <= 0 then
       self.attackTimer = 2
-      if p.new(ent):distanceTo(player) > ent.attackDistance then
+      if _G.p.new(ent):distanceTo(player) > ent.attackDistance then
         ent:setState('chasing', player)
       end
     end
@@ -27,7 +23,7 @@ function Public:new(ent)
   function State:start(player)
 
 
-    ent.rotation = h.rotateToward(ent, player)
+    ent.rotation = _G.h.rotateToward(ent, player)
 
     ent.fixedRotation = true
     ent.weapon.active = true

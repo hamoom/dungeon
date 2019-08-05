@@ -1,6 +1,3 @@
-local m = require("myapp")
-local p = require('lib.point')
-local h = require('lib.helper')
 local Public = {}
 
 function Public:new(ent)
@@ -17,11 +14,11 @@ function Public:new(ent)
     ent.alpha = 0.3
     ent:setLinearVelocity(0, 0)
 
-    local diff = p.newFromSubtraction(ent, player):normalize()
+    local diff = _G.p.newFromSubtraction(ent, player):normalize()
 
     ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
-    m.addTimer(1000, function()
+    _G.m.addTimer(1000, function()
       ent.health = ent.health - 1
 
       if ent.health > 0 then

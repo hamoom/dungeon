@@ -1,6 +1,3 @@
-local m = require("myapp")
-local p = require('lib.point')
-local h = require('lib.helper')
 local Public = {}
 
 function Public:new(ent)

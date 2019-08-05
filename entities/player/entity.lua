@@ -1,5 +1,3 @@
-local p = require('lib.point')
-local h = require('lib.helper')
 local physics = require('physics')
 local Public = {}
 local stateList = require('lib.state-machine.create-states')
@@ -70,7 +68,7 @@ function Public.new(group, x, y)
     self.state:update()
 
     if not self.fixedRotation then
-      self.rotation = h.getAngle(self.x, self.lastX, self.y, self.lastY)
+      self.rotation = _G.h.getAngle(self.x, self.lastX, self.y, self.lastY)
     end
 
     self.sword.x, self.sword.y = self.display.x, self.display.y + self.height/4

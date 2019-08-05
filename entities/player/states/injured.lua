@@ -1,7 +1,4 @@
-local m = require("myapp")
-local p = require('lib.point')
 local Public = {}
-
 
 function Public:new(ent)
   local State = {}
@@ -10,11 +7,11 @@ function Public:new(ent)
   end
 
   function State:start(enemy)
-    ent.health = ent.health - 3
+    -- ent.health = ent.health - 3
     Runtime:dispatchEvent({ name = 'changeHealth', params = { health = ent.health }})
 
 
-      local diff = p.newFromSubtraction(ent, enemy):normalize()
+      local diff = _G.p.newFromSubtraction(ent, enemy):normalize()
       diff.x = diff.x + (math.random(-100, 100) / 100)
       diff.y = diff.y + (math.random(-100, 100) / 100)
 
@@ -23,7 +20,7 @@ function Public:new(ent)
       ent.alpha = 0.3
 
 
-      m.addTimer(500, function()
+      _G.m.addTimer(500, function()
         if ent.health <= 0 then
           ent.health = 0
           Runtime:dispatchEvent({ name = 'gameOver' })

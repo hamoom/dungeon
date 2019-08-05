@@ -196,7 +196,7 @@
     <property name="name" value="blob"/>
    </properties>
   </object>
-  <object id="47" name="blob" x="288" y="1088" width="32" height="32">
+  <object id="47" name="blob" x="288" y="704" width="32" height="32">
    <properties>
     <property name="item" value="key"/>
     <property name="name" value="blob"/>

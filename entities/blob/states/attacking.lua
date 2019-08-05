@@ -1,8 +1,4 @@
-local m = require("myapp")
-local p = require('lib.point')
-local h = require('lib.helper')
 local Public = {}
-
 
 function Public:new(ent)
 
@@ -32,7 +28,7 @@ function Public:new(ent)
       totalTime = totalTime * 0.8
 
       if totalTime < 50 and not diff then
-        diff = p.newFromSubtraction(player, ent):normalize()
+        diff = _G.p.newFromSubtraction(player, ent):normalize()
       end
 
       if totalTime < 5 then totalTime = 0 end
@@ -45,12 +41,12 @@ function Public:new(ent)
         else
           ent:setFillColor(0,1,0)
         end
-        self.attackTimer = m.addTimer(totalTime, flash)
+        self.attackTimer = _G.m.addTimer(totalTime, flash)
       else
         ent.isAttacking = true
         ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
-        m.addTimer(200, function()
+        _G.m.addTimer(200, function()
           ent:setState('stopped', player)
         end)
       end
@@ -63,7 +59,7 @@ function Public:new(ent)
   end
 
   function State:exit()
-    m.cancelTimer(self.attackTimer)
+    _G.m.cancelTimer(self.attackTimer)
     ent:setFillColor(0,1,0)
     ent.isLit = false
     ent.isAttacking = false

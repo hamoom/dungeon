@@ -1,5 +1,3 @@
-local m = require("myapp")
-
 local Public = {}
 
 function Public:new(ent)
@@ -12,7 +10,7 @@ function Public:new(ent)
     ent.speed = ent.speed * 0.8
     ent:setLinearVelocity(ent.vx * ent.speed, ent.vy * ent.speed)
 
-    self.attackTimer = self.attackTimer - m.dt
+    self.attackTimer = self.attackTimer - _G.m.dt
     if self.attackTimer <= 0 then
       ent:setState('stopped')
     end

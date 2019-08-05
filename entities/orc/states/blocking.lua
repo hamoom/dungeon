@@ -1,7 +1,3 @@
-local m = require("myapp")
-local p = require('lib.point')
-local h = require('lib.helper')
-
 local Public = {}
 
 function Public:new(ent)
@@ -14,9 +10,9 @@ function Public:new(ent)
   end
 
   function State:start(player)
-    ent.rotation = h.rotateToward(ent, player)
+    ent.rotation = _G.h.rotateToward(ent, player)
     ent.fixedRotation = true
-    self.attackTimer = m.addTimer(200, function()
+    self.attackTimer = _G.m.addTimer(200, function()
       ent:setState('attacking', player)
     end)
   end

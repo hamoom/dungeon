@@ -1,6 +1,3 @@
-local m = require("myapp")
-local p = require('lib.point')
-local h = require('lib.helper')
 local Public = {}
 
 function Public:new(ent)
@@ -10,8 +7,8 @@ function Public:new(ent)
   end
 
   function State:start(player)
-    self.timer = m.addTimer(1000, function()
-      if p.new(ent):distanceTo(player) < ent.attackDistance then
+    self.timer = _G.m.addTimer(1000, function()
+      if _G.p.new(ent):distanceTo(player) < ent.attackDistance then
         ent:setState('attacking', player)
       else
         ent:setState('wandering', player)
@@ -20,7 +17,7 @@ function Public:new(ent)
   end
 
   function State:exit(player)
-    m.cancelTimer(self.timer)
+    _G.m.cancelTimer(self.timer)
   end
 
 

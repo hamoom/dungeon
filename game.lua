@@ -1,6 +1,4 @@
-local m = require("myapp")
-local p = require('lib.point')
-local h = require('lib.helper')
+
 local composer = require('composer')
 local widget = require('widget')
 
@@ -33,6 +31,9 @@ dusk.setPreference('enableObjectCulling', false)
 dusk.setPreference('cullingMargin', 2)
 
 local mapContainer = display.newGroup()
+local trackingLevel = 0.05
+local camSpeedSizeMax = 0.016
+local camZoomDir
 
 --------------------------------------------
 
@@ -46,7 +47,8 @@ local screenTouched, update, getDeltaTime, keysPressed
 local gameEnded = false
 
 function scene:create(event)
-	m.map = dusk.buildMap('levels/level1.json')
+	_G.m.map = dusk.buildMap('levels/level1.json')
+	_G.m.map.cameraScale = 1
 
 	local sceneGroup = self.view
 	sceneGroup:insert(mapContainer)
@@ -79,42 +81,42 @@ function scene:create(event)
 	pauseButton:setFillColor(1,1,1)
 	sceneGroup:insert(pauseButton)
 
-	mapContainer:insert(m.map)
+	mapContainer:insert(_G.m.map)
 
 
 	local padding = 30
 
-	m.map.setCameraBounds({
+	_G.m.map.setCameraBounds({
 		xMin = display.contentWidth/2 - padding,
-		xMax = m.map.data.width - display.contentWidth/2 + padding,
+		xMax = _G.m.map.data.width - display.contentWidth/2 + padding,
 		yMin = display.contentHeight/2 - padding,
-		yMax = m.map.data.height - display.contentHeight/2 + padding
+		yMax = _G.m.map.data.height - display.contentHeight/2 + padding
 	})
 
-	for object in m.map.layer['entities'].objects() do
+	for object in _G.m.map.layer['entities'].objects() do
 
 		if object.name == 'player' then
-			player = Player.new(m.map.layer['entities'], object.x, object.y)
+			player = Player.new(_G.m.map.layer['entities'], object.x, object.y)
 			player:addEventListener('preCollision', preCollision)
 		else
 			local newNum = #enemies+1
-			enemies[newNum] = Enemies[object.name].new(m.map.layer['entities'], object, player, newNum)
+			enemies[newNum] = Enemies[object.name].new(_G.m.map.layer['entities'], object, player, newNum)
 		end
 	end
 
-	for object in m.map.layer['objects'].objects() do
+	for object in _G.m.map.layer['objects'].objects() do
 			if object.name == 'door' then
-				theDoor = Objects[object.name].new(m.map.layer['objects'], object)
+				theDoor = Objects[object.name].new(_G.m.map.layer['objects'], object)
 			else
-				objects[#objects+1] = Objects[object.name].new(m.map.layer['objects'], object)
+				objects[#objects+1] = Objects[object.name].new(_G.m.map.layer['objects'], object)
 			end
 	end
 
 
 	health:setHealth(player.health)
 
-	m.map.setCameraFocus(player)
-	m.map.setTrackingLevel(0.05)
+	_G.m.map.setCameraFocus(player)
+	_G.m.map.setTrackingLevel(trackingLevel)
 
 	local attackBtn = widget.newButton({
 		width = 140,
@@ -157,8 +159,8 @@ function scene:create(event)
 end
 
 function scene:pauseToggle()
-	m.pause()
-	if m.paused then
+	_G.m.pause()
+	if _G.m.paused then
 		joystick.isVisible = false
 		Runtime:removeEventListener("enterFrame", update)
 		Runtime:removeEventListener("touch", screenTouched)
@@ -194,7 +196,7 @@ function scene:hide(event)
 
 	if event.phase == 'will' then
 
-		m.cancelAllTimers()
+		_G.m.cancelAllTimers()
 		Runtime:removeEventListener('enterFrame', update)
 		Runtime:removeEventListener('collision', onCollision)
 		Runtime:removeEventListener('key', keysPressed)
@@ -222,7 +224,7 @@ function scene:destroy(event)
 
 	health:destroy()
 	player:destroy()
-	m.map.destroy()
+	_G.m.map.destroy()
 
 	-- package.loaded[physics] = nil
 	-- physics = nil
@@ -230,7 +232,7 @@ function scene:destroy(event)
 end
 
 function preCollision(event)
-	if player.state.name == 'running' then
+	if player.state.name == 'running' or player.state.name == 'dashing' then
 		if event.contact then
 			event.contact.bounce = 0
 
@@ -290,8 +292,6 @@ function onCollision(event)
 			end
 		end
 	end
-
-
 end
 
 function screenTouched(event)
@@ -313,14 +313,14 @@ end
 
 function getDeltaTime()
     if lastUpdate == 0 then
-        m.dt = 0
+        _G.m.dt = 0
     else
-        m.dt = (system.getTimer() - lastUpdate) / 1000
+        _G.m.dt = (system.getTimer() - lastUpdate) / 1000
     end
     lastUpdate = system.getTimer()
 
-    if m.dt > 0.02 then
-        m.dt = 0.02
+    if _G.m.dt > 0.02 then
+        _G.m.dt = 0.02
     end
 end
 
@@ -339,7 +339,7 @@ end
 function gameOver()
 	if not gameEnded then
 		gameEnded = true
-		m.addTimer(100, function()
+		_G.m.addTimer(100, function()
 			composer.gotoScene('retry', { time = 0, params = { fadeTime = 500 }})
 		end)
 	end
@@ -360,25 +360,25 @@ function update()
 		if enemy.health <= 0 then
 			local thisEnemy = table.remove(enemies, k)
 			if thisEnemy then thisEnemy:destroy() end
-		elseif h.isActive(enemy) then
+		elseif _G.h.isActive(enemy) then
 			activeEnemies[#activeEnemies+1] = enemy
 		end
 
 	end
 
 	for _, object in pairs(objects) do
-		if h.isActive(object) then activeObjects[#activeObjects+1] = object end
+		if _G.h.isActive(object) then activeObjects[#activeObjects+1] = object end
 	end
 
 	for _, obj in pairs(activeObjects) do
 		if obj.isAttacking then
 
-			if h.hasCollided(obj, player.display) then
+			if _G.h.hasCollided(obj, player.display) then
 				player:setState('injured', obj)
 			end
 
 			for _, enemy in pairs(activeEnemies) do
-				if h.hasCollided(obj, enemy) then
+				if _G.h.hasCollided(obj, enemy) then
 					enemy:setState('injured', obj)
 				end
 			end
@@ -388,18 +388,46 @@ function update()
 	for k, enemy in pairs(activeEnemies) do
 		enemy:update(player)
 
-		if player.sword.active and h.hasCollided(player.sword, enemy) then
+		if player.sword.active and _G.h.hasCollided(player.sword, enemy) then
 			enemy:setState('injured', player)
 		end
 
-		if enemy.isAttacking and h.hasCollided(player.display, enemy)
-		or enemy.weapon and enemy.weapon.isAttacking and h.hasCollided(player.display, enemy.weapon) then
+		if enemy.isAttacking and _G.h.hasCollided(player.display, enemy)
+		or enemy.weapon and enemy.weapon.isAttacking and _G.h.hasCollided(player.display, enemy.weapon) then
 			player:setState('injured', enemy)
 		end
 
 	end
 
- 	m.map.updateView()
+
+	local camScale = _G.m.map.cameraScale
+
+
+
+
+
+	local camSpeedSize
+	local dir
+	if (player.state.name == 'stopped') then
+		camSpeedSize = math.abs(camScale - 1.2) * camSpeedSizeMax
+		dir = 1
+	else
+		camSpeedSize = math.abs(camScale - 1) * camSpeedSizeMax
+		dir = -1
+	end
+
+	camScale = camScale * (1 + (dir * camSpeedSize))
+	if camSpeedSize < 0.001 then camSpeedSize = 0 end
+
+	if camScale > 1.2 then
+		camScale = 1.2
+	elseif camScale < 1 then
+		camScale = 1
+	end
+
+	_G.m.map.updateView()
+	_G.m.map.xScale, _G.m.map.yScale = camScale, camScale
+	_G.m.map.cameraScale = camScale
 end
 
 ---------------------------------------------------------------------------------
