@@ -2,9 +2,9 @@ local Public = {}
 
 function Public:new()
   local joystick = display.newGroup()
+  joystick.isActive = false
 
   function joystick:moved(x, y)
-
     joystick.pos
       :setPosition(x, y)
       :subtract(self)
@@ -32,16 +32,19 @@ function Public:new()
         _G.p.new(self)
           :add(self.pos)
           :getPosition()
+
     end
 
   end
 
   function joystick:makeJoystick()
+      self.isActive = true
       self.pos:setPosition(0, 0)
       transition.to(self, {alpha=0.7, time=500})
   end
 
-  function joystick:stopped()
+  function joystick:stop()
+    self.isActive = false
     self.knob.x, self.knob.y = self.base.x, self.base.y
     self.pos:setPosition(0,0)
     transition.fadeOut(self, {time=500})

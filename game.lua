@@ -35,9 +35,6 @@ local trackingLevel = 0.05
 local camSpeedSizeMax = 0.016
 local camZoomDir
 
---------------------------------------------
-
--- forward declarations and other locals
 local enemies = {}
 local objects = {}
 local theDoor
@@ -47,11 +44,14 @@ local screenTouched, update, getDeltaTime, keysPressed
 local gameEnded = false
 
 function scene:create(event)
-	_G.m.map = dusk.buildMap('levels/level1.json')
+	_G.m.map = dusk.buildMap('levels/level' .. _G.m.currentLevel .. '.json')
 	_G.m.map.cameraScale = 1
 
 	local sceneGroup = self.view
 	sceneGroup:insert(mapContainer)
+
+	mapContainer.x = mapContainer.x - display.contentWidth
+	transition.to(mapContainer, { x = 0 })
 
 	health = health.new()
 	sceneGroup:insert(health)
@@ -201,6 +201,7 @@ function scene:hide(event)
 		Runtime:removeEventListener('collision', onCollision)
 		Runtime:removeEventListener('key', keysPressed)
 		Runtime:removeEventListener('touch', screenTouched)
+
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
 		physics.stop()
@@ -287,8 +288,10 @@ function onCollision(event)
 			-- 		player:setState('injured', otherObj)
 			-- 	end
 
-			elseif otherObj.name == 'door' and otherObj.isOpen and player.item == 'key' then
-				gameOver()
+		elseif otherObj.name == 'door' then
+			-- and otherObj.isOpen
+			-- and player.item == 'key' then
+				nextLevel()
 			end
 		end
 	end
@@ -301,9 +304,9 @@ function screenTouched(event)
 			joystick.x, joystick.y = event.x, event.y
 			joystick:makeJoystick()
 		elseif event.phase == 'moved' then
-		  joystick:moved(event.x, event.y)
+		  if joystick.isActive then joystick:moved(event.x, event.y) end
 		elseif event.phase == 'ended' then
-			joystick:stopped()
+			joystick:stop()
 			player:setState('stopped')
 		end
 	end
@@ -333,6 +336,21 @@ function keysPressed(event)
 		elseif event.keyName == 'c' then
 			player:dash()
 		end
+	end
+end
+
+function nextLevel()
+	if not gameEnded then
+		gameEnded = true
+		_G.m.currentLevel = _G.m.currentLevel + 1
+		-- transition.to(mapContainer, { delta = true, x = display.contentWidth, onComplete = function()
+
+			_G.m.addTimer(100, function()
+				composer.gotoScene('next-level', { effect = 'zoomInOutFade', time = 200, params = { fadeTime = 500 }})
+			end)
+
+		-- end })
+
 	end
 end
 
