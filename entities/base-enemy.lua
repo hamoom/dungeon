@@ -31,6 +31,15 @@ function Public.new(obj, stateNames, name)
     item:applyLinearImpulse(x * 0.02, y * 0.02, item.x, item.y)
   end
 
+  function Enemy:findNewCoord()
+    if not self.isColliding then
+      self.isColliding = true
+      self.coord = nil
+      timer.performWithDelay(300, function()
+        self.isColliding = false
+      end, 1)
+    end
+  end
 
   function Enemy:setState(state, player)
     local newState = states:getState(state)

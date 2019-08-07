@@ -26,7 +26,7 @@ function Public.new(group, x, y)
     bounce = 1,
     radius = 14
   })
-  Player.isFixedRotation = true
+  Player.isFixedRotation = false
   Player.linearDamping = 8
 
   Player.sword = display.newRect(Player, 0, 0, 56, 32)
@@ -69,6 +69,7 @@ function Public.new(group, x, y)
 
     if not self.fixedRotation then
       self.rotation = _G.h.getAngle(self.x, self.lastX, self.y, self.lastY)
+
     end
 
     self.sword.x, self.sword.y = self.display.x, self.display.y + self.height/4

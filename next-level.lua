@@ -16,7 +16,7 @@ function scene:create(event)
   local sceneGroup = self.view
 
 
-  timer.performWithDelay(210, function()
+  timer.performWithDelay(260, function()
     composer.removeScene('game')
     composer.loadScene('game')
     composer.removeScene('next-level')

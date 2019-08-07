@@ -11,29 +11,22 @@ local Player = require('entities.player.entity')
 local Enemies = {
 	blob = require('entities.blob.entity'),
 	orc = require('entities.orc.entity'),
+	archer = require('entities.archer.entity'),
 }
 
 local Objects = {
 	spike = require('objects.spike'),
 	door = require('objects.door')
 }
-local Spike
 
 local physics = require('physics')
 -- physics.setDrawMode('hybrid')
 physics.start()
 physics.setGravity(0, 0)
 
-local dusk = require('Dusk.Dusk')
-dusk.setPreference('virtualObjectsVisible', false)
-dusk.setPreference('enableObjectCulling', false)
--- dusk.setPreference('enableTileCulling', false)
-dusk.setPreference('cullingMargin', 2)
+local map = require('lib.map').new('levels/level-' .. _G.m.currentLevel .. '.json')
 
 local mapContainer = display.newGroup()
-local trackingLevel = 0.05
-local camSpeedSizeMax = 0.016
-local camZoomDir
 
 local enemies = {}
 local objects = {}
@@ -44,14 +37,13 @@ local screenTouched, update, getDeltaTime, keysPressed
 local gameEnded = false
 
 function scene:create(event)
-	_G.m.map = dusk.buildMap('levels/level' .. _G.m.currentLevel .. '.json')
-	_G.m.map.cameraScale = 1
+
 
 	local sceneGroup = self.view
 	sceneGroup:insert(mapContainer)
 
-	mapContainer.x = mapContainer.x - display.contentWidth
-	transition.to(mapContainer, { x = 0 })
+	-- mapContainer.x = mapContainer.x - display.contentWidth
+	-- transition.to(mapContainer, { x = 0 })
 
 	health = health.new()
 	sceneGroup:insert(health)
@@ -84,15 +76,6 @@ function scene:create(event)
 	mapContainer:insert(_G.m.map)
 
 
-	local padding = 30
-
-	_G.m.map.setCameraBounds({
-		xMin = display.contentWidth/2 - padding,
-		xMax = _G.m.map.data.width - display.contentWidth/2 + padding,
-		yMin = display.contentHeight/2 - padding,
-		yMax = _G.m.map.data.height - display.contentHeight/2 + padding
-	})
-
 	for object in _G.m.map.layer['entities'].objects() do
 
 		if object.name == 'player' then
@@ -116,7 +99,7 @@ function scene:create(event)
 	health:setHealth(player.health)
 
 	_G.m.map.setCameraFocus(player)
-	_G.m.map.setTrackingLevel(trackingLevel)
+	_G.m.map.setTrackingLevel(0.06)
 
 	local attackBtn = widget.newButton({
 		width = 140,
@@ -252,20 +235,15 @@ end
 function onCollision(event)
 	if event.phase == 'began' then
 
-		local function findNewCoord(obj)
-			if not obj.isColliding then
-				obj.isColliding = true
-				obj.coord = nil
-				timer.performWithDelay(300, function()
-					obj.isColliding = false
-				end, 1)
-			end
-		end
+
 
 		local obj1, obj2 = event.object1, event.object2
 
-		if obj1.type == 'enemy' then findNewCoord(obj1) end
-		if obj2.type == 'enemy' then findNewCoord(obj2) end
+		if obj1.findNewCoord then obj1:findNewCoord() end
+		if obj2.findNewCoord then obj2:findNewCoord() end
+
+		if obj1.collisionCallBack then obj1:collisionCallBack() end
+		if obj2.collisionCallBack then obj2:collisionCallBack() end
 
 		if obj1.name == 'player' or obj2.name == 'player' then
 			local player
@@ -412,40 +390,14 @@ function update()
 
 		if enemy.isAttacking and _G.h.hasCollided(player.display, enemy)
 		or enemy.weapon and enemy.weapon.isAttacking and _G.h.hasCollided(player.display, enemy.weapon) then
-			player:setState('injured', enemy)
+			player:setState('injured', enemy.weapon or enemy)
+
+			if enemy.weapon and enemy.weapon.collisionCallBack then enemy.weapon:collisionCallBack() end
 		end
 
 	end
 
-
-	local camScale = _G.m.map.cameraScale
-
-
-
-
-
-	local camSpeedSize
-	local dir
-	if (player.state.name == 'stopped') then
-		camSpeedSize = math.abs(camScale - 1.2) * camSpeedSizeMax
-		dir = 1
-	else
-		camSpeedSize = math.abs(camScale - 1) * camSpeedSizeMax
-		dir = -1
-	end
-
-	camScale = camScale * (1 + (dir * camSpeedSize))
-	if camSpeedSize < 0.001 then camSpeedSize = 0 end
-
-	if camScale > 1.2 then
-		camScale = 1.2
-	elseif camScale < 1 then
-		camScale = 1
-	end
-
-	_G.m.map.updateView()
-	_G.m.map.xScale, _G.m.map.yScale = camScale, camScale
-	_G.m.map.cameraScale = camScale
+	_G.m.map:moveCamera()
 end
 
 ---------------------------------------------------------------------------------
