@@ -4,8 +4,9 @@ local widget = require('widget')
 
 local scene = composer.newScene()
 
-local health =  require('ui.health')
-local joystick = require('ui.joystick').new()
+_G.controls:toFront()
+local health = _G.controls.health
+local joystick = _G.controls.joystick
 local Player = require('entities.player.entity')
 
 local Enemies = {
@@ -42,37 +43,6 @@ function scene:create(event)
 	local sceneGroup = self.view
 	sceneGroup:insert(mapContainer)
 
-	-- mapContainer.x = mapContainer.x - display.contentWidth
-	-- transition.to(mapContainer, { x = 0 })
-
-	health = health.new()
-	sceneGroup:insert(health)
-	sceneGroup:insert(joystick)
-
-	local pauseButton = widget.newButton({
-			x=display.contentWidth-40,
-			y=30,
-			width=30,
-			height=30,
-			shape="rect",
-			onPress=function(event)
-				scene:pauseToggle()
-				event.target:setEnabled(false)
-				timer.performWithDelay(1000, function()
-					event.target:setEnabled(true)
-				end,1)
-			end
-	})
-
-	-- lets not spam pausing
-	pauseButton:setEnabled(false)
-	timer.performWithDelay(1200, function()
-		pauseButton:setEnabled(true)
-	end,1)
-
-	pauseButton:setFillColor(1,1,1)
-	sceneGroup:insert(pauseButton)
-
 	mapContainer:insert(_G.m.map)
 
 
@@ -101,44 +71,30 @@ function scene:create(event)
 	_G.m.map.setCameraFocus(player)
 	_G.m.map.setTrackingLevel(0.06)
 
-	local attackBtn = widget.newButton({
-		width = 140,
-		height = 110,
-		onPress = function(event)
-			if event.phase == 'began' then
-				player:attack()
-			end
+	_G.controls.attackBtnFn = function(event)
+		if event.phase == 'began' then
+			player:attack()
 		end
-	})
+	end
 
-	attackBtn.x = display.contentWidth - 140
-	attackBtn.y = display.contentHeight - 80
-	sceneGroup:insert(attackBtn)
-
-	attackBtn.visual = display.newRect(sceneGroup, attackBtn.x, attackBtn.y, attackBtn.width, attackBtn.height)
-	attackBtn.visual.alpha = 0.4
-
-	local dashBtn = widget.newButton({
-		width = 140,
-		height = 110,
-		onPress = function(event)
-			if event.phase == 'began' then
-				player:dash()
-				event.target:setEnabled(false)
-				timer.performWithDelay(400, function()
-					event.target:setEnabled(true)
-				end,1)
-
-			end
+	_G.controls.dashBtnFn = function(event)
+		if event.phase == 'began' then
+			player:dash()
+			event.target:setEnabled(false)
+			timer.performWithDelay(400, function()
+				event.target:setEnabled(true)
+			end,1)
 		end
-	})
+	end
 
-	dashBtn.x = display.contentWidth - 140
-	dashBtn.y = attackBtn.y - 140
-	sceneGroup:insert(dashBtn)
-
-	dashBtn.visual = display.newRect(sceneGroup, dashBtn.x, dashBtn.y, dashBtn.width, dashBtn.height)
-	dashBtn.visual.alpha = 0.4
+	_G.controls.pauseBtnFn = function(event)
+		scene:pauseToggle()
+		event.target:setEnabled(false)
+		timer.performWithDelay(1000, function()
+			event.target:setEnabled(true)
+		end,1)
+	end
+	
 end
 
 function scene:pauseToggle()

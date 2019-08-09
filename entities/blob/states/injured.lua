@@ -19,7 +19,7 @@ function Public:new(ent)
     ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
     _G.m.addTimer(1000, function()
-      ent.health = ent.health - 1
+      ent.health = ent.health - 2
 
       if ent.health > 0 then
         ent:setState('stopped', player)

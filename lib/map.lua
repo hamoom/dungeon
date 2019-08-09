@@ -26,7 +26,9 @@ function Public.new(mapPath)
 
     local camSpeedSize
     local dir
-    if (player.state.name == 'stopped') then
+
+    local isPlayerMoving = math.abs(player.vx) > 0 or math.abs(player.vy) > 0
+    if not isPlayerMoving then
       camSpeedSize = math.abs(camScale - 1.2) * self.camSpeedSizeMax
       dir = 1
     else
