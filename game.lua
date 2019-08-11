@@ -57,12 +57,14 @@ function scene:create(event)
 		end
 	end
 
-	for object in _G.m.map.layer['objects'].objects() do
-			if object.name == 'door' then
-				theDoor = Objects[object.name].new(_G.m.map.layer['objects'], object)
-			else
-				objects[#objects+1] = Objects[object.name].new(_G.m.map.layer['objects'], object)
-			end
+	if _G.m.map.layer['objects'] then
+		for object in _G.m.map.layer['objects'].objects() do
+				if object.name == 'door' then
+					theDoor = Objects[object.name].new(_G.m.map.layer['objects'], object)
+				else
+					objects[#objects+1] = Objects[object.name].new(_G.m.map.layer['objects'], object)
+				end
+		end
 	end
 
 
@@ -94,7 +96,7 @@ function scene:create(event)
 			event.target:setEnabled(true)
 		end,1)
 	end
-	
+
 end
 
 function scene:pauseToggle()
@@ -325,7 +327,7 @@ function update()
 	for _, obj in pairs(activeObjects) do
 		if obj.isAttacking then
 
-			if _G.h.hasCollided(obj, player.display) then
+			if _G.h.hasCollided(obj, player.sprite) then
 				player:setState('injured', obj)
 			end
 
@@ -344,8 +346,8 @@ function update()
 			enemy:setState('injured', player)
 		end
 
-		if enemy.isAttacking and _G.h.hasCollided(player.display, enemy)
-		or enemy.weapon and enemy.weapon.isAttacking and _G.h.hasCollided(player.display, enemy.weapon) then
+		if enemy.isAttacking and _G.h.hasCollided(player.sprite, enemy)
+		or enemy.weapon and enemy.weapon.isAttacking and _G.h.hasCollided(player.sprite, enemy.weapon) then
 			player:setState('injured', enemy.weapon or enemy)
 
 			if enemy.weapon and enemy.weapon.collisionCallBack then enemy.weapon:collisionCallBack() end

@@ -276,7 +276,7 @@ function Helper.findValidCoord(ent, map, range)
 end
 
 function Helper.isFacing(obj1, obj2)
-  print(obj1.rotation, obj2.rotation)  
+  print(obj1.rotation, obj2.rotation)
   return (obj1.rotation == -180 and obj2.rotation == 0)
     or (obj1.rotation == 0 and obj2.rotation == -180)
     or (obj1.rotation == 90 and obj2.rotation == -90)
@@ -308,6 +308,14 @@ function Helper.getAngle(x, lastX, y, lastY)
   end
 
   return angle
+end
+
+function Helper.getFacing(x, lastX, y, lastY)
+  local angle = Helper.getAngle(x, lastX, y, lastY)  
+  if angle == -180 then return 'top' end
+  if angle == 0 then return 'bottom' end
+  if angle == -90 then return 'right' end
+  if angle == 90 then return 'left' end
 end
 
 function Helper.rotateToward(obj1, obj2)

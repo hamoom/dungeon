@@ -19,6 +19,18 @@ function Public:new(ent)
       ent.vy * ent.speed
     )
 
+    if ent.facing == 'bottom' then
+      ent:setAnim('running-f')
+    elseif ent.facing == 'top' then
+      ent:setAnim('running-b')
+    elseif ent.facing == 'right' then
+      ent:setAnim('running-s')
+      ent.xScale = 1
+    elseif ent.facing == 'left' then
+      ent:setAnim('running-s')
+      ent.xScale = -1
+    end
+
     if ent.attacking then ent:setState('attacking') end
   end
 

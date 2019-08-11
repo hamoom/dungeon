@@ -6,9 +6,29 @@ function Public.new(group, x, y)
   local Player = display.newGroup()
   group:insert(Player)
 
-  Player.display = display.newRect(Player, 0, 0, 32, 32)
+
+  local sequenceData = {
+    { name='stopped-f', frames={1,2,1,2,1,2,3}, time=2000 },
+    { name='stopped-b', frames={4,5}, time=1000 },
+    { name='stopped-s', frames={12,13}, time=1000 },
+    { name='running-f', frames={9,10,11}, time=300 },
+    { name='running-b', frames={6,7,8}, time=300 },
+    { name='running-s', frames={14,15,16}, time=300 },
+  }
+
+
+  local sheetInfo = require("sprites.player")
+  local myImageSheet = graphics.newImageSheet("sprites/player.png", sheetInfo:getSheet())
+  Player.sprite = display.newSprite(myImageSheet, sequenceData)
+  Player:insert(Player.sprite)
+  Player.sprite:play()
+
+
+
+  -- Player.sprite = display.newRect(Player, 0, 0, 32, 32)
   Player.dirInd = display.newRect(Player, 0, 0, 10, 10)
   Player.dirInd:setFillColor(0,1,1)
+  Player.dirInd.isVisible = false
 
   Player.name = 'player'
   Player.item = nil
@@ -54,6 +74,16 @@ function Public.new(group, x, y)
     end
   end
 
+  function Player:setAnim(sequence)
+      local sprite = self.sprite and self.sprite or self
+      if sprite.sequence ~= sequence then
+
+          sprite:setSequence(sequence)
+          sprite:play()
+          sprite.sequence = sequence
+      end
+  end
+
   function Player:attack()
     if self.state.name ~= 'injured' then self:setState('attacking') end
   end
@@ -68,12 +98,13 @@ function Public.new(group, x, y)
     self.state:update()
 
     if not self.fixedRotation then
-      self.rotation = _G.h.getAngle(self.x, self.lastX, self.y, self.lastY)
-
+      self.facing = _G.h.getFacing(self.x, self.lastX, self.y, self.lastY) or 'bottom'
+      -- self.rotation = _G.h.getAngle(self.x, self.lastX, self.y, self.lastY)
     end
 
-    self.sword.x, self.sword.y = self.display.x, self.display.y + self.height/4
-    self.dirInd.x, self.dirInd.y = self.display.x, self.display.y + self.height/4
+
+    self.sword.x, self.sword.y = self.sprite.x, self.sprite.y + self.height/4
+    self.dirInd.x, self.dirInd.y = self.sprite.x, self.sprite.y + self.height/4
     self.lastX, self.lastY = self.x, self.y
   end
 

@@ -4,6 +4,7 @@ function Public:new(ent)
   local State = {}
 
   function State:update()
+
     ent.speed = ent.speed * 0.9
 
     if math.abs(ent.vx) > 0 or math.abs(ent.vy) > 0 then
@@ -16,6 +17,18 @@ function Public:new(ent)
     )
 
     if ent.attacking then ent:setState('attacking') end
+    
+    if ent.facing == 'bottom' then
+      ent:setAnim('stopped-f')
+    elseif ent.facing == 'top' then
+      ent:setAnim('stopped-b')
+    elseif ent.facing == 'right' then
+      ent:setAnim('stopped-s')
+      ent.xScale = 1
+    elseif ent.facing == 'left' then
+      ent:setAnim('stopped-s')
+      ent.xScale = -1
+    end
 
   end
 
