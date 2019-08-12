@@ -26,6 +26,7 @@ function Public.new(group, x, y)
 
   Player.name = 'player'
   Player.item = nil
+  Player.facing = 'bottom'
   Player.speed = 0
   Player.maxSpeed = 150
   Player.x, Player.y = x, y
@@ -97,7 +98,8 @@ function Public.new(group, x, y)
       self.swordGroup.rotation = _G.h.getAngle(self.x, self.lastX, self.y, self.lastY)
     end
 
-    self.facing = _G.h.getFacing(self.x, self.lastX, self.y, self.lastY) or 'bottom'
+    local newFacing = _G.h.getFacing(self.x, self.lastX, self.y, self.lastY)
+    if newFacing then self.facing = newFacing end
 
     self.sword.x, self.sword.y = self.sprite.x, self.sprite.y + self.height/4
     self.lastX, self.lastY = self.x, self.y

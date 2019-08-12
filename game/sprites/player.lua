@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:33237c074162deedcb636e9916b16cf4:735c65f241e962613494ce2160b8be50:b2f580ea7c37465eac371f095cbaf8c7$
+-- $TexturePacker:SmartUpdate:097758be70ab20e78f61322d626a4970:436689ef5cba8acd037e3707f1e88c9b:b2f580ea7c37465eac371f095cbaf8c7$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -25,7 +25,7 @@ SheetInfo.sheet =
         {
             -- player2
             x=1,
-            y=281,
+            y=41,
             width=28,
             height=38,
 
@@ -33,7 +33,7 @@ SheetInfo.sheet =
         {
             -- player3
             x=1,
-            y=321,
+            y=81,
             width=28,
             height=38,
 
@@ -41,7 +41,7 @@ SheetInfo.sheet =
         {
             -- player4
             x=1,
-            y=361,
+            y=121,
             width=28,
             height=38,
 
@@ -49,7 +49,7 @@ SheetInfo.sheet =
         {
             -- player5
             x=1,
-            y=401,
+            y=161,
             width=28,
             height=38,
 
@@ -57,7 +57,7 @@ SheetInfo.sheet =
         {
             -- player6
             x=1,
-            y=441,
+            y=201,
             width=28,
             height=38,
 
@@ -65,7 +65,7 @@ SheetInfo.sheet =
         {
             -- player7
             x=1,
-            y=361,
+            y=241,
             width=28,
             height=38,
 
@@ -73,7 +73,7 @@ SheetInfo.sheet =
         {
             -- player8
             x=1,
-            y=481,
+            y=281,
             width=28,
             height=38,
 
@@ -81,7 +81,7 @@ SheetInfo.sheet =
         {
             -- player9
             x=1,
-            y=521,
+            y=321,
             width=28,
             height=38,
 
@@ -89,7 +89,7 @@ SheetInfo.sheet =
         {
             -- player10
             x=1,
-            y=41,
+            y=361,
             width=28,
             height=38,
 
@@ -97,7 +97,7 @@ SheetInfo.sheet =
         {
             -- player11
             x=1,
-            y=81,
+            y=401,
             width=28,
             height=38,
 
@@ -105,7 +105,7 @@ SheetInfo.sheet =
         {
             -- player12
             x=1,
-            y=121,
+            y=441,
             width=28,
             height=38,
 
@@ -113,7 +113,7 @@ SheetInfo.sheet =
         {
             -- player13
             x=1,
-            y=161,
+            y=481,
             width=28,
             height=38,
 
@@ -121,7 +121,7 @@ SheetInfo.sheet =
         {
             -- player14
             x=1,
-            y=201,
+            y=521,
             width=28,
             height=38,
 
@@ -129,7 +129,7 @@ SheetInfo.sheet =
         {
             -- player15
             x=1,
-            y=121,
+            y=561,
             width=28,
             height=38,
 
@@ -137,15 +137,23 @@ SheetInfo.sheet =
         {
             -- player16
             x=1,
-            y=241,
+            y=601,
+            width=28,
+            height=38,
+
+        },
+        {
+            -- player17
+            x=1,
+            y=641,
             width=28,
             height=38,
 
         },
     },
     
-    sheetContentWidth = 30,
-    sheetContentHeight = 560
+    sheetContentWidth = 32,
+    sheetContentHeight = 2048
 }
 
 SheetInfo.frameIndex =
@@ -167,6 +175,7 @@ SheetInfo.frameIndex =
     ["player14"] = 14,
     ["player15"] = 15,
     ["player16"] = 16,
+    ["player17"] = 17,
 }
 
 function SheetInfo:getSheet()
