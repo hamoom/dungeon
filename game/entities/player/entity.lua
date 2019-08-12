@@ -47,7 +47,7 @@ function Public.new(group, x, y)
   Player:insert(Player.swordGroup)
   Player.sword = display.newRect(Player.swordGroup, 0, 0, 56, 32)
   Player.sword.active = false
-  -- Player.sword.isVisible = false
+  Player.sword.isVisible = false
   Player.sword:setFillColor(1,0,0)
 
   local stateNames = {'attacking', 'injured', 'running', 'stopped', 'dashing'}
@@ -94,11 +94,10 @@ function Public.new(group, x, y)
     self.state:update()
 
     if not self.fixedRotation then
-      self.facing = _G.h.getFacing(self.x, self.lastX, self.y, self.lastY) or 'bottom'
       self.swordGroup.rotation = _G.h.getAngle(self.x, self.lastX, self.y, self.lastY)
-      print(self.swordGroup.rotation)
     end
 
+    self.facing = _G.h.getFacing(self.x, self.lastX, self.y, self.lastY) or 'bottom'
 
     self.sword.x, self.sword.y = self.sprite.x, self.sprite.y + self.height/4
     self.lastX, self.lastY = self.x, self.y

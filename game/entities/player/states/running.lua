@@ -19,17 +19,24 @@ function Public:new(ent)
       ent.vy * ent.speed
     )
 
+
+    ent.sprite.xScale = 1
     if ent.facing == 'bottom' then
       ent:setAnim('running-f')
     elseif ent.facing == 'top' then
       ent:setAnim('running-b')
-    elseif ent.facing == 'right' then
+    elseif ent.facing == 'right' or ent.facing == 'left' then
+
+      local vx, _ = ent:getLinearVelocity()
       ent:setAnim('running-s')
-      ent.sprite.xScale = 1
-    elseif ent.facing == 'left' then
-      ent:setAnim('running-s')
-      ent.sprite.xScale = -1
+      if vx > 0 then
+        ent.sprite.xScale = 1
+      else
+        ent.sprite.xScale = -1
+      end
     end
+
+
 
     if ent.attacking then ent:setState('attacking') end
   end

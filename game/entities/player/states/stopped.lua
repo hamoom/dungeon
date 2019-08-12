@@ -17,17 +17,15 @@ function Public:new(ent)
     )
 
     if ent.attacking then ent:setState('attacking') end
-    
+
     if ent.facing == 'bottom' then
       ent:setAnim('stopped-f')
     elseif ent.facing == 'top' then
       ent:setAnim('stopped-b')
     elseif ent.facing == 'right' then
-      ent:setAnim('stopped-s')
-      ent.xScale = 1
+      ent:setAnim('stopped-s')      
     elseif ent.facing == 'left' then
       ent:setAnim('stopped-s')
-      ent.xScale = -1
     end
 
   end
