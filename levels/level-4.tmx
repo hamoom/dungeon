@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="30">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="47">
  <tileset firstgid="1" name="new" tilewidth="32" tileheight="32" tilecount="16" columns="8">
-  <image source="../better-tileset.png" width="256" height="64"/>
+  <image source="../game/graphics/tileset.png" width="256" height="64"/>
  </tileset>
  <layer name="ground" width="100" height="100">
   <data encoding="csv">
@@ -220,14 +220,14 @@
   <object id="5" x="272" y="112" width="16" height="192"/>
   <object id="6" x="160" y="192" width="16" height="224"/>
   <object id="7" x="0" y="0" width="16" height="192"/>
-  <object id="8" x="544" y="32" width="16" height="272"/>
   <object id="9" x="784" y="32" width="16" height="384"/>
   <object id="10" x="80" y="80" width="208" height="32"/>
-  <object id="11" x="160" y="384" width="640" height="32"/>
-  <object id="12" x="272" y="272" width="288" height="32"/>
   <object id="13" x="552" y="48" width="248" height="32"/>
   <object id="14" x="0" y="8" width="96" height="32"/>
   <object id="15" x="80" y="0" width="16" height="112"/>
+  <object id="34" x="160" y="384" width="640" height="32"/>
+  <object id="45" x="272" y="272" width="288" height="32"/>
+  <object id="46" x="544" y="32" width="16" height="272"/>
  </objectgroup>
  <objectgroup name="entities">
   <object id="21" name="player" x="32" y="96" width="32" height="32">
@@ -240,27 +240,12 @@
     <property name="name" value="blob"/>
    </properties>
   </object>
-  <object id="25" name="blob" x="224" y="320" width="32" height="32">
+  <object id="25" name="blob" x="432" y="328" width="32" height="32">
    <properties>
     <property name="name" value="blob"/>
    </properties>
   </object>
-  <object id="26" name="blob" x="448" y="352" width="32" height="32">
-   <properties>
-    <property name="name" value="blob"/>
-   </properties>
-  </object>
-  <object id="27" name="blob" x="608" y="256" width="32" height="32">
-   <properties>
-    <property name="name" value="blob"/>
-   </properties>
-  </object>
-  <object id="28" name="blob" x="672" y="128" width="32" height="32">
-   <properties>
-    <property name="name" value="blob"/>
-   </properties>
-  </object>
-  <object id="29" name="blob" x="704" y="256" width="32" height="32">
+  <object id="31" name="blob" x="656" y="208" width="32" height="32">
    <properties>
     <property name="name" value="blob"/>
    </properties>
