@@ -17,11 +17,23 @@ function Public:new(ent)
   end
 
   function State:start()
+    
+    if ent.facing == 'bottom' then
+      ent:setAnim('attacking-f')
+    elseif ent.facing == 'top' then
+      ent:setAnim('attacking-a')
+    elseif ent.facing == 'right' then
+      ent:setAnim('attacking-s')
+    elseif ent.facing == 'left' then
+      ent:setAnim('attacking-s')
+    end
+
+
     ent.fixedRotation = true
     ent.sword.active = true
-    ent.sword.isVisible = true
+    -- ent.sword.isVisible = true
 
-    self.attackTimer = 0.25
+    self.attackTimer = 0.30
   end
 
   function State:exit()

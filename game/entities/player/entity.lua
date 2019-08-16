@@ -8,21 +8,25 @@ function Public.new(group, x, y)
 
 
   local sequenceData = {
-    { name='stopped-f', frames={1,2,1,2,1,2,3}, time=2000 },
-    { name='stopped-b', frames={4,5}, time=1000 },
-    { name='stopped-s', frames={12,13}, time=1000 },
-    { name='running-f', frames={9,10,11}, time=300 },
-    { name='running-b', frames={6,7,8}, time=300 },
-    { name='running-s', frames={14,15,16}, time=300 },
+    { name='stopped-f', frames={ 1,2,1,2,1,2,3 }, time=2000 },
+    { name='stopped-b', frames={ 4,5 }, time=1000 },
+    { name='stopped-s', frames={ 12,13 }, time=1000 },
+    { name='running-f', frames={ 9,10,11 }, time=300 },
+    { name='running-b', frames={ 6,7,8 }, time=300 },
+    { name='running-s', frames={ 14,15,16 }, time=300 },
+    { name='attacking-f', frames={ 17,18,19,20,21 }, time=300, loopCount=1 },
+    { name='attacking-s', frames={ 22,23,24 }, time=200, loopCount=1 },
+    { name='attacking-a', frames={ 25,26,27,28 }, time=250, loopCount=1 },
+    { name='injured-f', frames={ 29 }, time=250, loopCount=1 },
   }
 
+  Player.shadow = display.newImageRect(Player, 'graphics/shadow.png', 28, 7)
 
-  local sheetInfo = require("sprites.player")
-  local myImageSheet = graphics.newImageSheet("sprites/player.png", sheetInfo:getSheet())
+  local sheetInfo = require('sprites.player')
+  local myImageSheet = graphics.newImageSheet('sprites/player.png', sheetInfo:getSheet())
   Player.sprite = display.newSprite(myImageSheet, sequenceData)
   Player:insert(Player.sprite)
   Player.sprite:play()
-
 
   Player.name = 'player'
   Player.item = nil
@@ -50,6 +54,8 @@ function Public.new(group, x, y)
   Player.sword.active = false
   Player.sword.isVisible = false
   Player.sword:setFillColor(1,0,0)
+
+
 
   local stateNames = {'attacking', 'injured', 'running', 'stopped', 'dashing'}
   local states = stateList.new(Player, stateNames)
@@ -101,6 +107,7 @@ function Public.new(group, x, y)
     local newFacing = _G.h.getFacing(self.x, self.lastX, self.y, self.lastY)
     if newFacing then self.facing = newFacing end
 
+    self.shadow.x, self.shadow.y = self.sprite.x, self.sprite.y + 10
     self.sword.x, self.sword.y = self.sprite.x, self.sprite.y + self.height/4
     self.lastX, self.lastY = self.x, self.y
   end
