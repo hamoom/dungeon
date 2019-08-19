@@ -6,7 +6,8 @@ function Public.new(group, x, y)
   local Player = display.newGroup()
   group:insert(Player)
 
-
+  local sheetInfo = require('sprites.player')
+  local myImageSheet = graphics.newImageSheet('sprites/player.png', sheetInfo:getSheet())
   local sequenceData = {
     { name='stopped-f', frames={ 1,2,1,2,1,2,3 }, time=2000 },
     { name='stopped-b', frames={ 4,5 }, time=1000 },
@@ -20,10 +21,40 @@ function Public.new(group, x, y)
     { name='injured-f', frames={ 29 }, time=250, loopCount=1 },
   }
 
+  Player.dashSprites = {}
+  for i = 1, 10 do
+    local thisSprite = display.newSprite(myImageSheet, sequenceData)
+    group:insert(thisSprite)
+    thisSprite.isVisible = false
+    thisSprite.alpha = 0.3
+    thisSprite.cancelChase = function(self)
+      self.isVisible = false
+      _G.m.eachFrameRemove(self.animFunc)
+    end
+
+    thisSprite.chasePlayer = function(self)
+      self.animFunc = function()
+        if p.new(self):distanceTo(Player) > 10 then
+          local velocity = p.new(Player)
+            :subtract(self)
+            :normalize()
+            :multiply(15)
+
+          self.x, self.y = self.x + velocity.x, self.y + velocity.y
+        else
+          self:cancelChase()
+        end
+      end
+      _G.m.addTimer(100, function()
+        _G.m.eachFrame(self.animFunc)
+      end)
+
+    end
+    Player.dashSprites[#Player.dashSprites + 1] = thisSprite
+  end
+
   Player.shadow = display.newImageRect(Player, 'graphics/shadow.png', 28, 7)
 
-  local sheetInfo = require('sprites.player')
-  local myImageSheet = graphics.newImageSheet('sprites/player.png', sheetInfo:getSheet())
   Player.sprite = display.newSprite(myImageSheet, sequenceData)
   Player:insert(Player.sprite)
   Player.sprite:play()

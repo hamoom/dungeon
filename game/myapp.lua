@@ -5,7 +5,9 @@ MyApp.dt = 0
 MyApp.paused = false
 MyApp.timers = {}
 MyApp.map = nil
-MyApp.currentLevel = 4
+MyApp.currentLevel = 3
+
+MyApp.enterFrameFunctions = nil
 
 function MyApp.cancelTimer(t)
   timer.cancel(t)
@@ -39,7 +41,6 @@ function MyApp.addTimer(delay, fn, iterations)
   return thisTimer
 end
 
-
 function MyApp.pause()
   if not MyApp.paused then
 
@@ -64,5 +65,37 @@ function MyApp.pause()
   end
 end
 
+function MyApp._enterFrame()
+  if MyApp.paused then do return end end
+  if MyApp.enterFrameFunctions then
+    for i = 1, #MyApp.enterFrameFunctions do
+      if MyApp.enterFrameFunctions[i] then MyApp.enterFrameFunctions[i]() end
+    end
+  end
+end
+
+function MyApp.eachFrame(fn)
+  if not MyApp.enterFrameFunctions then
+    MyApp.enterFrameFunctions = {}
+    Runtime:addEventListener("enterFrame", MyApp._enterFrame)
+  end
+  table.insert(MyApp.enterFrameFunctions, fn)
+end
+
+function MyApp.eachFrameRemove(fn)
+  local ind = table.indexOf(MyApp.enterFrameFunctions, fn)
+  if ind then
+    table.remove(MyApp.enterFrameFunctions, ind)
+    if #MyApp.enterFrameFunctions == 0 then
+      Runtime:removeEventListener("enterFrame", MyApp._enterFrame)
+      MyApp.enterFrameFunctions = nil
+    end
+  end
+end
+
+function MyApp.eachFrameRemoveAll()
+  Runtime:removeEventListener("enterFrame", MyApp._enterFrame)
+  MyApp.enterFrameFunctions = nil
+end
 
 return MyApp

@@ -1,127 +1,132 @@
 local floor = math.floor
--- local m = require("myapp")
+local mrand = math.random
+local mabs = math.abs
+local mround = math.round
+
 local Helper = {}
 
 Helper.chain = {}
 
 
 function Helper.formatTime(seconds)
-    local secs = floor(seconds)
-    local secsDec = (seconds - secs) * 100
-    return string.format("%02d.%02d", secs, secsDec)
+  local secs = floor(seconds)
+  local secsDec = (seconds - secs) * 100
+  return string.format("%02d.%02d", secs, secsDec)
 end
 
 
 function Helper.countDown(timer, max, reset, action)
-    timer = timer - m.dt
-    if reset then reset() end
-    if timer <= 0 then
-        if action then action() end
-        timer = max
-    end
+  timer = timer - m.dt
+  if reset then reset() end
+  if timer <= 0 then
+    if action then action() end
+    timer = max
+  end
 
-    return timer
+  return timer
 end
 
 function Helper.isActive(obj, paddingX, paddingY)
 
-    if obj.localToContent then
-        local localX, localY = obj:localToContent(0, 0)
-        -- print(localX, localY)
+  if obj.localToContent then
+    local localX, localY = obj:localToContent(0, 0)
+    -- print(localX, localY)
 
-        local paddingX = paddingX or 0
-        local paddingY = paddingY or 0
+    local paddingX = paddingX or 0
+    local paddingY = paddingY or 0
 
-        local minX, maxX = -obj.width/2 - paddingX, display.contentWidth + obj.width/2 + paddingX
-        local minY, maxY = -obj.height/2 - paddingY, display.contentHeight + obj.height/2 + paddingY
+    local minX, maxX = -obj.width/2 - paddingX, display.contentWidth + obj.width/2 + paddingX
+    local minY, maxY = -obj.height/2 - paddingY, display.contentHeight + obj.height/2 + paddingY
 
-        return (localX > minX and localX < maxX) and (localY > minY and localY < maxY)
-    else
-        return false
-    end
+    return (localX > minX and localX < maxX) and (localY > minY and localY < maxY)
+  else
+    return false
+  end
 end
 
 function Helper.sign(num)
-    return (num < 0) and -1 or 1
+  return (num < 0) and -1 or 1
 end
 
 function Helper.easeSin(f,a, damping)
-    local a = a
-    return function(t, tMax, start, delta)
-        a = a * damping
-        return start + delta + a * math.sin((t/tMax) * f * math.pi * 2)
-    end
+  local a = a
+  return function(t, tMax, start, delta)
+    a = a * damping
+    return start + delta + a * math.sin((t/tMax) * f * math.pi * 2)
+  end
 end
 
 function Helper.randomBetween(min, max)
-    if max < min then
-        error("max cannot be less than min")
-    end
-    return math.random() * (max - min) + min
+  if max < min then
+    error("max cannot be less than min")
+  end
+  return math.random() * (max - min) + min
 end
 function Helper.randomSign()
-    return (math.random(0, 1) == 1) and 1 or -1
+  return (math.random(0, 1) == 1) and 1 or -1
 end
 
 function Helper.oscillate(f, a, axis, howlong, damping, fn)
 
-    if not damping then damping = 0.7 end
-    return function(thing)
-        transition.to(thing, {time=howlong, delta=true, [axis]=0, transition=Helper.easeSin(f,a, damping), onComplete=function()
-            if fn then
-                fn()
-            end
-        end})
-    end
+  if not damping then damping = 0.7 end
+  return function(thing)
+    transition.to(thing, {time=howlong, delta=true, [axis]=0, transition=Helper.easeSin(f,a, damping), onComplete=function()
+      if fn then
+        fn()
+      end
+    end})
+  end
 end
 
 
 function Helper.impulse(objects, duration)
-    duration = duration / 1000
+  duration = duration / 1000
 
-    local function animation()
-        duration = duration - m.dt
-        for _, obj in ipairs(objects) do
-            if obj.x and obj.y then
-                obj.x = obj.x + (obj.vector.x * obj.speed * m.dt)
-                obj.y = obj.y + (obj.vector.y * obj.speed * m.dt)
+  local function animation()
+    duration = duration - _G.m.dt
+    for _, obj in ipairs(objects) do
+      if obj.x and obj.y then
+        obj.x = obj.x + (obj.vector.x * obj.speed * _G.m.dt)
+        obj.y = obj.y + (obj.vector.y * obj.speed * _G.m.dt)
 
-                if obj.vector.y < 1 then
-                    obj.vector.y = obj.vector.y + 0.045
-                end
-
-                if duration <= 0 then
-                    Runtime:removeEventListener("enterFrame", animation)
-                    m.eachFrameRemove(animation)
-                    obj.isVisible = false
-                end
-            end
+        if obj.vector.y < 1 then
+          obj.vector.y = obj.vector.y + 0.045
         end
+
+        if duration <= 0 then
+          Runtime:removeEventListener("enterFrame", animation)
+          _G.m.eachFrameRemove(animation)
+          obj.isVisible = false
+        end
+      end
     end
-    m.eachFrame(animation)
+  end
+  m.eachFrame(animation)
 end
 
 function Helper.verticalCollisions(velocityStep, obj1, obj2)
-    local yMod = math.abs(velocityStep.y)
-    local xMod = math.abs(velocityStep.x)
+  local yMod = math.abs(velocityStep.y)
+  local xMod = math.abs(velocityStep.x)
 
-    local bottom = (
-        yMod > xMod
-        and velocityStep.y > 0
-        and math.floor(Helper.bottomEdge(obj1) - math.abs(velocityStep.y)) <= math.ceil(Helper.topEdge(obj2))
-    ) and true or false
+  local bottom = (
+    yMod > xMod
+    and velocityStep.y > 0
+    and math.floor(Helper.bottomEdge(obj1) - math.abs(velocityStep.y)) <= math.ceil(Helper.topEdge(obj2))
+  )
+  and true or false
 
 
-    local top = (
-        yMod > xMod
-        and velocityStep.y < 0
-        and math.floor(Helper.topEdge(obj1) + math.abs(velocityStep.y)) >= math.ceil(Helper.bottomEdge(obj2))
-    ) and true or false
+  local top = (
+    yMod > xMod
+    and velocityStep.y < 0
+    and math.floor(Helper.topEdge(obj1) + math.abs(velocityStep.y)) >= math.ceil(Helper.bottomEdge(obj2))
+  )
+  and true or false
 
-    return {
-        bottom = bottom,
-        top = top
-    }
+  return {
+    bottom = bottom,
+    top = top
+  }
 end
 
 function Helper.clamp(num, min, max)
@@ -156,6 +161,7 @@ function Helper.rightBoundary(obj1, obj2)
 end
 
 function Helper.bottomBoundary(obj1, obj2)
+
     local offset = (obj1.y + obj1.height/2) - (obj2.y - obj2.height/2)
     return Helper.clamp(offset, 0, offset)
 end
@@ -197,10 +203,10 @@ end
 
 function Helper.hasCollided(obj1, obj2)
     if ( obj1 == nil ) then  -- Make sure the first object exists
-        return false
+      return false
     end
     if ( obj2 == nil ) then  -- Make sure the other object exists
-        return false
+      return false
     end
 
     local function left()
@@ -226,7 +232,7 @@ function Helper.dumpvar(data)
     -- cache of tables already printed, to avoid infinite recursive loops
     local tablecache = {}
     local buffer = ""
-    local padder = "    "
+    local padder = "  "
 
     local function _dumpvar(d, depth)
         local t = type(d)
@@ -276,7 +282,7 @@ function Helper.findValidCoord(ent, map, range)
 end
 
 function Helper.isFacing(obj1, obj2)
-  print(obj1.rotation, obj2.rotation)
+
   return (obj1.rotation == -180 and obj2.rotation == 0)
     or (obj1.rotation == 0 and obj2.rotation == -180)
     or (obj1.rotation == 90 and obj2.rotation == -90)
@@ -286,7 +292,7 @@ end
 function Helper.getAngle(x, lastX, y, lastY)
 
   local real_vx, real_vy = x - lastX, y - lastY
-  local avx, avy = math.abs(real_vx), math.abs(real_vy)
+  local avx, avy = mround(mabs(real_vx)), mround(mabs(real_vy))
   local angle
 
   if avy > avx then
@@ -311,7 +317,7 @@ function Helper.getAngle(x, lastX, y, lastY)
 end
 
 function Helper.getFacing(x, lastX, y, lastY)
-  local angle = Helper.getAngle(x, lastX, y, lastY)  
+  local angle = Helper.getAngle(x, lastX, y, lastY)
   if angle == -180 then return 'top' end
   if angle == 0 then return 'bottom' end
   if angle == -90 then return 'right' end
@@ -340,5 +346,22 @@ function Helper.rotateToward(obj1, obj2)
   return angle
 end
 
+function Helper.stutter()
+  physics.pause()
+
+  for _, v in pairs(_G.m.timers) do
+    timer.pause(v)
+  end
+  transition.pause()
+
+  timer.performWithDelay(100, function()
+    physics.start()
+    for _, v in pairs(_G.m.timers) do
+      timer.resume(v)
+    end
+    transition.resume()
+  end, 1)
+
+end
 
 return Helper

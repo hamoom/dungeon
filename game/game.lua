@@ -136,7 +136,7 @@ function scene:hide(event)
 	local phase = event.phase
 
 	if event.phase == 'will' then
-
+		_G.m.eachFrameRemoveAll()
 		_G.m.cancelAllTimers()
 		Runtime:removeEventListener('enterFrame', update)
 		Runtime:removeEventListener('collision', onCollision)
