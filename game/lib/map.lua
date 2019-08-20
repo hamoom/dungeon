@@ -1,3 +1,4 @@
+local mabs = math.abs
 local dusk = require("Dusk.Dusk")
 dusk.setPreference("virtualObjectsVisible", false)
 dusk.setPreference("enableObjectCulling", false)
@@ -21,18 +22,19 @@ function Public.new(mapPath)
 		yMax = Map.data.height - display.contentHeight/2 + padding
 	})
 
-  function Map:moveCamera()
+  function Map:moveCamera(player)
     local camScale = self.cameraScale
 
     local camSpeedSize
     local dir
-
-    local isPlayerMoving = math.abs(player.vx) > 0 or math.abs(player.vy) > 0
+    local vx, vy = player:getLinearVelocity()
+    local isPlayerMoving = mabs(vx) > 0 or mabs(vy) > 0
+    -- print(isPlayerMoving, math.abs(player.vx),  math.abs(player.vy))
     if not isPlayerMoving then
-      camSpeedSize = math.abs(camScale - 1.5) * self.camSpeedSizeMax
+      camSpeedSize = mabs(camScale - 1.5) * self.camSpeedSizeMax
       dir = 1
     else
-      camSpeedSize = math.abs(camScale - 1.2) * self.camSpeedSizeMax
+      camSpeedSize = mabs(camScale - 1.2) * self.camSpeedSizeMax
       dir = -1
     end
 

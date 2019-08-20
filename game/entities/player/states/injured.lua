@@ -36,7 +36,7 @@ function Public:new(ent)
       for i = 1, self.bloodAmount do
         local blood = display.newRect(group, ent.x + mrand(-5, 5), ent.y + mrand(-5, 5), sizeX, sizeY)
         blood:setFillColor(1,0,0)
-        transition.to(blood, {delay = 4000, alpha = 0, time = 1500, onComplete = function()
+        transition.to(blood, {delay = 20000, alpha = 0, time = 1500, onComplete = function()
           display.remove(blood)
         end})
 
@@ -81,7 +81,7 @@ function Public:new(ent)
         end)
       end
     end)
-    
+
     _G.h.stutter()
 
   end

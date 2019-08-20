@@ -19,7 +19,7 @@ function Public.new(group, x, y)
     { name='attacking-s', frames={ 22,23,24 }, time=200, loopCount=1 },
     { name='attacking-a', frames={ 25,26,27,28 }, time=250, loopCount=1 },
     -- { name='injured-f', frames={ 29 }, time=250, loopCount=1 },
-    { name='death', frames={ 29,29,30,30,31,32,33,34 }, time=600, loopCount=1 },
+    { name='death', frames={ 29,29,30,30,31,32,33,34,35,35,36,36,37 }, time=800, loopCount=1 },
   }
 
   Player.dashSprites = {}
@@ -106,7 +106,7 @@ function Public.new(group, x, y)
       newState.prevStateName = prevStateName
       self.state:exit(newState)
       newState:start(enemy)
-      self.state = newState      
+      self.state = newState
     end
   end
 

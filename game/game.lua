@@ -34,6 +34,7 @@ local mapContainer = display.newGroup()
 local enemies = {}
 local objects = {}
 local theDoor
+local player
 
 local lastUpdate = 0
 local screenTouched, update, getDeltaTime, keysPressed, stopInput
@@ -369,7 +370,7 @@ function update()
 
 	end
 
-	_G.m.map:moveCamera()
+	_G.m.map:moveCamera(player)
 end
 
 function stopInput()

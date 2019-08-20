@@ -29,6 +29,13 @@ function Public:new(ent)
       time = time * 1.15
     end
 
+    ent.sprite.fill.effect = 'filter.brightness'
+    ent.sprite.fill.effect.intensity = 1
+
+    _G.m.addTimer(50, function()
+      ent.sprite.fill.effect = ""
+    end)
+
     self.lockedVx, self.lockedVy = ent.vx, ent.vy
     self.dashTimer = 0.08
   end
