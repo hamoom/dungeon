@@ -6,7 +6,7 @@ function Public.new(ent, states)
 
   for _, v in pairs(states) do
     list[v] = require('entities.' .. ent.name .. '.states.' .. v):new(ent)
-    list[v].name = v
+    list[v].name = v    
   end
 
   function list:getState(state)

@@ -202,10 +202,12 @@ end
 
 
 function Helper.hasCollided(obj1, obj2)
-    if ( obj1 == nil ) then  -- Make sure the first object exists
+    if obj1 == nil
+    or obj1.state and obj1.state.name == 'death' then  -- Make sure the first object exists
       return false
     end
-    if ( obj2 == nil ) then  -- Make sure the other object exists
+    if obj2 == nil
+    or obj2.state and obj2.state.name == 'death' then  -- Make sure the other object exists
       return false
     end
 
@@ -350,14 +352,18 @@ function Helper.stutter()
   physics.pause()
 
   for _, v in pairs(_G.m.timers) do
-    timer.pause(v)
+    if not v._expired then
+      timer.pause(v)
+    end
   end
   transition.pause()
 
   timer.performWithDelay(100, function()
     physics.start()
     for _, v in pairs(_G.m.timers) do
-      timer.resume(v)
+      if not v._expired then
+        timer.resume(v)
+      end
     end
     transition.resume()
   end, 1)

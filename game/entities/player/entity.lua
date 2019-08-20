@@ -18,7 +18,8 @@ function Public.new(group, x, y)
     { name='attacking-f', frames={ 17,18,19,20,21 }, time=300, loopCount=1 },
     { name='attacking-s', frames={ 22,23,24 }, time=200, loopCount=1 },
     { name='attacking-a', frames={ 25,26,27,28 }, time=250, loopCount=1 },
-    { name='injured-f', frames={ 29 }, time=250, loopCount=1 },
+    -- { name='injured-f', frames={ 29 }, time=250, loopCount=1 },
+    { name='death', frames={ 29,29,30,30,31,32,33,34 }, time=600, loopCount=1 },
   }
 
   Player.dashSprites = {}
@@ -88,7 +89,7 @@ function Public.new(group, x, y)
 
 
 
-  local stateNames = {'attacking', 'injured', 'running', 'stopped', 'dashing'}
+  local stateNames = {'attacking', 'injured', 'running', 'stopped', 'dashing', 'death'}
   local states = stateList.new(Player, stateNames)
   Player.state = states:getState('stopped')
 
@@ -99,23 +100,24 @@ function Public.new(group, x, y)
   function Player:setState(state, enemy)
     local newState = states:getState(state)
 
+
     if self.state.name ~= newState.name then
       local prevStateName = self.state.name
       newState.prevStateName = prevStateName
       self.state:exit(newState)
       newState:start(enemy)
-      self.state = newState
+      self.state = newState      
     end
   end
 
   function Player:setAnim(sequence)
-      local sprite = self.sprite and self.sprite or self
-      if sprite.sequence ~= sequence then
+    local sprite = self.sprite and self.sprite or self
+    if sprite.sequence ~= sequence then
 
-          sprite:setSequence(sequence)
-          sprite:play()
-          sprite.sequence = sequence
-      end
+      sprite:setSequence(sequence)
+      sprite:play()
+      sprite.sequence = sequence
+    end
   end
 
   function Player:attack()
@@ -128,6 +130,7 @@ function Public.new(group, x, y)
 
   function Player:update(vx, vy)
     self.vx, self.vy = vx, vy
+
 
     self.state:update()
 

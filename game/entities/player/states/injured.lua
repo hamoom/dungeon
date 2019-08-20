@@ -13,9 +13,6 @@ function Public:new(ent)
   end
 
   local function bloodSplosion()
-    ent.sprite.fill.effect = 'filter.brightness'
-    ent.sprite.fill.effect.intensity = 1
-    -- ent.sprite:setFillColor(0.6,0,0)
 
     for _, blood in pairs(State.bloods) do
       local randomSpread = math.random(-5,5)
@@ -39,7 +36,9 @@ function Public:new(ent)
       for i = 1, self.bloodAmount do
         local blood = display.newRect(group, ent.x + mrand(-5, 5), ent.y + mrand(-5, 5), sizeX, sizeY)
         blood:setFillColor(1,0,0)
-        transition.to(blood, { delay = 4000, alpha = 0, time = 1500 })
+        transition.to(blood, {delay = 4000, alpha = 0, time = 1500, onComplete = function()
+          display.remove(blood)
+        end})
 
       end
       self.bloodAmount = self.bloodAmount - 3
@@ -51,13 +50,11 @@ function Public:new(ent)
   end
 
   function State:start(enemy)
-    -- ent.health = ent.health - 3
-
+    ent.health = ent.health - 3
 
     Runtime:dispatchEvent({ name = 'changeHealth', params = { health = ent.health }})
 
     local diff = _G.p.newFromSubtraction(ent, enemy):normalize()
-
 
     diff.x = diff.x + (mrand(-100, 100) / 100)
     diff.y = diff.y + (mrand(-100, 100) / 100)
@@ -70,33 +67,27 @@ function Public:new(ent)
     self.bloodTimer = 0
     self.bloodAmount = 10
     bloodSplosion()
-
-
+    ent.sprite.fill.effect = 'filter.brightness'
+    ent.sprite.fill.effect.intensity = 1
 
     _G.m.addTimer(50, function()
       ent.sprite.fill.effect = ""
-    end)
 
-    _G.m.addTimer(300, function()
       if ent.health <= 0 then
-        ent.health = 0
-        Runtime:dispatchEvent({ name = 'gameOver' })
+        ent:setState('death')
       else
-        -- ent.alpha = 1
-        ent.sprite.fill.effect = ""
-        ent.sprite:setFillColor(1,1,1)
-        ent:setState('stopped')
+        _G.m.addTimer(250, function()
+          ent:setState('stopped')
+        end)
       end
     end)
-
-    _G.h.stutter()
     
-  end
+    _G.h.stutter()
 
+  end
 
   function State:exit()
   end
-
 
   return State
 end

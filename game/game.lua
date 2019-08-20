@@ -4,9 +4,11 @@ local widget = require('widget')
 
 local scene = composer.newScene()
 
-_G.controls:toFront()
+_G.controls = require('ui.controls'):new()
+_G.controls.group:toFront()
 local health = _G.controls.health
 local joystick = _G.controls.joystick
+
 local Player = require('entities.player.entity')
 
 local Enemies = {
@@ -34,7 +36,7 @@ local objects = {}
 local theDoor
 
 local lastUpdate = 0
-local screenTouched, update, getDeltaTime, keysPressed
+local screenTouched, update, getDeltaTime, keysPressed, stopInput
 local gameEnded = false
 
 function scene:create(event)
@@ -174,7 +176,9 @@ function scene:destroy(event)
 end
 
 function preCollision(event)
-	if player.state.name == 'running' or player.state.name == 'dashing' or player.state.name == 'stopped' then
+	if player.state.name == 'running'
+	or player.state.name == 'dashing'
+	or player.state.name == 'stopped' then
 		if event.contact then
 			event.contact.bounce = 0
 
@@ -194,15 +198,19 @@ end
 function onCollision(event)
 	if event.phase == 'began' then
 
-
-
 		local obj1, obj2 = event.object1, event.object2
 
 		if obj1.findNewCoord then obj1:findNewCoord() end
 		if obj2.findNewCoord then obj2:findNewCoord() end
 
-		if obj1.collisionCallBack then obj1:collisionCallBack() end
-		if obj2.collisionCallBack then obj2:collisionCallBack() end
+		if obj1.collisionCallBack
+		and obj2.name ~= 'player' then
+			obj1:collisionCallBack()
+		end
+		if obj2.collisionCallBack
+		and obj1.name ~= 'player' then
+			obj2:collisionCallBack()
+		end
 
 		if obj1.name == 'player' or obj2.name == 'player' then
 			local player
@@ -241,7 +249,9 @@ function screenTouched(event)
 			joystick.x, joystick.y = event.x, event.y
 			joystick:makeJoystick()
 		elseif event.phase == 'moved' then
-		  if joystick.isActive then joystick:moved(event.x, event.y) end
+		  if joystick.isActive then
+				joystick:moved(event.x, event.y)
+			end
 		elseif event.phase == 'ended' then
 			joystick:stop()
 			player:setState('stopped')
@@ -295,6 +305,7 @@ function gameOver()
 	if not gameEnded then
 		gameEnded = true
 		_G.m.addTimer(100, function()
+			_G.controls:remove()
 			composer.gotoScene('retry', { time = 0, params = { fadeTime = 500 }})
 		end)
 	end
@@ -329,7 +340,7 @@ function update()
 		if obj.isAttacking then
 
 			if _G.h.hasCollided(obj, player.sprite) then
-				player:setState('injured', obj)
+				-- player:setState('injured', obj)
 			end
 
 			for _, enemy in pairs(activeEnemies) do
@@ -349,15 +360,21 @@ function update()
 
 		if enemy.isAttacking and _G.h.hasCollided(player.sprite, enemy)
 		or enemy.weapon and enemy.weapon.isAttacking and _G.h.hasCollided(player.sprite, enemy.weapon) then
-			enemy:bounce(player)
-			player:setState('injured', enemy or enemy.weapon)
-
+			if player.health > 0 then
+				enemy:bounce(player)
+				player:setState('injured', enemy or enemy.weapon)
+			end
 			if enemy.weapon and enemy.weapon.collisionCallBack then enemy.weapon:collisionCallBack() end
 		end
 
 	end
 
 	_G.m.map:moveCamera()
+end
+
+function stopInput()
+	Runtime:removeEventListener("touch", screenTouched)
+	Runtime:removeEventListener('key', keysPressed)
 end
 
 ---------------------------------------------------------------------------------
@@ -372,8 +389,8 @@ Runtime:addEventListener('key', keysPressed)
 Runtime:addEventListener('touch', screenTouched)
 
 Runtime:addEventListener('collision', onCollision)
-
 Runtime:addEventListener('gameOver', gameOver)
+Runtime:addEventListener('stopInput', stopInput)
 
 -----------------------------------------------------------------------------------------
 

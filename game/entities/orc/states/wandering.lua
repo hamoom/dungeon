@@ -12,7 +12,8 @@ function Public:new(ent)
 
   function State:update(player)
     self:superUpdate(player)
-    if _G.p.new(ent):distanceTo(player) < ent.chaseDistance then
+    if _G.p.new(ent):distanceTo(player) < ent.chaseDistance
+    and player.state.name ~= 'death' then
       ent:setState('chasing', player)
     end
   end

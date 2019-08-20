@@ -19,7 +19,6 @@ function Public:new(ent)
       ent.vy * ent.speed
     )
 
-
     ent.sprite.xScale = 1
     if ent.facing == 'bottom' then
       ent:setAnim('running-f')
@@ -35,8 +34,6 @@ function Public:new(ent)
         ent.sprite.xScale = -1
       end
     end
-
-
 
     if ent.attacking then ent:setState('attacking') end
   end

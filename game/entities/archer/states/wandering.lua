@@ -12,7 +12,10 @@ function Public:new(ent)
 
   function State:update(player)
     self:superUpdate(player)
-    if _G.p.new(ent):distanceTo(player) < ent.attackDistance then ent:setState('shooting', player) end
+    if _G.p.new(ent):distanceTo(player) < ent.attackDistance
+    and player.state.name ~= 'death' then
+       ent:setState('shooting', player)
+    end
   end
 
   function State:start(player)

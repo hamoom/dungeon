@@ -4,12 +4,12 @@ local Controls = {}
 
 function Controls:new()
   if not self.created then
-    self = display.newGroup()
+    self.group = display.newGroup()
     self.joystick = require('ui.joystick').new()
     self.health = require('ui.health').new()
 
-    self:insert(self.joystick)
-    self:insert(self.health)
+    self.group:insert(self.joystick)
+    self.group:insert(self.health)
 
     -----------------------------
     -- Attack Button
@@ -25,9 +25,9 @@ function Controls:new()
     local attackBtn = self.attackBtn
   	attackBtn.x = display.contentWidth - 140
   	attackBtn.y = display.contentHeight - 80
-  	self:insert(attackBtn)
+  	self.group:insert(attackBtn)
 
-  	attackBtn.visual = display.newRect(self, attackBtn.x, attackBtn.y, attackBtn.width, attackBtn.height)
+  	attackBtn.visual = display.newRect(self.group, attackBtn.x, attackBtn.y, attackBtn.width, attackBtn.height)
   	attackBtn.visual.alpha = 0.4
 
     -----------------------------
@@ -44,9 +44,9 @@ function Controls:new()
 
   	dashBtn.x = display.contentWidth - 140
   	dashBtn.y = attackBtn.y - 140
-  	self:insert(dashBtn)
+  	self.group:insert(dashBtn)
 
-  	dashBtn.visual = display.newRect(self, dashBtn.x, dashBtn.y, dashBtn.width, dashBtn.height)
+  	dashBtn.visual = display.newRect(self.group, dashBtn.x, dashBtn.y, dashBtn.width, dashBtn.height)
   	dashBtn.visual.alpha = 0.4
 
     -----------------------------
@@ -65,7 +65,7 @@ function Controls:new()
     local pauseButton = self.pauseButton
 
   	pauseButton:setFillColor(1,1,1)
-  	self:insert(pauseButton)
+  	self.group:insert(pauseButton)
 
     self.created = true
   end
@@ -75,7 +75,7 @@ end
 
 
 function Controls:remove()
-  display.remove(self)
+  display.remove(self.group)
   self.created = false
 end
 

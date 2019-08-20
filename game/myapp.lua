@@ -5,7 +5,7 @@ MyApp.dt = 0
 MyApp.paused = false
 MyApp.timers = {}
 MyApp.map = nil
-MyApp.currentLevel = 3
+MyApp.currentLevel = 4
 
 MyApp.enterFrameFunctions = nil
 

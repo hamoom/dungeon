@@ -54,6 +54,11 @@ function Public.new(obj, stateNames, name)
   end
 
   function Enemy:update(player)
+
+    if player.state.name == 'death' then
+      self:setState('wandering', player)
+    end
+    
     self.state:update(player)
 
     if not self.fixedRotation then
