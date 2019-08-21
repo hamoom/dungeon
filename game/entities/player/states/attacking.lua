@@ -17,29 +17,31 @@ function Public:new(ent)
   end
 
   function State:start()
-    
+    local weaponComponent = ent.components.weapon
+    local SpriteComponent = ent.components.sprite
+
     if ent.facing == 'bottom' then
-      ent:setAnim('attacking-f')
+      SpriteComponent:setAnim('attacking-f')
     elseif ent.facing == 'top' then
-      ent:setAnim('attacking-a')
+      SpriteComponent:setAnim('attacking-a')
     elseif ent.facing == 'right' then
-      ent:setAnim('attacking-s')
+      SpriteComponent:setAnim('attacking-s')
     elseif ent.facing == 'left' then
-      ent:setAnim('attacking-s')
+      SpriteComponent:setAnim('attacking-s')
     end
 
 
     ent.fixedRotation = true
-    ent.sword.active = true
-    -- ent.sword.isVisible = true
+    weaponComponent:setAttacking(true)
 
     self.attackTimer = 0.30
   end
 
   function State:exit()
+    local weaponComponent = ent.components.weapon    
+
     ent.fixedRotation = false
-    ent.sword.active = false
-    ent.sword.isVisible = false
+    weaponComponent:setAttacking(false)
   end
 
 

@@ -7,7 +7,7 @@ function Public:new(ent)
   end
 
   function State:start(player)
-
+    _G.h.oscillate(3,20,"y",500)(_G.m.map)
 
     local impulseSpeed = 50
 

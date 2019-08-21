@@ -1,4 +1,5 @@
 local mabs = math.abs
+local mround = math.round
 local dusk = require("Dusk.Dusk")
 dusk.setPreference("virtualObjectsVisible", false)
 dusk.setPreference("enableObjectCulling", false)
@@ -13,7 +14,7 @@ function Public.new(mapPath)
   Map.camSpeedSizeMax = 0.016
   Map.camZoomDir = nil
 
-  local padding = 30
+  local padding = 100
 
   Map.setCameraBounds({
 		xMin = display.contentWidth/2 - padding,
@@ -27,10 +28,12 @@ function Public.new(mapPath)
 
     local camSpeedSize
     local dir
-    local vx, vy = player:getLinearVelocity()
-    local isPlayerMoving = mabs(vx) > 0 or mabs(vy) > 0
+    -- local vx, vy = player:getLinearVelocity()
+    -- local isPlayerMoving = mround(mabs(vx)) > 0 or mround(mabs(vy)) > 0
+    local isPlayerMoving = math.abs(player.vx) > 0 or math.abs(player.vy) > 0
+
     -- print(isPlayerMoving, math.abs(player.vx),  math.abs(player.vy))
-    if not isPlayerMoving then
+    if not isPlayerMoving or player.state.name == 'death' then
       camSpeedSize = mabs(camScale - 1.5) * self.camSpeedSizeMax
       dir = 1
     else

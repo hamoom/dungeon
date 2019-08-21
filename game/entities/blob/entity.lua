@@ -3,14 +3,11 @@ local BaseEnemy = require('entities.base-enemy')
 local Public = {}
 
 
-function Public.new(group, ogObj, player, id)
-
-  local stateNames = {'attacking', 'injured', 'stopped', 'wandering', 'colliding'}
+function Public.new(group, ogObj, player)
 
   local obj = display.newRect(group, ogObj.x, ogObj.y, 32, 32)
-  local Blob = BaseEnemy.new(obj, stateNames, 'blob')
-
-  Blob.id = id
+  local Blob = BaseEnemy.new(obj, 'blob', 'wandering', player)
+  Blob.superUpdate = Blob.update
   Blob.attackDistance = 170
   Blob.item = ogObj.item
   Blob.health = 2
@@ -36,9 +33,19 @@ function Public.new(group, ogObj, player, id)
     self:applyLinearImpulse(20 * diff.x, 20 * diff.y, self.x, self.y)
   end
 
-  Blob:createPhysics()
-  Blob:setState('wandering', player)
+  function Blob:update(player)
+    self:superUpdate(player)
+    local playerSprite = player.components.sprite:getSprite()
 
+    if self.isAttacking and _G.h.hasCollided(playerSprite, self) then
+      if player.health > 0 then
+				self:bounce(player)
+				player:setState('injured', self)
+			end
+    end
+  end
+
+  Blob:createPhysics()
 
   return Blob
 end

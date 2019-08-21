@@ -4,6 +4,7 @@ local widget = require('widget')
 
 local scene = composer.newScene()
 
+_G.m.spriteList = {}
 _G.controls = require('ui.controls'):new()
 _G.controls.group:toFront()
 local health = _G.controls.health
@@ -55,8 +56,7 @@ function scene:create(event)
 			player = Player.new(_G.m.map.layer['entities'], object.x, object.y)
 			player:addEventListener('preCollision', preCollision)
 		else
-			local newNum = #enemies+1
-			enemies[newNum] = Enemies[object.name].new(_G.m.map.layer['entities'], object, player, newNum)
+			enemies[#enemies + 1] = Enemies[object.name].new(_G.m.map.layer['entities'], object, player)
 		end
 	end
 
@@ -65,7 +65,7 @@ function scene:create(event)
 				if object.name == 'door' then
 					theDoor = Objects[object.name].new(_G.m.map.layer['objects'], object)
 				else
-					objects[#objects+1] = Objects[object.name].new(_G.m.map.layer['objects'], object)
+					objects[#objects + 1] = Objects[object.name].new(_G.m.map.layer['objects'], object)
 				end
 		end
 	end
@@ -339,8 +339,8 @@ function update()
 
 	for _, obj in pairs(activeObjects) do
 		if obj.isAttacking then
-
-			if _G.h.hasCollided(obj, player.sprite) then
+			local sprite = player.components.sprite:getSprite()
+			if _G.h.hasCollided(obj, sprite) then
 				-- player:setState('injured', obj)
 			end
 
@@ -353,21 +353,14 @@ function update()
 	end
 
 	for k, enemy in pairs(activeEnemies) do
-		enemy:update(player)
+		local playerSprite = player.components.sprite:getSprite()
+		local playerWeapon = player.components.weapon:getHitBox()
 
-		if player.sword.active and _G.h.hasCollided(player.sword, enemy) then
+		if playerWeapon.isAttacking and _G.h.hasCollided(playerWeapon, enemy) then
 			enemy:setState('injured', player)
 		end
 
-		if enemy.isAttacking and _G.h.hasCollided(player.sprite, enemy)
-		or enemy.weapon and enemy.weapon.isAttacking and _G.h.hasCollided(player.sprite, enemy.weapon) then
-			if player.health > 0 then
-				enemy:bounce(player)
-				player:setState('injured', enemy or enemy.weapon)
-			end
-			if enemy.weapon and enemy.weapon.collisionCallBack then enemy.weapon:collisionCallBack() end
-		end
-
+		enemy:update(player)
 	end
 
 	_G.m.map:moveCamera(player)

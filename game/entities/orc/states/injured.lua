@@ -8,6 +8,7 @@ function Public:new(ent)
 
   function State:start(player)
 
+    _G.h.oscillate(3,20,"y",500)(_G.m.map)
 
     local impulseSpeed = 15
     local diff = _G.p.newFromSubtraction(ent, player):normalize()

@@ -19,19 +19,22 @@ function Public:new(ent)
       ent.vy * ent.speed
     )
 
-    ent.sprite.xScale = 1
+
+    local spriteComponent = ent.components.sprite
+    local sprite = spriteComponent:getSprite()
+    sprite.xScale = 1
     if ent.facing == 'bottom' then
-      ent:setAnim('running-f')
+      spriteComponent:setAnim('running-f')
     elseif ent.facing == 'top' then
-      ent:setAnim('running-b')
+      spriteComponent:setAnim('running-b')
     elseif ent.facing == 'right' or ent.facing == 'left' then
 
       local vx, _ = ent:getLinearVelocity()
-      ent:setAnim('running-s')
+      spriteComponent:setAnim('running-s')
       if vx > 0 then
-        ent.sprite.xScale = 1
+        sprite.xScale = 1
       else
-        ent.sprite.xScale = -1
+        sprite.xScale = -1
       end
     end
 

@@ -1,40 +1,26 @@
 local physics = require('physics')
 local BaseEnemy = require('entities.base-enemy')
+
+local Weapon = require('components.items.weapon')
+
 local Public = {}
 
-
-function Public.new(group, ogObj, player, id)
-
-  local stateNames = {'wandering', 'chasing', 'blocking', 'attacking', 'injured'}
+function Public.new(group, ogObj, player)
 
   local obj = display.newGroup()
   group:insert(obj)
-  local Orc = BaseEnemy.new(obj, stateNames, 'orc')
+  local Orc = BaseEnemy.new(obj, 'orc', 'wandering', player)
   Orc.x, Orc.y = ogObj.x, ogObj.y
   Orc.display = display.newRect(Orc, 0, 0, 32, 32)
   Orc.superUpdate = Orc.update
-  Orc.id = id
   Orc.chaseDistance = 170
   Orc.item = ogObj.item
   Orc.health = 2
 
-  print(Orc.bounce)
-
-
   Orc.attackDistance = 40
-  Orc.weapon = display.newRect(Orc, 0, 0, 56, 46)
-  Orc.weapon.active = false
-  Orc.weapon.isVisible = false
-  Orc.weapon:setFillColor(1,1,0)
+  Orc:addComponent(Weapon, 56, 48)
 
   Orc.display:setFillColor(0.4,0.3,0)
-
-
-
-  function Orc:update(player)
-    self:superUpdate(player)
-    self.weapon.x, self.weapon.y = self.display.x, self.display.y + self.height/4
-  end
 
   function Orc:createPhysics()
     physics.addBody(self, 'dynamic', {
@@ -50,11 +36,23 @@ function Public.new(group, ogObj, player, id)
     self.isFixedRotation = true
   end
 
+  function Orc:update(player)
+    self:superUpdate(player)
+
+    local playerSprite = player.components.sprite:getSprite()
+    local weaponGroup = self.components.weapon:getGroup()
+    local weapon = self.components.weapon:getHitBox()
+    weaponGroup.rotation = _G.h.getAngle(self.x, self.lastX, self.y, self.lastY)
+    weapon.x, weapon.y = self.display.x, self.display.y + self.height/4
+
+    if weapon.isAttacking and _G.h.hasCollided(playerSprite, weapon) then
+      if player.health > 0 then
+				player:setState('injured', weapon)
+			end
+    end
+  end
+
   Orc:createPhysics()
-  Orc:setState('wandering', player)
-
-
-
   return Orc
 end
 

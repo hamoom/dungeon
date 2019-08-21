@@ -17,15 +17,15 @@ function Public:new(ent)
     )
 
     if ent.attacking then ent:setState('attacking') end
-
+    local spriteComponent = ent.components.sprite
     if ent.facing == 'bottom' then
-      ent:setAnim('stopped-f')
+      spriteComponent:setAnim('stopped-f')
     elseif ent.facing == 'top' then
-      ent:setAnim('stopped-b')
+      spriteComponent:setAnim('stopped-b')
     elseif ent.facing == 'right' then
-      ent:setAnim('stopped-s')      
+      spriteComponent:setAnim('stopped-s')
     elseif ent.facing == 'left' then
-      ent:setAnim('stopped-s')
+      spriteComponent:setAnim('stopped-s')
     end
 
   end

@@ -6,6 +6,7 @@ MyApp.paused = false
 MyApp.timers = {}
 MyApp.map = nil
 MyApp.currentLevel = 4
+MyApp.spritesList = {}
 
 MyApp.enterFrameFunctions = nil
 

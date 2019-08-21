@@ -34,17 +34,18 @@ function Public:new(ent)
 
   function State:update()
     local vx, vy = ent:getLinearVelocity()
-    print(vx, vy)
     if mabs(vx) < 2 and mabs(vy) < 2 then
       ent.isSensor = true
     end
   end
 
   function State:start()
+    local spriteComponent = ent.components.sprite
+    spriteComponent:setAnim('death')
+
     Runtime:dispatchEvent({ name = 'stopInput' })
     _G.controls:remove()
-
-    ent:setAnim('death')
+        
     createGhost()
 
     _G.m.addTimer(5000, function()

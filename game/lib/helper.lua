@@ -90,7 +90,7 @@ function Helper.impulse(objects, duration)
         obj.y = obj.y + (obj.vector.y * obj.speed * _G.m.dt)
 
         if obj.vector.y < 1 then
-          obj.vector.y = obj.vector.y + 0.045
+          obj.vector.y = obj.vector.y + obj.downSpeed
         end
 
         if duration <= 0 then
@@ -349,7 +349,12 @@ function Helper.rotateToward(obj1, obj2)
 end
 
 function Helper.stutter()
+
   physics.pause()
+
+  for _, v in pairs(_G.m.spriteList) do
+    v:pause()
+  end
 
   for _, v in pairs(_G.m.timers) do
     if not v._expired then
@@ -360,6 +365,11 @@ function Helper.stutter()
 
   timer.performWithDelay(100, function()
     physics.start()
+
+    for _, v in pairs(_G.m.spriteList) do
+      v:play()
+    end
+
     for _, v in pairs(_G.m.timers) do
       if not v._expired then
         timer.resume(v)

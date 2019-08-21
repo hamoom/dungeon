@@ -1,17 +1,12 @@
+local BaseEntity = require('entities.base-entity')
 local stateList = require('lib.state-machine.create-states')
 local Public = {}
 
-function Public.new(obj, stateNames, name)
-  local Enemy = obj
-  Enemy.name = name
-  Enemy.type = 'enemy'
-  Enemy.state = {
-    name = 'blank',
-    exit = function() end
-  }
-  Enemy.lastX, Enemy.lastY = Enemy.x, Enemy.y
+function Public.new(obj, name, initialState, player)
+  local Enemy = BaseEntity.new(obj, name, initialState, player)
 
-  local states = stateList.new(Enemy, stateNames, 'enemies')
+  Enemy.type = 'enemy'
+  Enemy.lastX, Enemy.lastY = Enemy.x, Enemy.y
 
   function Enemy:dropItem()
     local item = display.newRect(self.parent, self.x, self.y, 16, 16)
@@ -41,24 +36,12 @@ function Public.new(obj, stateNames, name)
     end
   end
 
-  function Enemy:setState(state, player)
-    local newState = states:getState(state)
-
-    if self.state.name ~= newState.name then
-      local prevStateName = self.state.name
-      newState.prevStateName = prevStateName
-      self.state:exit(newState)
-      newState:start(player)
-      self.state = newState
-    end
-  end
-
   function Enemy:update(player)
 
     if player.state.name == 'death' then
       self:setState('wandering', player)
     end
-    
+
     self.state:update(player)
 
     if not self.fixedRotation then
