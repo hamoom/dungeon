@@ -18,12 +18,10 @@ function Public:new(ent)
     local BloodComponent = ent.components.blood
     BloodComponent:splash()
 
-    local impulseSpeed = 20
-
-    ent:setLinearVelocity(0, 0)
 
     local diff = _G.p.newFromSubtraction(ent, player):normalize()
-
+    local impulseSpeed = 20
+    ent:setLinearVelocity(0, 0)
     ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
     if ent.health > 0 then
@@ -33,7 +31,6 @@ function Public:new(ent)
     else
       ent:setState('death', player)
     end
-
 
   end
 
