@@ -14,10 +14,19 @@ function Public:new(ent)
 
   function State:update(player)
     State:superUpdate(player)
+
+    local vx, _ = ent:getLinearVelocity()
+    ent.xScale = math.round(vx) > 0 and -1 or 1
+
     if _G.p.new(ent):distanceTo(player) < ent.attackDistance
     and player.state.name ~= 'death' then
       ent:setState('attacking', player)
     end
+  end
+
+  function State:start(player)
+    local spriteComponent = ent.components.sprite
+    spriteComponent:setAnim('wandering')
   end
 
 

@@ -4,34 +4,40 @@ function Public:new(ent)
   local State = {}
 
   function State:update()
+    local BloodComponent = ent.components.blood
+    BloodComponent:createStreak()
   end
 
   function State:start(player)
+
+    -- print('im here')
+    ent.health = ent.health - 1
+
     _G.h.oscillate(3,20,"y",500)(_G.m.map)
 
-    local impulseSpeed = 50
+    local BloodComponent = ent.components.blood
+    BloodComponent:splash()
 
-    ent.alpha = 0.3
+    local impulseSpeed = 20
+
     ent:setLinearVelocity(0, 0)
 
     local diff = _G.p.newFromSubtraction(ent, player):normalize()
 
     ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
-    _G.m.addTimer(1000, function()
-      ent.health = ent.health - 2
-
-      if ent.health > 0 then
+    if ent.health > 0 then
+      _G.m.addTimer(1000, function()
         ent:setState('stopped', player)
-      elseif ent.health <= 0 and ent.item then
-        ent:dropItem()
-      end
-    end)
+      end)
+    else
+      ent:setState('death', player)
+    end
+
 
   end
 
   function State:exit()
-    ent.alpha = 1
   end
 
 

@@ -14,12 +14,16 @@ function Public.new(ent, name, initialState, otherEnt)
   function ent:setState(state, obj)
     local newState = states:getState(state)
 
+
     if self.state.name ~= newState.name then
+      if self.name == 'blob' then print(self.state.name, newState.name) end
       local prevStateName = self.state.name
       newState.prevStateName = prevStateName
       self.state:exit(newState)
       newState:start(obj)
       self.state = newState
+
+
     end
   end
 

@@ -45,8 +45,8 @@ function Public:new(ent)
 
     Runtime:dispatchEvent({ name = 'stopInput' })
     _G.controls:remove()
-        
-    createGhost()
+
+    -- createGhost()
 
     _G.m.addTimer(5000, function()
       Runtime:dispatchEvent({ name = 'gameOver' })

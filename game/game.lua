@@ -52,11 +52,15 @@ function scene:create(event)
 
 	for object in _G.m.map.layer['entities'].objects() do
 
+		if object.name ~= 'player' then
+			enemies[#enemies + 1] = Enemies[object.name].new(_G.m.map.layer['entities'], object, player)
+		end
+	end
+
+	for object in _G.m.map.layer['entities'].objects() do
 		if object.name == 'player' then
 			player = Player.new(_G.m.map.layer['entities'], object.x, object.y)
 			player:addEventListener('preCollision', preCollision)
-		else
-			enemies[#enemies + 1] = Enemies[object.name].new(_G.m.map.layer['entities'], object, player)
 		end
 	end
 
@@ -326,7 +330,6 @@ function update()
 
 		if enemy.health <= 0 then
 			local thisEnemy = table.remove(enemies, k)
-			if thisEnemy then thisEnemy:destroy() end
 		elseif _G.h.isActive(enemy) then
 			activeEnemies[#activeEnemies+1] = enemy
 		end
@@ -356,7 +359,8 @@ function update()
 		local playerSprite = player.components.sprite:getSprite()
 		local playerWeapon = player.components.weapon:getHitBox()
 
-		if playerWeapon.isAttacking and _G.h.hasCollided(playerWeapon, enemy) then
+		if playerWeapon.isAttacking
+		and _G.h.hasCollided(playerWeapon, enemy) then			
 			enemy:setState('injured', player)
 		end
 

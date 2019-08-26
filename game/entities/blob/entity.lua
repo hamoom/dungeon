@@ -1,18 +1,30 @@
 local physics = require('physics')
 local BaseEnemy = require('entities.base-enemy')
+local CreateSprite = require('components.graphics.create-sprite')
+local Blood = require('components.graphics.blood')
 local Public = {}
 
 
 function Public.new(group, ogObj, player)
 
-  local obj = display.newRect(group, ogObj.x, ogObj.y, 32, 32)
+  local obj = display.newGroup()
+  obj.x, obj.y = ogObj.x, ogObj.y
+  group:insert(obj)
   local Blob = BaseEnemy.new(obj, 'blob', 'wandering', player)
+
   Blob.superUpdate = Blob.update
   Blob.attackDistance = 170
   Blob.item = ogObj.item
   Blob.health = 2
+  Blob.fixedRotation = true
 
-  Blob:setFillColor(0,1,0)
+  Blob.shadow = display.newImageRect(Blob, 'graphics/shadow.png', 28, 7)
+  Blob:addComponent(CreateSprite)
+  Blob:addComponent(
+    Blood,
+    {r = 0.435, g=0.890, b=0.710}
+  )
+
 
   function Blob:createPhysics()
     physics.addBody(self, 'dynamic', {
@@ -34,8 +46,11 @@ function Public.new(group, ogObj, player)
   end
 
   function Blob:update(player)
+
     self:superUpdate(player)
+
     local playerSprite = player.components.sprite:getSprite()
+    local blobSprite = self.components.sprite:getSprite()
 
     if self.isAttacking and _G.h.hasCollided(playerSprite, self) then
       if player.health > 0 then
@@ -43,7 +58,12 @@ function Public.new(group, ogObj, player)
 				player:setState('injured', self)
 			end
     end
+
+    self.shadow.x, self.shadow.y = blobSprite.x, blobSprite.y + 12
+    -- print(self.state.name)
   end
+
+
 
   Blob:createPhysics()
 

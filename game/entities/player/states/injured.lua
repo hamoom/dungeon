@@ -11,7 +11,7 @@ function Public:new(ent)
   end
 
   function State:start(enemy)
-    ent.health = ent.health - 1
+    ent.health = ent.health - 1    
 
     local BloodComponent = ent.components.blood
     BloodComponent:splash()
@@ -28,12 +28,7 @@ function Public:new(ent)
     ent:setLinearVelocity(0,0)
     ent:applyLinearImpulse(0.2 * diff.x, 0.2  * diff.y, ent.x, ent.y)
 
-    local sprite = ent.components.sprite:getSprite()
-    sprite.fill.effect = 'filter.brightness'
-    sprite.fill.effect.intensity = 1
-
     _G.m.addTimer(50, function()
-      sprite.fill.effect = ""
 
       if ent.health <= 0 then
         ent:setState('death')

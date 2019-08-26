@@ -1,5 +1,6 @@
 local BaseEntity = require('entities.base-entity')
 local stateList = require('lib.state-machine.create-states')
+local animation = require("plugin.animation")
 local Public = {}
 
 function Public.new(obj, name, initialState, player)
@@ -53,7 +54,17 @@ function Public.new(obj, name, initialState, player)
   function Enemy:destroy()
     self.state:exit()
     transition.cancel(self)
-    display.remove(self)
+    physics.removeBody(self)
+    -- transition.to(self, {alpha = 0.5, time = 2000})
+
+    local spriteComponent = self.components.sprite
+    if spriteComponent then
+      local sprite = spriteComponent:getSprite()
+
+      sprite.fill.effect = "filter.saturate"
+      animation.to(sprite.fill.effect, {intensity = 0.2}, {time = 1000})
+    end
+
   end
 
   function Enemy:bounce() end

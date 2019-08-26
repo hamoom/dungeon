@@ -8,14 +8,10 @@ function Public:new(ent)
 
   function State:start(player)
     local spriteComponent = ent.components.sprite
-    spriteComponent:setAnim('wandering')
-    self.timer = _G.m.addTimer(500, function()
-
-      if _G.p.new(ent):distanceTo(player) < ent.attackDistance then
-        ent:setState('attacking', player)
-      else
-        ent:setState('wandering', player)
-      end
+    spriteComponent:setAnim('death')
+    
+    self.timer = _G.m.addTimer(1000, function()
+      ent:destroy()
     end)
   end
 

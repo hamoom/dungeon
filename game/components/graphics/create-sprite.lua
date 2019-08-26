@@ -1,6 +1,7 @@
 local Public = {}
 Public.name = 'sprite'
 function Public.new(ent)
+
   local SpriteComponent = {}
 
   local spriteData = require('data.sprite-info.' .. ent.name)
@@ -15,7 +16,7 @@ function Public.new(ent)
 
     local sprite = self.sprite
     if sprite.sequence ~= sequence then
-
+      
       sprite:setSequence(sequence)
       sprite:play()
       sprite.sequence = sequence

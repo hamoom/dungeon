@@ -2,7 +2,9 @@ local mrand = math.random
 local Public = {}
 Public.name = 'blood'
 
-function Public.new(ent)
+function Public.new(ent, args)
+  local customBlood = unpack(args)
+  local bloodColor = customBlood or { r = 1, g = 0, b = 0}
   local BloodComponent = {}
 
   BloodComponent.bloodtimerMax = 1
@@ -21,10 +23,8 @@ function Public.new(ent)
 
       for i = 1, self.bloodAmount do
         local blood = display.newRect(group, ent.x + mrand(-5, 5), ent.y + mrand(-5, 5), sizeX, sizeY)
-        blood:setFillColor(1,0,0)
-        transition.to(blood, {delay = 15000, alpha = 0, time = 1500, onComplete = function()
-          display.remove(blood)
-        end})
+        blood:setFillColor(bloodColor.r, bloodColor.g, bloodColor.b)
+        blood.alpha = 0.8
 
       end
       self.bloodAmount = self.bloodAmount - 3
@@ -37,17 +37,25 @@ function Public.new(ent)
   function BloodComponent:splash()
     local group = _G.m.map.layer['ground']
 
+    local sprite = ent.components.sprite:getSprite()
+    if sprite then
+      sprite.fill.effect = 'filter.brightness'
+      sprite.fill.effect.intensity = 1
+
+      _G.m.addTimer(50, function()
+        sprite.fill.effect.intensity = 0
+      end)
+    end
+
     for i = 1, 12 do
       local sizeX, sizeY = mrand(2, 7), mrand(2, 7)
       local blood = display.newRect(group, ent.x + mrand(-5, 5), ent.y + mrand(-5, 5), sizeX, sizeY)
-      blood:setFillColor(1,0,0)
+      blood:setFillColor(bloodColor.r, bloodColor.g, bloodColor.b)
+      blood.alpha = 0.8
       local moveTime = 200
       transition.to( blood, { x = mrand(-40,40), time = moveTime, delta = true} )
       transition.to( blood, { y = mrand(-30,-10), delay = 0, time = moveTime/2, transition = easing.outCirc, delta = true} )
       transition.to( blood, { y = mrand(10,30), delay = moveTime/2, time = moveTime/2, transition = easing.inCirc, delta = true} )
-      transition.to(blood, {delay = 15000, alpha = 0, time = 1500, onComplete = function()
-        display.remove(blood)
-      end})
     end
 
 

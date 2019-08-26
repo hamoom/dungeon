@@ -104,6 +104,7 @@ function Helper.impulse(objects, duration)
   m.eachFrame(animation)
 end
 
+
 function Helper.verticalCollisions(velocityStep, obj1, obj2)
   local yMod = math.abs(velocityStep.y)
   local xMod = math.abs(velocityStep.x)
@@ -353,7 +354,7 @@ function Helper.stutter()
   physics.pause()
 
   for _, v in pairs(_G.m.spriteList) do
-    v:pause()
+    if v.pause then v:pause() end
   end
 
   for _, v in pairs(_G.m.timers) do
@@ -367,7 +368,7 @@ function Helper.stutter()
     physics.start()
 
     for _, v in pairs(_G.m.spriteList) do
-      v:play()
+      if v.play then v:play() end
     end
 
     for _, v in pairs(_G.m.timers) do

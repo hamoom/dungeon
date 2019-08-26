@@ -11,8 +11,10 @@ local Weapon = require('components.items.weapon')
 
 function Public.new(group, x, y)
   local obj = display.newGroup()
+  obj.x, obj.y = x, y
   local Player = BaseEntity.new(obj, 'player', 'stopped')
   group:insert(Player)
+  Player:toFront()
 
   Player.shadow = display.newImageRect(Player, 'graphics/shadow.png', 28, 7)
 
