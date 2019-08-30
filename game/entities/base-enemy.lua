@@ -46,7 +46,7 @@ function Public.new(obj, name, initialState, player)
     self.state:update(player)
 
     if not self.fixedRotation then
-      self.rotation = _G.h.getAngle(self.x, self.lastX, self.y, self.lastY)
+      -- self.rotation = _G.h.getAngle(self.x, self.lastX, self.y, self.lastY)
     end
     self.lastX, self.lastY = self.x, self.y
   end

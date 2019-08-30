@@ -4,6 +4,7 @@ local Public = {}
 function Public:new(ent)
   local State = Wandering:new(ent)
   State.superUpdate = State.update
+  State.superStart = State.start
 
   State.curAngle = nil
   State.rotationSpeed = 200
@@ -17,6 +18,12 @@ function Public:new(ent)
       ent:setState('chasing', player)
     end
   end
+
+  -- function State:start(player)
+  --   self:superStart(play)
+  --   local spriteComponent = ent.components.sprite
+  --   spriteComponent:setAnim('running-f')
+  -- end
 
   return State
 end

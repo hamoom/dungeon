@@ -43,7 +43,8 @@ function Public:new(ent)
   end
 
   function State:start(player)
-
+    local spriteComponent = ent.components.sprite
+    spriteComponent:setAnim('running-f-chasing')
   end
 
   function State:exit(player)

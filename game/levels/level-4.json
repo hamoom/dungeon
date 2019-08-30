@@ -197,8 +197,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":96,
-                 "y":160
+                 "x":752,
+                 "y":384
                 }, 
                 {
                  "height":32,
@@ -235,16 +235,16 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":496,
-                 "y":392
+                 "x":264,
+                 "y":352
                 }, 
                 {
                  "height":32,
                  "id":31,
-                 "name":"blob",
+                 "name":"orc",
                  "properties":
                     {
-                     "name":"blob"
+                     "name":"orc"
                     },
                  "propertytypes":
                     {

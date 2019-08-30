@@ -23,7 +23,7 @@ function Public:new(ent)
 
   function State:start(player)
     local weapon = ent.components.weapon:getHitBox()
-    ent.rotation = _G.h.rotateToward(ent, player)
+    -- ent.rotation = _G.h.rotateToward(ent, player)
 
     ent.fixedRotation = true
     weapon.isVisible = true
@@ -33,7 +33,7 @@ function Public:new(ent)
 
   function State:exit(player)
     local weapon = ent.components.weapon:getHitBox()
-    
+
     ent.fixedRotation = false
     weapon.isVisible = false
     weapon.isAttacking = false

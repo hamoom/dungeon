@@ -197,6 +197,7 @@
             <key type="filename">scratch/better-tileset_12.png</key>
             <key type="filename">scratch/better-tileset_13.png</key>
             <key type="filename">scratch/better-tileset_14.png</key>
+            <key type="filename">scratch/better-tileset_15.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -219,6 +220,7 @@
             <filename>scratch/better-tileset_12.png</filename>
             <filename>scratch/better-tileset_13.png</filename>
             <filename>scratch/better-tileset_14.png</filename>
+            <filename>scratch/better-tileset_15.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

@@ -230,7 +230,7 @@
   <object id="46" x="608" y="96" width="16" height="272"/>
  </objectgroup>
  <objectgroup name="entities">
-  <object id="21" name="player" x="96" y="160" width="32" height="32">
+  <object id="21" name="player" x="752" y="384" width="32" height="32">
    <properties>
     <property name="name" value="player"/>
    </properties>
@@ -240,14 +240,14 @@
     <property name="name" value="blob"/>
    </properties>
   </object>
-  <object id="25" name="blob" x="496" y="392" width="32" height="32">
+  <object id="25" name="blob" x="264" y="352" width="32" height="32">
    <properties>
     <property name="name" value="blob"/>
    </properties>
   </object>
-  <object id="31" name="blob" x="720" y="272" width="32" height="32">
+  <object id="31" name="orc" x="720" y="272" width="32" height="32">
    <properties>
-    <property name="name" value="blob"/>
+    <property name="name" value="orc"/>
    </properties>
   </object>
  </objectgroup>
