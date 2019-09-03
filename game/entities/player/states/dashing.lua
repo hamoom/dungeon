@@ -1,16 +1,16 @@
 local Public = {}
 
-function Public:new(ent)
+function Public.new(ent)
   local State = {}
-
 
   function State:update()
     local dash = ent.maxSpeed * 9
     ent:setLinearVelocity(self.lockedVx * dash, self.lockedVy * dash)
 
     self.dashTimer = self.dashTimer - _G.m.dt
-    if self.dashTimer <= 0 then ent:setState('running') end
-
+    if self.dashTimer <= 0 then
+      ent:setState('running')
+    end
   end
 
   function State:start()
@@ -25,7 +25,5 @@ function Public:new(ent)
 
   return State
 end
-
-
 
 return Public

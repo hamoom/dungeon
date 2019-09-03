@@ -1,14 +1,13 @@
 local rand = math.random
 local Public = {}
 
-function Public:new(ent)
+function Public.new(ent)
   local State = {}
 
   State.curAngle = nil
   State.rotationSpeed = 130
   State.speed = 120
   State.range = 180
-
 
   function State:update(player)
     if not self.curAngle then
@@ -36,17 +35,12 @@ function Public:new(ent)
 
     local spriteComponent = ent.components.sprite
 
-    spriteComponent:setFacing(
-      'running-f-chasing',
-      'running-b-chasing',
-      'running-s-chasing'
-    )
+    spriteComponent:setFacing('running-f-chasing', 'running-b-chasing', 'running-s-chasing')
 
     if entPt:distanceTo(player) > 200 then
       ent:setState('wandering', player)
-    elseif entPt:distanceTo(player) <= ent.attackDistance + 10
-    and rand() < 0.75 then
-        ent:setState('blocking', player)
+    elseif entPt:distanceTo(player) <= ent.attackDistance + 10 and rand() < 0.75 then
+      ent:setState('blocking', player)
     end
   end
 
@@ -54,7 +48,6 @@ function Public:new(ent)
   end
 
   function State:exit(player)
-
   end
 
   return State

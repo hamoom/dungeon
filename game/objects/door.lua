@@ -1,3 +1,4 @@
+local physics = require('physics')
 local Public = {}
 
 function Public.new(group, obj)

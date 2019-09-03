@@ -1,12 +1,11 @@
 local Public = {}
 
-function Public:new(ent)
+function Public.new(ent)
   local State = {}
 
   State.attackTimer = 0
 
   function State:update()
-
     ent.speed = ent.speed * 0.8
     ent:setLinearVelocity(ent.vx * ent.speed, ent.vy * ent.speed)
 
@@ -20,12 +19,7 @@ function Public:new(ent)
     local weaponComponent = ent.components.weapon
     local SpriteComponent = ent.components.sprite
 
-    SpriteComponent:setFacing(
-      'attacking-f',
-      'attacking-b',
-      'attacking-s',
-      true
-    )
+    SpriteComponent:setFacing('attacking-f', 'attacking-b', 'attacking-s', true)
 
     weaponComponent:setAttacking(true)
 
@@ -38,10 +32,7 @@ function Public:new(ent)
     weaponComponent:setAttacking(false)
   end
 
-
   return State
 end
-
-
 
 return Public

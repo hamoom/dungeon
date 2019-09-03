@@ -4,9 +4,7 @@ local CreateSprite = require('components.graphics.create-sprite')
 local Blood = require('components.graphics.blood')
 local Public = {}
 
-
 function Public.new(group, ogObj, player)
-
   local obj = display.newGroup()
   obj.x, obj.y = ogObj.x, ogObj.y
   group:insert(obj)
@@ -20,20 +18,21 @@ function Public.new(group, ogObj, player)
 
   Blob.shadow = display.newImageRect(Blob, 'graphics/shadow.png', 28, 7)
   Blob:addComponent(CreateSprite)
-  Blob:addComponent(
-    Blood,
-    {r = 0.435, g=0.890, b=0.710}
-  )
+  Blob:addComponent(Blood, {r = 0.435, g = 0.890, b = 0.710})
 
   function Blob:createPhysics()
-    physics.addBody(self, 'dynamic', {
-      bounce = 0.5,
-      density = 2,
-      filter = {
-        categoryBits = 2,
-        maskBits = 1
+    physics.addBody(
+      self,
+      'dynamic',
+      {
+        bounce = 0.5,
+        density = 2,
+        filter = {
+          categoryBits = 2,
+          maskBits = 1
+        }
       }
-    })
+    )
     self.linearDamping = 8
     self.isFixedRotation = true
   end
@@ -45,7 +44,6 @@ function Public.new(group, ogObj, player)
   end
 
   function Blob:update(player)
-
     self:superUpdate(player)
 
     local playerSprite = player.components.sprite:getSprite()
@@ -53,22 +51,18 @@ function Public.new(group, ogObj, player)
 
     if self.isAttacking and _G.h.hasCollided(playerSprite, self) then
       if player.health > 0 then
-				self:bounce(player)
-				player:setState('injured', self)
-			end
+        self:bounce(player)
+        player:setState('injured', self)
+      end
     end
 
     self.shadow.x, self.shadow.y = blobSprite.x, blobSprite.y + 12
     self:setFacing()
   end
 
-
-
   Blob:createPhysics()
 
   return Blob
 end
-
-
 
 return Public

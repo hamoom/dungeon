@@ -1,7 +1,7 @@
 local Wandering = require('lib.state-machine.common-states.wandering')
 local Public = {}
 
-function Public:new(ent)
+function Public.new(ent)
   local State = Wandering:new(ent)
   State.superUpdate = State.update
   State.superStart = State.start
@@ -17,11 +17,7 @@ function Public:new(ent)
 
     local spriteComponent = ent.components.sprite
 
-    spriteComponent:setFacing(
-      'running-f',
-      'running-b',
-      'running-s'
-    )
+    spriteComponent:setFacing('running-f', 'running-b', 'running-s')
 
     if _G.p.new(ent):distanceTo(player) < self.chaseDistance
     and player.state.name ~= 'death' then

@@ -7,7 +7,6 @@ local CreateSprite = require('components.graphics.create-sprite')
 local Public = {}
 
 function Public.new(group, ogObj, player)
-
   local obj = display.newGroup()
   obj.x, obj.y = ogObj.x, ogObj.y
   group:insert(obj)
@@ -29,18 +28,22 @@ function Public.new(group, ogObj, player)
   Orc:addComponent(Blood)
   Orc:addComponent(CreateSprite)
 
-  Orc.display:setFillColor(0.4,0.3,0)
+  Orc.display:setFillColor(0.4, 0.3, 0)
 
   function Orc:createPhysics()
-    physics.addBody(self, 'dynamic', {
-      bounce = 0.5,
-      density = 2,
-      radius = 14,
-      filter = {
-        categoryBits = 2,
-        maskBits = 1
+    physics.addBody(
+      self,
+      'dynamic',
+      {
+        bounce = 0.5,
+        density = 2,
+        radius = 14,
+        filter = {
+          categoryBits = 2,
+          maskBits = 1
+        }
       }
-    })
+    )
     self.linearDamping = 8
     self.isFixedRotation = true
   end
@@ -53,11 +56,10 @@ function Public.new(group, ogObj, player)
     local WeaponComponent = self.components.weapon
     local weapon = WeaponComponent:getHitBox()
 
-
     if weapon.isAttacking and _G.h.hasCollided(playerSprite, weapon) then
       if player.health > 0 then
-				player:setState('injured', weapon)
-			end
+        player:setState('injured', weapon)
+      end
     end
 
     self.shadow.x, self.shadow.y = sprite.x, sprite.y + 12
@@ -69,7 +71,5 @@ function Public.new(group, ogObj, player)
   Orc:createPhysics()
   return Orc
 end
-
-
 
 return Public

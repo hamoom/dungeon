@@ -1,16 +1,14 @@
 local Public = {}
 
-function Public:new(ent)
+function Public.new(ent)
   local State = {}
 
 
   function State:update(player)
     ent:setLinearVelocity(0,0)
-
   end
 
   function State:start(player)
-    -- ent.rotation = _G.h.rotateToward(ent, player)
     ent.fixedRotation = true
     self.attackTimer = _G.m.addTimer(200, function()
       ent:setState('attacking', player)

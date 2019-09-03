@@ -1,6 +1,6 @@
 local Public = {}
 
-function Public:new(ent)
+function Public.new(ent)
 
   local State = {}
 
@@ -12,7 +12,7 @@ function Public:new(ent)
 
   function State:update(player)
     local sprite = ent.components.sprite:getSprite()
-    sprite.xScale = player.x > ent.x and 1 or -1    
+    sprite.xScale = player.x > ent.x and 1 or -1
   end
 
   function State:start(player)
@@ -23,7 +23,7 @@ function Public:new(ent)
       if event.phase == 'ended' then
 
         SpriteComponent:setAnim('attacking')
-        diff = _G.p.newFromSubtraction(player, ent):normalize()
+        local diff = _G.p.newFromSubtraction(player, ent):normalize()
 
         ent.isAttacking = true
         ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
@@ -38,9 +38,6 @@ function Public:new(ent)
     ent.isLit = false
     ent:setLinearVelocity(0, 0)
 
-    local totalTime = 300
-
-    local diff
     SpriteComponent:setAnim('charging')
     SpriteComponent:getSprite():addEventListener('sprite', self.spriteListener)
 

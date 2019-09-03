@@ -7,6 +7,7 @@ function Public.new(ent, name, initialState, otherEnt)
 
   local states = stateList.new(ent, name)
 
+  --ignore 212/%.%.%.
   function ent:addComponent(component, ...)
     self.components[component.name] = component.new(self, arg)
   end

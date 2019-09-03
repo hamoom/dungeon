@@ -1,8 +1,7 @@
 local floor = math.floor
-local mrand = math.random
 local mabs = math.abs
 local mround = math.round
-
+local physics = require('physics')
 local Helper = {}
 
 Helper.chain = {}
@@ -16,7 +15,7 @@ end
 
 
 function Helper.countDown(timer, max, reset, action)
-  timer = timer - m.dt
+  timer = timer - _G.m.dt
   if reset then reset() end
   if timer <= 0 then
     if action then action() end
@@ -30,10 +29,9 @@ function Helper.isActive(obj, paddingX, paddingY)
 
   if obj.localToContent then
     local localX, localY = obj:localToContent(0, 0)
-    -- print(localX, localY)
 
-    local paddingX = paddingX or 0
-    local paddingY = paddingY or 0
+    paddingX = paddingX or 0
+    paddingY = paddingY or 0
 
     local minX, maxX = -obj.width/2 - paddingX, display.contentWidth + obj.width/2 + paddingX
     local minY, maxY = -obj.height/2 - paddingY, display.contentHeight + obj.height/2 + paddingY
@@ -49,7 +47,6 @@ function Helper.sign(num)
 end
 
 function Helper.easeSin(f,a, damping)
-  local a = a
   return function(t, tMax, start, delta)
     a = a * damping
     return start + delta + a * math.sin((t/tMax) * f * math.pi * 2)
@@ -101,7 +98,7 @@ function Helper.impulse(objects, duration)
       end
     end
   end
-  m.eachFrame(animation)
+  _G.m.eachFrame(animation)
 end
 
 

@@ -15,9 +15,12 @@ function Public.new(group, obj)
     else
       self.alpha = 0.2
     end
-    _G.m.addTimer(2000, function()
-      self:toggleSpikes()
-    end)
+    _G.m.addTimer(
+      2000,
+      function()
+        self:toggleSpikes()
+      end
+    )
   end
 
   function Spike:destroy()
@@ -29,6 +32,5 @@ function Public.new(group, obj)
 
   return Spike
 end
-
 
 return Public

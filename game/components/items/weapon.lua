@@ -24,7 +24,6 @@ function Public.new(ent, args)
 
   function weaponGroup:updateWeaponDir(sprite, facing)
     self.rotation = _G.h.getAngleFromDir(facing)
-    local weapon = self:getHitBox()
     weapon.x, weapon.y = sprite.x, sprite.y + self.height/4
   end
 

@@ -1,6 +1,6 @@
 local Public = {}
 
-function Public:new(ent)
+function Public.new(ent)
   local State = {}
 
   function State:update(player)
@@ -11,7 +11,7 @@ function Public:new(ent)
 
     local SpriteComponent = ent.components.sprite
     SpriteComponent:setAnim('wandering')
-    
+
     self.timer = _G.m.addTimer(500, function()
 
       if _G.p.new(ent):distanceTo(player) < ent.attackDistance then

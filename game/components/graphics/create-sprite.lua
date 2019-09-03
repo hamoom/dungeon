@@ -1,7 +1,6 @@
 local Public = {}
 Public.name = 'sprite'
 function Public.new(ent)
-
   local SpriteComponent = {}
 
   local spriteData = require('data.sprite-info.' .. ent.name)
@@ -15,10 +14,8 @@ function Public.new(ent)
   table.insert(_G.m.spriteList, SpriteComponent.sprite)
 
   function SpriteComponent:setAnim(sequence)
-
     local sprite = self.sprite
     if sprite.sequence ~= sequence then
-
       sprite:setSequence(sequence)
       sprite:play()
       sprite.sequence = sequence
@@ -32,7 +29,7 @@ function Public.new(ent)
   function SpriteComponent:setFacing(front, back, side, dontSwitchDir)
     local sprite = self.sprite
 
-    if front and ent.facing == 'bottom'  then
+    if front and ent.facing == 'bottom' then
       self:setAnim(front)
     elseif back and ent.facing == 'top' then
       self:setAnim(back)
@@ -40,8 +37,7 @@ function Public.new(ent)
       self:setAnim(side)
       local vx = ent.x - ent.lastX
 
-      if not dontSwitchDir
-      and not ent.isColliding then
+      if not dontSwitchDir and not ent.isColliding then
         if vx > 0 then
           sprite.xScale = 1
         elseif vx < 0 then
@@ -49,9 +45,6 @@ function Public.new(ent)
         end
       end
     end
-
-
-
   end
 
   return SpriteComponent

@@ -15,8 +15,8 @@ function Public.new(ent, name)
 
   local list = {}
 
-  for _, v in pairs(states) do    
-    list[v] = require('entities.' .. name .. '.states.' .. v):new(ent)
+  for _, v in pairs(states) do
+    list[v] = require('entities.' .. name .. '.states.' .. v).new(ent)
     list[v].name = v
   end
 

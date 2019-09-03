@@ -1,7 +1,7 @@
 local Wandering = require('lib.state-machine.common-states.wandering')
 local Public = {}
 
-function Public:new(ent)
+function Public.new(ent)
   local State = Wandering:new(ent)
   State.superUpdate = State.update
 
@@ -14,12 +14,11 @@ function Public:new(ent)
     self:superUpdate(player)
     if _G.p.new(ent):distanceTo(player) < ent.attackDistance
     and player.state.name ~= 'death' then
-       ent:setState('shooting', player)
+      ent:setState('shooting', player)
     end
   end
 
   function State:start(player)
-
   end
 
   return State

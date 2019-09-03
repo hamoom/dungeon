@@ -1,7 +1,7 @@
 local Wandering = require('lib.state-machine.common-states.wandering')
 local Public = {}
 
-function Public:new(ent)
+function Public.new(ent)
 
   local State = Wandering:new(ent)
   State.superUpdate = State.update

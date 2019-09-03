@@ -1,6 +1,6 @@
 local Public = {}
 
-function Public:new(ent)
+function Public.new(ent)
   local State = {}
 
   function State:update()

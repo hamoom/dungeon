@@ -8,7 +8,6 @@ local CreateSprite = require('components.graphics.create-sprite')
 local Blood = require('components.graphics.blood')
 local Weapon = require('components.items.weapon')
 
-
 function Public.new(group, x, y)
   local obj = display.newGroup()
   obj.x, obj.y = x, y
@@ -19,11 +18,7 @@ function Public.new(group, x, y)
   Player.shadow = display.newImageRect(Player, 'graphics/shadow.png', 28, 7)
 
   Player:addComponent(CreateSprite)
-  Player:addComponent(
-    DashEffect,
-    group,
-    Player.components.sprite:getSprite()
-  )
+  Player:addComponent(DashEffect, group, Player.components.sprite:getSprite())
   Player:addComponent(Weapon, 56, 32)
   Player:addComponent(Blood)
 
@@ -39,10 +34,14 @@ function Public.new(group, x, y)
 
   Player.health = 3
 
-  physics.addBody(Player, 'dynamic', {
-    bounce = 0.5,
-    radius = 14,
-  })
+  physics.addBody(
+    Player,
+    'dynamic',
+    {
+      bounce = 0.5,
+      radius = 14
+    }
+  )
   Player.isFixedRotation = false
   Player.linearDamping = 16
 
@@ -51,7 +50,9 @@ function Public.new(group, x, y)
   -----------------------------
 
   function Player:attack()
-    if self.state.name ~= 'injured' then self:setState('attacking') end
+    if self.state.name ~= 'injured' then
+      self:setState('attacking')
+    end
   end
 
   function Player:dash()
@@ -63,7 +64,6 @@ function Public.new(group, x, y)
   function Player:update(vx, vy)
     local sprite = self.components.sprite:getSprite()
     local WeaponComponent = self.components.weapon
-    local weapon = WeaponComponent:getHitBox()
 
     self.vx, self.vy = vx, vy
 
@@ -80,7 +80,6 @@ function Public.new(group, x, y)
   end
 
   return Player
-
 end
 
 return Public
