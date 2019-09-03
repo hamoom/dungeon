@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:fae2ce93a23cb4fae112b6ea89132ef9:72b6c96617652d84a2e855682b3e56e5:89e2aed1b7b7c496e4cca688c27d0ad4$
+-- $TexturePacker:SmartUpdate:75384ed434fccf4272149ca99c9ea0c9:a3f9292c6e07dead3f85f53e221b79d1:89e2aed1b7b7c496e4cca688c27d0ad4$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -33,7 +33,7 @@ SheetInfo.sheet =
             width=24,
             height=16,
 
-            sourceX = 18,
+            sourceX = 17,
             sourceY = 31,
             sourceWidth = 60,
             sourceHeight = 66
@@ -57,7 +57,7 @@ SheetInfo.sheet =
             width=26,
             height=14,
 
-            sourceX = 18,
+            sourceX = 16,
             sourceY = 33,
             sourceWidth = 60,
             sourceHeight = 66
@@ -69,7 +69,7 @@ SheetInfo.sheet =
             width=22,
             height=16,
 
-            sourceX = 18,
+            sourceX = 20,
             sourceY = 31,
             sourceWidth = 60,
             sourceHeight = 66
@@ -81,7 +81,7 @@ SheetInfo.sheet =
             width=22,
             height=16,
 
-            sourceX = 18,
+            sourceX = 20,
             sourceY = 31,
             sourceWidth = 60,
             sourceHeight = 66
@@ -93,7 +93,7 @@ SheetInfo.sheet =
             width=22,
             height=16,
 
-            sourceX = 18,
+            sourceX = 20,
             sourceY = 31,
             sourceWidth = 60,
             sourceHeight = 66
@@ -105,7 +105,7 @@ SheetInfo.sheet =
             width=24,
             height=16,
 
-            sourceX = 17,
+            sourceX = 18,
             sourceY = 31,
             sourceWidth = 60,
             sourceHeight = 66
@@ -117,7 +117,7 @@ SheetInfo.sheet =
             width=24,
             height=14,
 
-            sourceX = 17,
+            sourceX = 18,
             sourceY = 33,
             sourceWidth = 60,
             sourceHeight = 66

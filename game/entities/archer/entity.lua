@@ -51,6 +51,8 @@ function Public.new(group, ogObj, player)
       end
       arrowComponent:collisionCallBack()
     end
+
+    self:setFacing()
   end
 
   Archer:createPhysics()

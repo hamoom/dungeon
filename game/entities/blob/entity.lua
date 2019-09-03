@@ -25,7 +25,6 @@ function Public.new(group, ogObj, player)
     {r = 0.435, g=0.890, b=0.710}
   )
 
-
   function Blob:createPhysics()
     physics.addBody(self, 'dynamic', {
       bounce = 0.5,
@@ -60,7 +59,7 @@ function Public.new(group, ogObj, player)
     end
 
     self.shadow.x, self.shadow.y = blobSprite.x, blobSprite.y + 12
-    -- print(self.state.name)
+    self:setFacing()
   end
 
 

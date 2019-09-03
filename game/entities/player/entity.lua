@@ -62,24 +62,16 @@ function Public.new(group, x, y)
 
   function Player:update(vx, vy)
     local sprite = self.components.sprite:getSprite()
-    local weaponGroup = self.components.weapon:getGroup()
-    local weapon = self.components.weapon:getHitBox()
+    local WeaponComponent = self.components.weapon
+    local weapon = WeaponComponent:getHitBox()
 
     self.vx, self.vy = vx, vy
 
     self.state:update()
 
-    if not self.fixedRotation then
-      weaponGroup.rotation = _G.h.getAngle(self.x, self.lastX, self.y, self.lastY)
-    end
-    weapon.x, weapon.y = sprite.x, sprite.y + self.height/4
-
-    local newFacing = _G.h.getFacing(self.x, self.lastX, self.y, self.lastY)
-    if newFacing then self.facing = newFacing end
-
+    WeaponComponent:updateWeaponDir(sprite, self.facing)
     self.shadow.x, self.shadow.y = sprite.x, sprite.y + 10
-
-    self.lastX, self.lastY = self.x, self.y
+    self:setFacing()
   end
 
   function Player:destroy()

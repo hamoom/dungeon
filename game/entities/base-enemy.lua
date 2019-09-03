@@ -28,10 +28,11 @@ function Public.new(obj, name, initialState, player)
   end
 
   function Enemy:findNewCoord()
+
     if not self.isColliding then
       self.isColliding = true
-      self.coord = nil
-      timer.performWithDelay(300, function()
+      self.coord = self.lastCoord
+      timer.performWithDelay(500, function()
         self.isColliding = false
       end, 1)
     end
@@ -48,7 +49,7 @@ function Public.new(obj, name, initialState, player)
     if not self.fixedRotation then
       -- self.rotation = _G.h.getAngle(self.x, self.lastX, self.y, self.lastY)
     end
-    self.lastX, self.lastY = self.x, self.y
+
   end
 
   function Enemy:destroy()

@@ -1,7 +1,7 @@
 
 local composer = require('composer')
 local widget = require('widget')
-
+local animation = require("plugin.animation")
 local scene = composer.newScene()
 
 _G.m.spriteList = {}
@@ -40,6 +40,7 @@ local player
 local lastUpdate = 0
 local screenTouched, update, getDeltaTime, keysPressed, stopInput
 local gameEnded = false
+local _door
 
 function scene:create(event)
 
@@ -49,6 +50,20 @@ function scene:create(event)
 
 	mapContainer:insert(_G.m.map)
 
+	local doorObjectLayer = _G.m.map.layer['door-objects']
+	for object in doorObjectLayer.objects() do
+		for _, coord in pairs(object.door) do
+			_door = object
+			local lock = display.newImageRect(doorObjectLayer, 'graphics/lock.png', 32, 32)
+			lock.x = object.x
+			lock.y = object.y - 45
+
+			-- object.isSensor = true
+		  -- local x, y = coord[1]+1, coord[2]+1
+		  -- _G.m.map.layer['doors'].lockTileErased(x, y)
+
+		end
+	end
 
 	for object in _G.m.map.layer['entities'].objects() do
 
@@ -129,11 +144,28 @@ function scene:show(event)
 		Runtime:addEventListener('enterFrame', update)
 
 	elseif phase == 'did' then
-		-- Called when the scene is now on screen
-		--
-		-- INSERT code here to make the scene come alive
-		-- e.g. start timers, begin animation, play audio, etc.
 
+		-- timer.performWithDelay(1000, function()
+		-- 	local meh = display.newRect(_G.m.map.layer['entities'], player.x, player.y-10, 10, 10)
+		-- 	Runtime:removeEventListener("enterFrame", update)
+		-- 	_G.m.map.setCameraFocus(meh, true)
+		-- 	_G.m.map.setTrackingLevel(0.06)
+		-- 	local whatever = function()
+		-- 		_G.m.map.updateView()
+		-- 	end
+		--
+		-- 	_G.m.eachFrame(whatever)
+		-- 	animation.to(meh, { x=_door.x, y=_door.y }, { constantRate=200, constantRateProperty="position", onComplete=function()
+		-- 		timer.performWithDelay(1000, function()
+		-- 				animation.to(meh, { x=player.x, y=player.y }, { constantRate=200, constantRateProperty="position", onComplete=function()
+		-- 					Runtime:addEventListener("enterFrame", update)
+		-- 					_G.m.eachFrameRemove(whatever)
+		-- 					_G.m.map.setCameraFocus(player, true)
+		-- 					display.remove(meh)
+		-- 				end } )
+		-- 		end, 1)
+		-- 	end } )
+		-- end,1)
 	end
 end
 
@@ -205,8 +237,13 @@ function onCollision(event)
 
 		local obj1, obj2 = event.object1, event.object2
 
-		if obj1.findNewCoord then obj1:findNewCoord() end
-		if obj2.findNewCoord then obj2:findNewCoord() end
+		if obj1.findNewCoord then
+
+			obj1:findNewCoord()
+		end
+		if obj2.findNewCoord then
+			obj2:findNewCoord()
+		end
 
 		if obj1.collisionCallBack
 		and obj2.name ~= 'player' then
@@ -360,7 +397,7 @@ function update()
 		local playerWeapon = player.components.weapon:getHitBox()
 
 		if playerWeapon.isAttacking
-		and _G.h.hasCollided(playerWeapon, enemy) then			
+		and _G.h.hasCollided(playerWeapon, enemy) then
 			enemy:setState('injured', player)
 		end
 

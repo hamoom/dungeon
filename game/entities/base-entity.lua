@@ -16,17 +16,20 @@ function Public.new(ent, name, initialState, otherEnt)
 
 
     if self.state.name ~= newState.name then
-      if self.name == 'blob' then print(self.state.name, newState.name) end
       local prevStateName = self.state.name
       newState.prevStateName = prevStateName
       self.state:exit(newState)
       newState:start(obj)
       self.state = newState
 
-
     end
   end
 
+  function ent:setFacing()
+    local newFacing = _G.h.getFacing(self.x, self.lastX, self.y, self.lastY)
+    if newFacing then self.facing = newFacing end
+    self.lastX, self.lastY = self.x, self.y
+  end
 
   ent.state = states:getState(initialState, otherEnt)
 

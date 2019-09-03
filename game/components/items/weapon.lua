@@ -22,6 +22,12 @@ function Public.new(ent, args)
     -- self.isVisible = isAttacking
   end
 
+  function weaponGroup:updateWeaponDir(sprite, facing)
+    self.rotation = _G.h.getAngleFromDir(facing)
+    local weapon = self:getHitBox()
+    weapon.x, weapon.y = sprite.x, sprite.y + self.height/4
+  end
+
   return weaponGroup
 end
 

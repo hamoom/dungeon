@@ -8,12 +8,22 @@ function Public:new(ent)
 
   State.curAngle = nil
   State.rotationSpeed = 200
-  State.speed = 40
-  State.range = 150
+  State.speed = 60
+  State.range = 130
+  State.chaseDistance = 30
 
   function State:update(player)
     self:superUpdate(player)
-    if _G.p.new(ent):distanceTo(player) < ent.chaseDistance
+
+    local spriteComponent = ent.components.sprite
+
+    spriteComponent:setFacing(
+      'running-f',
+      'running-b',
+      'running-s'
+    )
+
+    if _G.p.new(ent):distanceTo(player) < self.chaseDistance
     and player.state.name ~= 'death' then
       ent:setState('chasing', player)
     end

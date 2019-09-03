@@ -19,24 +19,13 @@ function Public:new(ent)
       ent.vy * ent.speed
     )
 
+    local SpriteComponent = ent.components.sprite
 
-    local spriteComponent = ent.components.sprite
-    local sprite = spriteComponent:getSprite()
-    sprite.xScale = 1
-    if ent.facing == 'bottom' then
-      spriteComponent:setAnim('running-f')
-    elseif ent.facing == 'top' then
-      spriteComponent:setAnim('running-b')
-    elseif ent.facing == 'right' or ent.facing == 'left' then
-
-      local vx, _ = ent:getLinearVelocity()
-      spriteComponent:setAnim('running-s')
-      if vx > 0 then
-        sprite.xScale = 1
-      else
-        sprite.xScale = -1
-      end
-    end
+    SpriteComponent:setFacing(
+      'running-f',
+      'running-b',
+      'running-s'
+    )
 
     if ent.attacking then ent:setState('attacking') end
   end

@@ -34,6 +34,14 @@ function Public:new(ent)
 
     local entPt = _G.p.new(ent)
 
+    local spriteComponent = ent.components.sprite
+
+    spriteComponent:setFacing(
+      'running-f-chasing',
+      'running-b-chasing',
+      'running-s-chasing'
+    )
+
     if entPt:distanceTo(player) > 200 then
       ent:setState('wandering', player)
     elseif entPt:distanceTo(player) <= ent.attackDistance + 10
@@ -43,8 +51,6 @@ function Public:new(ent)
   end
 
   function State:start(player)
-    local spriteComponent = ent.components.sprite
-    spriteComponent:setAnim('running-f-chasing')
   end
 
   function State:exit(player)

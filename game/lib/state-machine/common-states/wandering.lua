@@ -13,7 +13,7 @@ function Public:new(ent)
     local entLocation = p.new(ent)
 
     if not ent.coord then
-      ent:setLinearVelocity(0,0)
+      -- ent:setLinearVelocity(0,0)
       ent.coord = h.findValidCoord(ent, m.map, self.range)
     else
       -- if line then display.remove(line) end
@@ -41,6 +41,7 @@ function Public:new(ent)
 
       ent:setLinearVelocity(direction.x * self.speed, direction.y * self.speed)
       if entLocation:distanceTo(ent.coord) < 32 then
+        ent.lastCoord = ent.coord
         ent.coord = nil
       end
     end

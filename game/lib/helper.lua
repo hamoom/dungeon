@@ -270,11 +270,16 @@ function Helper.findValidCoord(ent, map, range)
     x = ent.x + math.random(-range, range),
     y = ent.y + math.random(-range, range)
   }
+  --
+  -- randomPt.x = Helper.clamp(randomPt.x, ent.x - range, ent.x + range)
+  -- randomPt.y = Helper.clamp(randomPt.y, ent.y - range, ent.y + range)
 
-  local indices = {7,1,3,5,0,2,6,8}
+-- for obj in map.layer['barriers'].objects() do
 
   local coorx, coory = map.pixelsToTiles(randomPt.x, randomPt.y)
   local validTile = map.layer["ground"].tile(coorx, coory)
+    and not map.layer["walls"].tile(coorx, coory)
+
 
   local hits = physics.rayCast(ent.x, ent.y, randomPt.x, randomPt.y, 'closest')
   -- line = display.newLine(m.map.layer['ground'], ent.x, ent.y, randomPt.x, randomPt.y)
@@ -307,6 +312,7 @@ function Helper.getAngle(x, lastX, y, lastY)
       -- print('bottom')
     end
   elseif avx > avy then
+
     if real_vx > 0 then
       angle = -90
       -- print('right')
@@ -326,6 +332,17 @@ function Helper.getFacing(x, lastX, y, lastY)
   if angle == -90 then return 'right' end
   if angle == 90 then return 'left' end
 end
+
+function Helper.getAngleFromDir(dir)
+  local angles = {
+    top = -180,
+    bottom = 0,
+    right = -90,
+    left = 90
+  }
+  return angles[dir]
+end
+
 
 function Helper.rotateToward(obj1, obj2)
   local angle

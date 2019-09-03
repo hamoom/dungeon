@@ -7,9 +7,9 @@ function Public:new(ent)
   end
 
   function State:start(player)
-    local spriteComponent = ent.components.sprite
-    spriteComponent:setAnim('death')
-    
+    local SpriteComponent = ent.components.sprite
+    SpriteComponent:setAnim('death')
+
     self.timer = _G.m.addTimer(1000, function()
       ent:destroy()
     end)

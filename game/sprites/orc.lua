@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:b7868dc784d1bed03ce99f99a9193b05:6627410793236b27d2af7a7712a7985b:081054e524172d87a1f61a8d13ca77d3$
+-- $TexturePacker:SmartUpdate:b7ed44e96c2307a9bbbc049d2adb6dda:967d72c6cda0596c868361cd1a74904a:081054e524172d87a1f61a8d13ca77d3$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -28,8 +28,8 @@ SheetInfo.sheet =
         },
         {
             -- orc2
-            x=1,
-            y=43,
+            x=29,
+            y=1,
             width=26,
             height=40,
 
@@ -40,8 +40,8 @@ SheetInfo.sheet =
         },
         {
             -- orc3
-            x=1,
-            y=85,
+            x=57,
+            y=1,
             width=26,
             height=40,
 
@@ -52,20 +52,80 @@ SheetInfo.sheet =
         },
         {
             -- orc4
-            x=1,
-            y=127,
-            width=24,
+            x=85,
+            y=1,
+            width=22,
             height=42,
 
-            sourceX = 15,
+            sourceX = 16,
             sourceY = 7,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- orc5
+            x=109,
+            y=1,
+            width=22,
+            height=42,
+
+            sourceX = 17,
+            sourceY = 7,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- orc6
+            x=133,
+            y=1,
+            width=22,
+            height=42,
+
+            sourceX = 16,
+            sourceY = 7,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- orc7
+            x=157,
+            y=1,
+            width=26,
+            height=38,
+
+            sourceX = 17,
+            sourceY = 8,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- orc8
+            x=185,
+            y=1,
+            width=26,
+            height=40,
+
+            sourceX = 17,
+            sourceY = 6,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- orc9
+            x=213,
+            y=1,
+            width=26,
+            height=38,
+
+            sourceX = 16,
+            sourceY = 8,
             sourceWidth = 60,
             sourceHeight = 66
         },
     },
     
-    sheetContentWidth = 28,
-    sheetContentHeight = 170
+    sheetContentWidth = 240,
+    sheetContentHeight = 44
 }
 
 SheetInfo.frameIndex =
@@ -75,6 +135,11 @@ SheetInfo.frameIndex =
     ["orc2"] = 2,
     ["orc3"] = 3,
     ["orc4"] = 4,
+    ["orc5"] = 5,
+    ["orc6"] = 6,
+    ["orc7"] = 7,
+    ["orc8"] = 8,
+    ["orc9"] = 9,
 }
 
 function SheetInfo:getSheet()

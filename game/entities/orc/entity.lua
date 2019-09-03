@@ -1,6 +1,7 @@
 local physics = require('physics')
 local BaseEnemy = require('entities.base-enemy')
 
+local Blood = require('components.graphics.blood')
 local Weapon = require('components.items.weapon')
 local CreateSprite = require('components.graphics.create-sprite')
 local Public = {}
@@ -15,13 +16,17 @@ function Public.new(group, ogObj, player)
   Orc.display = display.newRect(Orc, 0, 0, 32, 32)
   Orc.display.isVisible = false
   Orc.superUpdate = Orc.update
-  Orc.chaseDistance = 170
+
   Orc.item = ogObj.item
   Orc.health = 2
   Orc.fixedRotation = true
+  Orc.facing = 'bottom'
 
   Orc.attackDistance = 40
+  Orc.shadow = display.newImageRect(Orc, 'graphics/shadow.png', 28, 7)
+
   Orc:addComponent(Weapon, 56, 48)
+  Orc:addComponent(Blood)
   Orc:addComponent(CreateSprite)
 
   Orc.display:setFillColor(0.4,0.3,0)
@@ -45,14 +50,9 @@ function Public.new(group, ogObj, player)
 
     local sprite = self.components.sprite:getSprite()
     local playerSprite = player.components.sprite:getSprite()
-    local weaponGroup = self.components.weapon:getGroup()
-    local weapon = self.components.weapon:getHitBox()
+    local WeaponComponent = self.components.weapon
+    local weapon = WeaponComponent:getHitBox()
 
-
-    if not self.fixedRotation then
-      weaponGroup.rotation = _G.h.rotateToward(self, player)
-    end
-    weapon.x, weapon.y = sprite.x, sprite.y + self.height/4
 
     if weapon.isAttacking and _G.h.hasCollided(playerSprite, weapon) then
       if player.health > 0 then
@@ -60,6 +60,10 @@ function Public.new(group, ogObj, player)
 			end
     end
 
+    self.shadow.x, self.shadow.y = sprite.x, sprite.y + 12
+
+    WeaponComponent:updateWeaponDir(sprite, self.facing)
+    self:setFacing()
   end
 
   Orc:createPhysics()

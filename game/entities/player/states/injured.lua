@@ -11,22 +11,23 @@ function Public:new(ent)
   end
 
   function State:start(enemy)
-    ent.health = ent.health - 1    
 
-    local BloodComponent = ent.components.blood
-    BloodComponent:splash()
-
-    _G.h.oscillate(3,50,"y",500)(_G.m.map)
-
-    Runtime:dispatchEvent({ name = 'changeHealth', params = { health = ent.health }})
-
-    local diff = _G.p.newFromSubtraction(ent, enemy):normalize()
-
-    diff.x = diff.x + (mrand(-100, 100) / 100)
-    diff.y = diff.y + (mrand(-100, 100) / 100)
-
-    ent:setLinearVelocity(0,0)
-    ent:applyLinearImpulse(0.2 * diff.x, 0.2  * diff.y, ent.x, ent.y)
+    -- ent.health = ent.health - 1
+    --
+    -- local BloodComponent = ent.components.blood
+    -- BloodComponent:splash()
+    --
+    -- _G.h.oscillate(3,50,"y",500)(_G.m.map)
+    --
+    -- Runtime:dispatchEvent({ name = 'changeHealth', params = { health = ent.health }})
+    --
+    -- local diff = _G.p.newFromSubtraction(ent, enemy):normalize()
+    --
+    -- diff.x = diff.x + (mrand(-100, 100) / 100)
+    -- diff.y = diff.y + (mrand(-100, 100) / 100)
+    --
+    -- ent:setLinearVelocity(0,0)
+    -- ent:applyLinearImpulse(0.2 * diff.x, 0.2  * diff.y, ent.x, ent.y)
 
     _G.m.addTimer(50, function()
 

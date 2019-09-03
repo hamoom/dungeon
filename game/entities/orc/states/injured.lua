@@ -4,19 +4,26 @@ function Public:new(ent)
   local State = {}
 
   function State:update()
+    if self.prevStateName ~= 'blocking' then
+      local BloodComponent = ent.components.blood
+      BloodComponent:createStreak()
+    end
   end
 
   function State:start(player)
 
     _G.h.oscillate(3,20,"y",500)(_G.m.map)
 
-    local impulseSpeed = 15
+    local impulseSpeed = 20
     local diff = _G.p.newFromSubtraction(ent, player):normalize()
 
     ent:setLinearVelocity(0, 0)
     ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
-    ent.alpha = self.prevStateName == 'blocking' and 1 or 0.3
+    if self.prevStateName ~= 'blocking' then
+      local BloodComponent = ent.components.blood
+      BloodComponent:splash()
+    end
 
     _G.m.addTimer(600, function()
 
