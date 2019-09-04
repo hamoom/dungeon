@@ -44,10 +44,10 @@ function Public.new(ent)
     end
   end
 
-  function State:start(player)
+  function State:start()
   end
 
-  function State:exit(player)
+  function State:exit()
   end
 
   return State

@@ -20,7 +20,7 @@ function Public.new(ent, args)
 
       local group = _G.m.map.layer['ground']
 
-      for i = 1, self.bloodAmount do
+      for _ = 1, self.bloodAmount do
         local blood = display.newRect(group, ent.x + mrand(-5, 5), ent.y + mrand(-5, 5), sizeX, sizeY)
         blood:setFillColor(bloodColor.r, bloodColor.g, bloodColor.b)
         blood.alpha = 0.8

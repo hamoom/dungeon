@@ -4,7 +4,7 @@ function Public.new(ent)
   local State = {}
 
 
-  function State:update(player)
+  function State:update()
     ent:setLinearVelocity(0,0)
   end
 
@@ -15,7 +15,7 @@ function Public.new(ent)
     end)
   end
 
-  function State:exit(player)
+  function State:exit()
     ent.fixedRotation = false
     timer.cancel(self.attackTimer)
   end

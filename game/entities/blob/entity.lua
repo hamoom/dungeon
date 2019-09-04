@@ -5,6 +5,7 @@ local Blood = require('components.graphics.blood')
 local Public = {}
 
 function Public.new(group, ogObj, player)
+
   local obj = display.newGroup()
   obj.x, obj.y = ogObj.x, ogObj.y
   group:insert(obj)
@@ -37,14 +38,14 @@ function Public.new(group, ogObj, player)
     self.isFixedRotation = true
   end
 
-  function Blob:bounce(player)
+  function Blob:bounce()
     local diff = _G.p.newFromSubtraction(self, player):normalize()
     self:setLinearVelocity(0, 0)
     self:applyLinearImpulse(20 * diff.x, 20 * diff.y, self.x, self.y)
   end
 
-  function Blob:update(player)
-    self:superUpdate(player)
+  function Blob:update()
+    self:superUpdate()
 
     local playerSprite = player.components.sprite:getSprite()
     local blobSprite = self.components.sprite:getSprite()

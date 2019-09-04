@@ -152,7 +152,7 @@
             <string></string>
         </struct>
         <key>autoAliasEnabled</key>
-        <true/>
+        <false/>
         <key>trimSpriteNames</key>
         <false/>
         <key>prependSmartFolderName</key>
@@ -198,6 +198,26 @@
             <key type="filename">scratch/better-tileset_13.png</key>
             <key type="filename">scratch/better-tileset_14.png</key>
             <key type="filename">scratch/better-tileset_15.png</key>
+            <key type="filename">scratch/better-tileset_16.png</key>
+            <key type="filename">scratch/better-tileset_17.png</key>
+            <key type="filename">scratch/better-tileset_18.png</key>
+            <key type="filename">scratch/better-tileset_19.png</key>
+            <key type="filename">scratch/better-tileset_20.png</key>
+            <key type="filename">scratch/better-tileset_21.png</key>
+            <key type="filename">scratch/better-tileset_22.png</key>
+            <key type="filename">scratch/better-tileset_23.png</key>
+            <key type="filename">scratch/better-tileset_24.png</key>
+            <key type="filename">scratch/better-tileset_25.png</key>
+            <key type="filename">scratch/better-tileset_26.png</key>
+            <key type="filename">scratch/better-tileset_27.png</key>
+            <key type="filename">scratch/better-tileset_28.png</key>
+            <key type="filename">scratch/better-tileset_29.png</key>
+            <key type="filename">scratch/better-tileset_30.png</key>
+            <key type="filename">scratch/better-tileset_31.png</key>
+            <key type="filename">scratch/better-tileset_32.png</key>
+            <key type="filename">scratch/better-tileset_33.png</key>
+            <key type="filename">scratch/better-tileset_34.png</key>
+            <key type="filename">scratch/better-tileset_35.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -221,6 +241,26 @@
             <filename>scratch/better-tileset_13.png</filename>
             <filename>scratch/better-tileset_14.png</filename>
             <filename>scratch/better-tileset_15.png</filename>
+            <filename>scratch/better-tileset_16.png</filename>
+            <filename>scratch/better-tileset_17.png</filename>
+            <filename>scratch/better-tileset_18.png</filename>
+            <filename>scratch/better-tileset_19.png</filename>
+            <filename>scratch/better-tileset_20.png</filename>
+            <filename>scratch/better-tileset_21.png</filename>
+            <filename>scratch/better-tileset_22.png</filename>
+            <filename>scratch/better-tileset_23.png</filename>
+            <filename>scratch/better-tileset_24.png</filename>
+            <filename>scratch/better-tileset_25.png</filename>
+            <filename>scratch/better-tileset_26.png</filename>
+            <filename>scratch/better-tileset_27.png</filename>
+            <filename>scratch/better-tileset_28.png</filename>
+            <filename>scratch/better-tileset_29.png</filename>
+            <filename>scratch/better-tileset_30.png</filename>
+            <filename>scratch/better-tileset_31.png</filename>
+            <filename>scratch/better-tileset_32.png</filename>
+            <filename>scratch/better-tileset_33.png</filename>
+            <filename>scratch/better-tileset_34.png</filename>
+            <filename>scratch/better-tileset_35.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

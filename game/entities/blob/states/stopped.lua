@@ -3,7 +3,7 @@ local Public = {}
 function Public.new(ent)
   local State = {}
 
-  function State:update(player)
+  function State:update()
 
   end
 
@@ -22,7 +22,7 @@ function Public.new(ent)
     end)
   end
 
-  function State:exit(player)
+  function State:exit()
     _G.m.cancelTimer(self.timer)
   end
 

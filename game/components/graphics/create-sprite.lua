@@ -37,10 +37,11 @@ function Public.new(ent)
       self:setAnim(side)
       local vx = ent.x - ent.lastX
 
-      if not dontSwitchDir and not ent.isColliding then
-        if vx > 0 then
+      if not dontSwitchDir
+      and not ent.isColliding then
+        if vx > 0.1 then
           sprite.xScale = 1
-        elseif vx < 0 then
+        elseif vx < -0.1 then
           sprite.xScale = -1
         end
       end

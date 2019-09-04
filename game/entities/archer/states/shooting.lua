@@ -27,7 +27,7 @@ function Public.new(ent)
     ArrowComponent:shoot(player)
   end
 
-  function State:exit(player)
+  function State:exit()
     local ArrowComponent = ent.components.arrow
     ArrowComponent:cancel()
   end

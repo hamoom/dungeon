@@ -1,5 +1,4 @@
 local mabs = math.abs
-local mround = math.round
 local dusk = require("Dusk.Dusk")
 dusk.setPreference("virtualObjectsVisible", false)
 dusk.setPreference("enableObjectCulling", false)
@@ -42,7 +41,6 @@ function Public.new(mapPath)
     end
 
     camScale = camScale * (1 + (dir * camSpeedSize))
-    if camSpeedSize < 0.001 then camSpeedSize = 0 end
     -- print(camScale)
     if camScale > 1.5 then
       camScale = 1.5

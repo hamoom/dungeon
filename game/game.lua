@@ -29,8 +29,6 @@ local Objects = {
   door = require('objects.door')
 }
 
-
-
 local mapContainer = display.newGroup()
 
 local enemies = {}
@@ -51,36 +49,52 @@ local preCollision,
 local gameEnded = false
 local _door
 
-function scene:create(event)
+function scene:create()
   local sceneGroup = self.view
   sceneGroup:insert(mapContainer)
 
   mapContainer:insert(_G.m.map)
 
-  local doorObjectLayer = _G.m.map.layer['door-objects']
-  for object in doorObjectLayer.objects() do
-    for _, coord in pairs(object.door) do
-      _door = object
-      local lock = display.newImageRect(doorObjectLayer, 'graphics/lock.png', 32, 32)
-      lock.x = object.x
-      lock.y = object.y - 45
+  -- local doorObjectLayer = _G.m.map.layer['door-objects']
+  -- for object in doorObjectLayer.objects() do
 
-      -- object.isSensor = true
-      -- local x, y = coord[1]+1, coord[2]+1
-      -- _G.m.map.layer['doors'].lockTileErased(x, y)
+  --   local spriteData = require('data.sprite-info.lock')
+  --   local lock = display.newSprite(spriteData.imageSheet, spriteData.sequenceData)
+  --   doorObjectLayer:insert(lock)
+  --   -- local lock = display.newImageRect(doorObjectLayer, 'graphics/lock.png', 52, 30)
+  --   lock.x = object.x
+  --   lock.y = object.y - 45
+
+  --   _G.h.oscillateMultiple(7, lock, function()
+  --     lock:play()
+
+  --     for _, coord in pairs(object.door) do
+  --       _door = object
+
+  --       object.isSensor = true
+  --       local x, y = coord[1]+1, coord[2]+1
+  --       local tile = _G.m.map.layer['doors'].tile(x, y)
+
+  --       tile.fill.effect = 'filter.brightness'
+  --       tile.fill.effect.intensity = 0.2
+  --       tile:setFillColor(0.7,0,0)
+
+
+  --       transition.to(tile, { alpha = 0, time = 1000})
+  --     end
+  --   end)
+  -- end
+
+  for object in _G.m.map.layer['entities'].objects() do
+    if object.name == 'player' then
+      player = Player.new(_G.m.map.layer['entities'], object.x, object.y)
+      player:addEventListener('preCollision', preCollision)
     end
   end
 
   for object in _G.m.map.layer['entities'].objects() do
     if object.name ~= 'player' then
       enemies[#enemies + 1] = Enemies[object.name].new(_G.m.map.layer['entities'], object, player)
-    end
-  end
-
-  for object in _G.m.map.layer['entities'].objects() do
-    if object.name == 'player' then
-      player = Player.new(_G.m.map.layer['entities'], object.x, object.y)
-      player:addEventListener('preCollision', preCollision)
     end
   end
 
@@ -148,7 +162,6 @@ function scene.pauseToggle()
 end
 
 function scene:show(event)
-  local sceneGroup = self.view
   local phase = event.phase
 
   if phase == 'will' then
@@ -180,7 +193,6 @@ function scene:show(event)
 end
 
 function scene:hide(event)
-  local sceneGroup = self.view
 
   local phase = event.phase
 
@@ -200,8 +212,7 @@ function scene:hide(event)
   end
 end
 
-function scene:destroy(event)
-  local sceneGroup = self.view
+function scene:destroy()
 
   for _, enemy in pairs(enemies) do
     if enemy.destroy then
@@ -386,7 +397,7 @@ function update()
     if obj.isAttacking then
       local sprite = player.components.sprite:getSprite()
       if _G.h.hasCollided(obj, sprite) then
-      -- player:setState('injured', obj)
+        player:setState('injured', obj)
       end
 
       for _, enemy in pairs(activeEnemies) do
@@ -404,7 +415,7 @@ function update()
       enemy:setState('injured', player)
     end
 
-    enemy:update(player)
+    enemy:update()
   end
 
   _G.m.map:moveCamera(player)

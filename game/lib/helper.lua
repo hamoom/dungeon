@@ -4,8 +4,6 @@ local mround = math.round
 local physics = require('physics')
 local Helper = {}
 
-Helper.chain = {}
-
 
 function Helper.formatTime(seconds)
   local secs = floor(seconds)
@@ -67,7 +65,7 @@ function Helper.oscillate(f, a, axis, howlong, damping, fn)
 
   if not damping then damping = 0.7 end
   return function(thing)
-    transition.to(thing, {time=howlong, delta=true, [axis]=0, transition=Helper.easeSin(f,a, damping), onComplete=function()
+    transition.to(thing, {time=howlong, delta=true, [axis]=0, transition=Helper.easeSin(f, a, damping), onComplete=function()
       if fn then
         fn()
       end
@@ -75,129 +73,32 @@ function Helper.oscillate(f, a, axis, howlong, damping, fn)
   end
 end
 
+function Helper.oscillateMultiple(maxCount, obj, fn, f, a, axis, howlong, damping)
+  local count = 0
+  f = f or 3
+  a = a or 3
+  axis = axis or 'x'
+  howlong = howlong or 300
+  damping = damping or 1
 
-function Helper.impulse(objects, duration)
-  duration = duration / 1000
-
-  local function animation()
-    duration = duration - _G.m.dt
-    for _, obj in ipairs(objects) do
-      if obj.x and obj.y then
-        obj.x = obj.x + (obj.vector.x * obj.speed * _G.m.dt)
-        obj.y = obj.y + (obj.vector.y * obj.speed * _G.m.dt)
-
-        if obj.vector.y < 1 then
-          obj.vector.y = obj.vector.y + obj.downSpeed
-        end
-
-        if duration <= 0 then
-          Runtime:removeEventListener("enterFrame", animation)
-          _G.m.eachFrameRemove(animation)
-          obj.isVisible = false
-        end
+  local function oscillateMultiple()
+    _G.h.oscillate(f, a, axis, howlong, damping, function()
+      count = count + 1
+      if count < maxCount then
+        oscillateMultiple()
+      elseif fn then
+        fn()
       end
-    end
+    end)(obj)
   end
-  _G.m.eachFrame(animation)
-end
 
-
-function Helper.verticalCollisions(velocityStep, obj1, obj2)
-  local yMod = math.abs(velocityStep.y)
-  local xMod = math.abs(velocityStep.x)
-
-  local bottom = (
-    yMod > xMod
-    and velocityStep.y > 0
-    and math.floor(Helper.bottomEdge(obj1) - math.abs(velocityStep.y)) <= math.ceil(Helper.topEdge(obj2))
-  )
-  and true or false
-
-
-  local top = (
-    yMod > xMod
-    and velocityStep.y < 0
-    and math.floor(Helper.topEdge(obj1) + math.abs(velocityStep.y)) >= math.ceil(Helper.bottomEdge(obj2))
-  )
-  and true or false
-
-  return {
-    bottom = bottom,
-    top = top
-  }
+  oscillateMultiple()
 end
 
 function Helper.clamp(num, min, max)
     if num < min then num = min elseif num > max then num = max end
     return num
 end
-
-function Helper.bottomEdge(obj)
-    return obj.y + obj.height/2
-end
-
-function Helper.topEdge(obj)
-    return obj.y - obj.height/2
-end
-
-function Helper.leftEdge(obj)
-    return obj.x - obj.width/2
-end
-
-function Helper.rightEdge(obj)
-    return obj.x + obj.width/2
-end
-
-function Helper.leftBoundary(obj1, obj2)
-    local offset = (obj2.x + obj2.width/2) - (obj1.x - obj1.width/2)
-    return Helper.clamp(offset, 0, offset)
-end
-
-function Helper.rightBoundary(obj1, obj2)
-    local offset = (obj1.x + obj1.width/2) - (obj2.x - obj2.width/2)
-    return Helper.clamp(offset, 0, offset)
-end
-
-function Helper.bottomBoundary(obj1, obj2)
-
-    local offset = (obj1.y + obj1.height/2) - (obj2.y - obj2.height/2)
-    return Helper.clamp(offset, 0, offset)
-end
-
-function Helper.topBoundary(obj1, obj2)
-    local offset = (obj2.y + obj2.height/2) - (obj1.y - obj1.height/2)
-    return Helper.clamp(offset, 0, offset)
-end
-
-function Helper.boundaries(obj1, obj2)
-    return {
-        top=Helper.topBoundary(obj1, obj2),
-        bottom=Helper.bottomBoundary(obj1, obj2),
-        right=Helper.rightBoundary(obj1, obj2),
-        left=Helper.leftBoundary(obj1, obj2)
-    }
-end
-
-function Helper.shortestBoundary(obj1, obj2)
-    local boundaries = Helper.boundaries(obj1, obj2)
-    local collision = {}
-
-    -- find side of collision
-    for direction, boundary in pairs(boundaries) do
-        if not collision.boundary then
-            collision.direction = direction
-            collision.boundary = boundary
-        end
-
-        if collision.boundary > boundary then
-            collision.direction = direction
-            collision.boundary = boundary
-        end
-    end
-
-    return boundaries, collision
-end
-
 
 function Helper.hasCollided(obj1, obj2)
     if obj1 == nil
@@ -258,7 +159,7 @@ function Helper.dumpvar(data)
         end
     end
     _dumpvar(data, 0)
-    return buffer
+    print(buffer)
 end
 
 function Helper.findValidCoord(ent, map, range)
@@ -286,13 +187,6 @@ function Helper.findValidCoord(ent, map, range)
   return (validTile and clearPath) and randomPt or nil
 end
 
-function Helper.isFacing(obj1, obj2)
-
-  return (obj1.rotation == -180 and obj2.rotation == 0)
-    or (obj1.rotation == 0 and obj2.rotation == -180)
-    or (obj1.rotation == 90 and obj2.rotation == -90)
-    or (obj1.rotation == -90 and obj2.rotation == 90)
-end
 
 function Helper.getAngle(x, lastX, y, lastY)
 

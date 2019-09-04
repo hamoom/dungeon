@@ -7,7 +7,7 @@ function Public.new(ent, args)
   local DashComponent = {}
   DashComponent.sprites = {}
 
-  for i = 1, 10 do
+  for _ = 1, 10 do
     local spriteData = require('data.sprite-info.' .. ent.name)
     local thisSprite = display.newSprite(spriteData.imageSheet, spriteData.sequenceData)
     group:insert(thisSprite)
@@ -20,8 +20,8 @@ function Public.new(ent, args)
 
     thisSprite.chaseEnt = function(self)
       self.animFunc = function()
-        if p.new(self):distanceTo(ent) > 10 then
-          local velocity = p.new(ent)
+        if _G.p.new(self):distanceTo(ent) > 10 then
+          local velocity = _G.p.new(ent)
             :subtract(self)
             :normalize()
             :multiply(15)

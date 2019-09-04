@@ -48,8 +48,8 @@ function Public.new(group, ogObj, player)
     self.isFixedRotation = true
   end
 
-  function Orc:update(player)
-    self:superUpdate(player)
+  function Orc:update()
+    self:superUpdate()
 
     local sprite = self.components.sprite:getSprite()
     local playerSprite = player.components.sprite:getSprite()

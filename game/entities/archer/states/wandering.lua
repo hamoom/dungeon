@@ -18,7 +18,7 @@ function Public.new(ent)
     end
   end
 
-  function State:start(player)
+  function State:start()
   end
 
   return State

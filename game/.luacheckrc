@@ -24,6 +24,7 @@ stds.corona = {
 
 ignore = {
   '212/%.%.%.',
+  '212/self',
   '143/math.*'
 }
 std = 'lua51+corona'

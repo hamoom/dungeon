@@ -6,6 +6,7 @@ local Public = {}
 function Public.new(obj, name, initialState, player)
   local Enemy = BaseEntity.new(obj, name, initialState, player)
 
+
   Enemy.type = 'enemy'
   Enemy.lastX, Enemy.lastY = Enemy.x, Enemy.y
 
@@ -45,9 +46,10 @@ function Public.new(obj, name, initialState, player)
     end
   end
 
-  function Enemy:update(player)
+  function Enemy:update()
+
     if player.state.name == 'death' then
-      self:setState('wandering', player)
+      self:setState(initialState, player)
     end
 
     self.state:update(player)

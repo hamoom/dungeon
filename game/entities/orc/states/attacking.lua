@@ -21,7 +21,7 @@ function Public.new(ent)
     end
   end
 
-  function State:start(player)
+  function State:start()
     local weapon = ent.components.weapon:getHitBox()
     -- ent.rotation = _G.h.rotateToward(ent, player)
 
@@ -31,7 +31,7 @@ function Public.new(ent)
     self.attackTimer = 2
   end
 
-  function State:exit(player)
+  function State:exit()
     local weapon = ent.components.weapon:getHitBox()
 
     ent.fixedRotation = false

@@ -5,12 +5,10 @@ function Public.new()
   healthBar.x, healthBar.y = 10, 20
 
   function healthBar:clearAll()
-
     for i = self.numChildren, 1, -1 do
       self[i]:removeSelf()
       self[1] = nil
     end
-
   end
 
   function healthBar:setHealth(num)
@@ -37,7 +35,6 @@ function Public.new()
   Runtime:addEventListener('changeHealth', setHealth)
 
   return healthBar
-
 end
 
 return Public
