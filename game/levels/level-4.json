@@ -36,7 +36,7 @@
         {
          "draworder":"topdown",
          "height":0,
-         "name":"door-objects",
+         "name":"objects",
          "objects":[
                 {
                  "height":32,
@@ -44,11 +44,17 @@
                  "name":"",
                  "properties":
                     {
-                     "door":"!json! [[21,3],[21,4],[22,3],[22,4],[23,3],[23,4]]"
+                     "doorId":"1",
+                     "lockYOffset":"-45",
+                     "name":"door",
+                     "tiles":"!json! [[21,3],[21,4],[22,3],[22,4],[23,3],[23,4]]"
                     },
                  "propertytypes":
                     {
-                     "door":"string"
+                     "doorId":"string",
+                     "lockYOffset":"string",
+                     "name":"string",
+                     "tiles":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -63,11 +69,19 @@
                  "name":"",
                  "properties":
                     {
-                     "door":"!json! [[27,10],[27,11],[27,12]]"
+                     "doorId":"2",
+                     "lockXOffset":"3",
+                     "lockYOffset":"-10",
+                     "name":"door",
+                     "tiles":"!json! [[27,10],[27,11],[27,12]]"
                     },
                  "propertytypes":
                     {
-                     "door":"string"
+                     "doorId":"string",
+                     "lockXOffset":"string",
+                     "lockYOffset":"string",
+                     "name":"string",
+                     "tiles":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -312,8 +326,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":712,
-                 "y":296
+                 "x":88,
+                 "y":208
                 }, 
                 {
                  "height":32,

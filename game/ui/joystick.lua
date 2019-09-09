@@ -3,6 +3,11 @@ local Public = {}
 function Public.new()
   local joystick = display.newGroup()
   joystick.isActive = false
+  joystick.alpha = 0
+  joystick.base = display.newCircle(joystick, 0, 0, 40)
+  joystick.knob = display.newCircle(joystick, 0, 0, 25)
+  joystick.knob:setFillColor(1, 0, 0)
+  joystick.pos = _G.p.new(0, 0)
 
   function joystick:moved(x, y)
     joystick.pos:setPosition(x, y):subtract(self)
@@ -35,11 +40,6 @@ function Public.new()
     transition.fadeOut(self, {time = 500})
   end
 
-  joystick.alpha = 0
-  joystick.base = display.newCircle(joystick, 0, 0, 40)
-  joystick.knob = display.newCircle(joystick, 0, 0, 25)
-  joystick.knob:setFillColor(1, 0, 0)
-  joystick.pos = _G.p.new(0, 0)
   return joystick
 end
 

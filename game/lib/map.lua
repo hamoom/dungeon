@@ -1,9 +1,11 @@
 local mabs = math.abs
+local animation = require('plugin.animation')
 local dusk = require("Dusk.Dusk")
 dusk.setPreference("virtualObjectsVisible", false)
 dusk.setPreference("enableObjectCulling", false)
 -- dusk.setPreference("enableCameraRounding", true)
 dusk.setPreference("cullingMargin", 2)
+
 
 local Public = {}
 
@@ -21,6 +23,32 @@ function Public.new(mapPath)
 		yMin = display.contentHeight/2 - padding,
 		yMax = Map.data.height - display.contentHeight/2 + padding
 	})
+
+  function Map:focusCamera(ogObj, focusObj, delay, finished, fn)
+
+    local marker = display.newRect(self.layer['entities'], ogObj.x, ogObj.y-10, 10, 10)
+    marker.isVisible = false
+    Runtime:dispatchEvent({ name = 'pause' })
+
+    self.setCameraFocus(marker, true)
+    self.setTrackingLevel(0.06)
+    local focusCamFunc = function()
+      self.updateView()
+    end
+    _G.m.eachFrame(focusCamFunc)
+
+    animation.to(marker, { x=focusObj.x, y=focusObj.y }, { constantRate=200, constantRateProperty="position", onComplete=function()
+      timer.performWithDelay(delay, function()
+        if finished then
+          Runtime:dispatchEvent({ name = 'resume' })
+          _G.m.eachFrameRemove(focusCamFunc)
+        end
+        display.remove(marker)
+        self.setCameraFocus(focusObj, true)
+        if fn then fn() end
+      end, 1)
+    end } )
+  end
 
   function Map:moveCamera(player)
     local camScale = self.cameraScale

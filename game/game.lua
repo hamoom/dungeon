@@ -1,15 +1,14 @@
 local composer = require('composer')
-local animation = require('plugin.animation')
+
 local scene = composer.newScene()
+
+local physics = require('physics')
+physics.start()
+physics.setGravity(0, 0)
 
 _G.m.spriteList = {}
 _G.controls = require('ui.controls'):new()
 _G.controls.group:toFront()
-
-local physics = require('physics')
--- physics.setDrawMode('hybrid')
-physics.start()
-physics.setGravity(0, 0)
 
 local map = require('lib.map')
 map.new('levels/level-' .. _G.m.currentLevel .. '.json')
@@ -29,11 +28,14 @@ local Objects = {
   door = require('objects.door')
 }
 
+local SceneTransition = require('lib.scene-transition')
+
 local mapContainer = display.newGroup()
 
 local enemies = {}
 local objects = {}
-local theDoor
+
+
 local player
 
 local lastUpdate = 0
@@ -45,45 +47,24 @@ local preCollision,
   keysPressed,
   stopInput,
   gameOver,
-  nextLevel
+  nextLevel,
+  pauseToggle,
+  pause,
+  resume
 local gameEnded = false
-local _door
+
 
 function scene:create()
   local sceneGroup = self.view
   sceneGroup:insert(mapContainer)
+  local transitionGroup = display.newGroup()
+  sceneGroup:insert(transitionGroup)
+  SceneTransition.new({
+    transition = 'exiting',
+    direction = 'left'
+  }, transitionGroup)
 
   mapContainer:insert(_G.m.map)
-
-  -- local doorObjectLayer = _G.m.map.layer['door-objects']
-  -- for object in doorObjectLayer.objects() do
-
-  --   local spriteData = require('data.sprite-info.lock')
-  --   local lock = display.newSprite(spriteData.imageSheet, spriteData.sequenceData)
-  --   doorObjectLayer:insert(lock)
-  --   -- local lock = display.newImageRect(doorObjectLayer, 'graphics/lock.png', 52, 30)
-  --   lock.x = object.x
-  --   lock.y = object.y - 45
-
-  --   _G.h.oscillateMultiple(7, lock, function()
-  --     lock:play()
-
-  --     for _, coord in pairs(object.door) do
-  --       _door = object
-
-  --       object.isSensor = true
-  --       local x, y = coord[1]+1, coord[2]+1
-  --       local tile = _G.m.map.layer['doors'].tile(x, y)
-
-  --       tile.fill.effect = 'filter.brightness'
-  --       tile.fill.effect.intensity = 0.2
-  --       tile:setFillColor(0.7,0,0)
-
-
-  --       transition.to(tile, { alpha = 0, time = 1000})
-  --     end
-  --   end)
-  -- end
 
   for object in _G.m.map.layer['entities'].objects() do
     if object.name == 'player' then
@@ -98,15 +79,15 @@ function scene:create()
     end
   end
 
-  if _G.m.map.layer['objects'] then
-    for object in _G.m.map.layer['objects'].objects() do
-      if object.name == 'door' then
-        theDoor = Objects[object.name].new(_G.m.map.layer['objects'], object)
-      else
-        objects[#objects + 1] = Objects[object.name].new(_G.m.map.layer['objects'], object)
-      end
-    end
+  for object in _G.m.map.layer['objects'].objects() do
+    objects[#objects + 1] = Objects[object.name].new(_G.m.map.layer['objects'], object)
   end
+
+  player:toFront()
+
+  -- timer.performWithDelay(1500, function()
+  --   Runtime:dispatchEvent({ name = 'openDoor', doorId = 1, player = player })
+  -- end,1)
 
   health:setHealth(player.health)
 
@@ -134,7 +115,7 @@ function scene:create()
   end
 
   _G.controls.pauseBtnFn = function(event)
-    scene.pauseToggle()
+    pauseToggle()
     event.target:setEnabled(false)
     timer.performWithDelay(
       1000,
@@ -146,19 +127,28 @@ function scene:create()
   end
 end
 
-function scene.pauseToggle()
-  _G.m.pause()
-  if _G.m.paused then
-    joystick.isVisible = false
-    Runtime:removeEventListener('enterFrame', update)
-    Runtime:removeEventListener('touch', screenTouched)
-    Runtime:removeEventListener('key', keysPressed)
+function pauseToggle()
+  if not _G.m.paused then
+    pause()
   else
-    joystick.isVisible = true
-    Runtime:addEventListener('enterFrame', update)
-    Runtime:addEventListener('touch', screenTouched)
-    Runtime:addEventListener('key', keysPressed)
+    resume()
   end
+end
+
+function pause()
+  _G.m.pause()
+  joystick.isVisible = false
+  Runtime:removeEventListener('enterFrame', update)
+  Runtime:removeEventListener('touch', screenTouched)
+  Runtime:removeEventListener('key', keysPressed)
+end
+
+function resume()
+  _G.m.resume()
+  joystick.isVisible = true
+  Runtime:addEventListener('enterFrame', update)
+  Runtime:addEventListener('touch', screenTouched)
+  Runtime:addEventListener('key', keysPressed)
 end
 
 function scene:show(event)
@@ -167,28 +157,6 @@ function scene:show(event)
   if phase == 'will' then
     Runtime:addEventListener('enterFrame', update)
   elseif phase == 'did' then
-
-  -- timer.performWithDelay(1000, function()
-  -- 	local meh = display.newRect(_G.m.map.layer['entities'], player.x, player.y-10, 10, 10)
-  -- 	Runtime:removeEventListener("enterFrame", update)
-  -- 	_G.m.map.setCameraFocus(meh, true)
-  -- 	_G.m.map.setTrackingLevel(0.06)
-  -- 	local whatever = function()
-  -- 		_G.m.map.updateView()
-  -- 	end
-  --
-  -- 	_G.m.eachFrame(whatever)
-  -- 	animation.to(meh, { x=_door.x, y=_door.y }, { constantRate=200, constantRateProperty="position", onComplete=function()
-  -- 		timer.performWithDelay(1000, function()
-  -- 				animation.to(meh, { x=player.x, y=player.y }, { constantRate=200, constantRateProperty="position", onComplete=function()
-  -- 					Runtime:addEventListener("enterFrame", update)
-  -- 					_G.m.eachFrameRemove(whatever)
-  -- 					_G.m.map.setCameraFocus(player, true)
-  -- 					display.remove(meh)
-  -- 				end } )
-  -- 		end, 1)
-  -- 	end } )
-  -- end,1)
   end
 end
 
@@ -286,13 +254,13 @@ function onCollision(event)
         -- 	if otherObj.isAttacking then
         -- 		player:setState('injured', otherObj)
         -- 	end
-        display.remove(otherObj)
-        thePlayer.item = 'key'
-        theDoor:open()
+        -- display.remove(otherObj)
+        -- thePlayer.item = 'key'
+        -- theDoor:open()
       elseif otherObj.name == 'door' then
         -- and otherObj.isOpen
         -- and player.item == 'key' then
-        nextLevel()
+        -- nextLevel()
       end
     end
   end
@@ -440,6 +408,8 @@ Runtime:addEventListener('touch', screenTouched)
 Runtime:addEventListener('collision', onCollision)
 Runtime:addEventListener('gameOver', gameOver)
 Runtime:addEventListener('stopInput', stopInput)
+Runtime:addEventListener('pause', pause)
+Runtime:addEventListener('resume', resume)
 
 -----------------------------------------------------------------------------------------
 

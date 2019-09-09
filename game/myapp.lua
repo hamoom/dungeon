@@ -1,8 +1,8 @@
-local h = require('lib.helper')
+local physics = require('physics')
 local MyApp = {}
 
 MyApp.dt = 0
-MyApp.paused = false
+MyApp.isPaused = false
 MyApp.timers = {}
 MyApp.map = nil
 MyApp.currentLevel = 4
@@ -42,32 +42,34 @@ function MyApp.addTimer(delay, fn, iterations)
   return thisTimer
 end
 
-function MyApp.pause()
-  if not MyApp.paused then
-
-    MyApp.paused = true
-    -- audio.pause(1)
-    -- audio.setVolume(0)
-    physics.pause()
-
-    for _, v in pairs(MyApp.timers) do
-      timer.pause(v)
-    end
-    transition.pause()
+function MyApp.pauseToggle()
+  MyApp.isPaused = not MyApp.isPaused
+  if not MyApp.isPaused then
+    MyApp.pause()
   else
-    MyApp.paused = false
-    -- audio.resume(1)
-    -- audio.setVolume(1)
-    physics.start()
-    for _, v in pairs(MyApp.timers) do
-      timer.resume(v)
-    end
-    transition.resume()
+    MyApp.resume()
   end
 end
 
+function MyApp.pause()
+  physics.pause()
+
+  for _, v in pairs(MyApp.timers) do
+    timer.pause(v)
+  end
+  transition.pause()
+end
+
+function MyApp.resume()
+  physics.start()
+  for _, v in pairs(MyApp.timers) do
+    timer.resume(v)
+  end
+  transition.resume()
+end
+
 function MyApp._enterFrame()
-  if MyApp.paused then do return end end
+  if MyApp.isPaused then do return end end
   if MyApp.enterFrameFunctions then
     for i = 1, #MyApp.enterFrameFunctions do
       if MyApp.enterFrameFunctions[i] then MyApp.enterFrameFunctions[i]() end

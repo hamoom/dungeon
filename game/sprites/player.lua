@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:b32ea59c9974943b45262ceaf2d50d5a:9f30349308dc6c49dd8571df1460b3ec:b2f580ea7c37465eac371f095cbaf8c7$
+-- $TexturePacker:SmartUpdate:31db1ae465417a8b10bd450febb53f44:33e43dde5080713169e1f06408c031ab:b2f580ea7c37465eac371f095cbaf8c7$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -16,8 +16,8 @@ SheetInfo.sheet =
     
         {
             -- player1
-            x=57,
-            y=269,
+            x=84,
+            y=328,
             width=28,
             height=38,
 
@@ -28,20 +28,20 @@ SheetInfo.sheet =
         },
         {
             -- player2
-            x=75,
-            y=75,
+            x=52,
+            y=252,
             width=28,
-            height=36,
+            height=38,
 
             sourceX = 16,
-            sourceY = 10,
+            sourceY = 8,
             sourceWidth = 60,
             sourceHeight = 66
         },
         {
             -- player3
-            x=89,
-            y=37,
+            x=28,
+            y=108,
             width=28,
             height=36,
 
@@ -52,80 +52,8 @@ SheetInfo.sheet =
         },
         {
             -- player4
-            x=31,
-            y=151,
-            width=28,
-            height=36,
-
-            sourceX = 16,
-            sourceY = 9,
-            sourceWidth = 60,
-            sourceHeight = 66
-        },
-        {
-            -- player5
-            x=1,
-            y=151,
-            width=28,
-            height=36,
-
-            sourceX = 16,
-            sourceY = 9,
-            sourceWidth = 60,
-            sourceHeight = 66
-        },
-        {
-            -- player6
-            x=97,
-            y=113,
-            width=26,
-            height=36,
-
-            sourceX = 18,
-            sourceY = 9,
-            sourceWidth = 60,
-            sourceHeight = 66
-        },
-        {
-            -- player7
-            x=31,
-            y=151,
-            width=28,
-            height=36,
-
-            sourceX = 16,
-            sourceY = 9,
-            sourceWidth = 60,
-            sourceHeight = 66
-        },
-        {
-            -- player8
-            x=37,
-            y=113,
-            width=28,
-            height=36,
-
-            sourceX = 16,
-            sourceY = 9,
-            sourceWidth = 60,
-            sourceHeight = 66
-        },
-        {
-            -- player9
-            x=87,
-            y=189,
-            width=28,
-            height=38,
-
-            sourceX = 15,
-            sourceY = 8,
-            sourceWidth = 60,
-            sourceHeight = 66
-        },
-        {
-            -- player10
-            x=67,
-            y=113,
+            x=62,
+            y=36,
             width=28,
             height=36,
 
@@ -135,9 +63,33 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player11
-            x=27,
-            y=269,
+            -- player5
+            x=86,
+            y=0,
+            width=28,
+            height=36,
+
+            sourceX = 16,
+            sourceY = 10,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player6
+            x=34,
+            y=72,
+            width=28,
+            height=36,
+
+            sourceX = 16,
+            sourceY = 10,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player7
+            x=24,
+            y=252,
             width=28,
             height=38,
 
@@ -147,59 +99,119 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player12
-            x=1,
-            y=229,
-            width=24,
+            -- player8
+            x=0,
+            y=366,
+            width=28,
             height=38,
 
-            sourceX = 18,
+            sourceX = 16,
+            sourceY = 8,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player9
+            x=56,
+            y=216,
+            width=28,
+            height=36,
+
+            sourceX = 16,
+            sourceY = 9,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player10
+            x=0,
+            y=144,
+            width=28,
+            height=36,
+
+            sourceX = 16,
+            sourceY = 9,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player11
+            x=56,
+            y=144,
+            width=28,
+            height=36,
+
+            sourceX = 16,
+            sourceY = 9,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player12
+            x=84,
+            y=144,
+            width=28,
+            height=36,
+
+            sourceX = 16,
             sourceY = 9,
             sourceWidth = 60,
             sourceHeight = 66
         },
         {
             -- player13
-            x=73,
-            y=229,
-            width=24,
-            height=38,
+            x=28,
+            y=144,
+            width=28,
+            height=36,
 
-            sourceX = 18,
+            sourceX = 16,
             sourceY = 9,
             sourceWidth = 60,
             sourceHeight = 66
         },
         {
             -- player14
-            x=87,
-            y=269,
-            width=24,
-            height=38,
+            x=0,
+            y=180,
+            width=28,
+            height=36,
 
-            sourceX = 18,
+            sourceX = 16,
             sourceY = 9,
             sourceWidth = 60,
             sourceHeight = 66
         },
         {
             -- player15
-            x=99,
-            y=229,
-            width=24,
-            height=38,
+            x=82,
+            y=180,
+            width=28,
+            height=36,
 
-            sourceX = 18,
+            sourceX = 16,
             sourceY = 9,
             sourceWidth = 60,
             sourceHeight = 66
         },
         {
             -- player16
-            x=1,
-            y=269,
-            width=24,
-            height=38,
+            x=0,
+            y=216,
+            width=28,
+            height=36,
+
+            sourceX = 16,
+            sourceY = 9,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player17
+            x=56,
+            y=180,
+            width=26,
+            height=36,
 
             sourceX = 18,
             sourceY = 9,
@@ -207,9 +219,225 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player17
-            x=61,
-            y=151,
+            -- player18
+            x=84,
+            y=216,
+            width=28,
+            height=36,
+
+            sourceX = 16,
+            sourceY = 9,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player19
+            x=28,
+            y=180,
+            width=28,
+            height=36,
+
+            sourceX = 16,
+            sourceY = 9,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player20
+            x=94,
+            y=366,
+            width=28,
+            height=38,
+
+            sourceX = 15,
+            sourceY = 8,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player21
+            x=28,
+            y=216,
+            width=28,
+            height=36,
+
+            sourceX = 16,
+            sourceY = 10,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player22
+            x=72,
+            y=290,
+            width=28,
+            height=38,
+
+            sourceX = 16,
+            sourceY = 8,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player23
+            x=0,
+            y=404,
+            width=24,
+            height=40,
+
+            sourceX = 19,
+            sourceY = 7,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player24
+            x=96,
+            y=404,
+            width=24,
+            height=40,
+
+            sourceX = 19,
+            sourceY = 7,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player25
+            x=0,
+            y=290,
+            width=24,
+            height=38,
+
+            sourceX = 19,
+            sourceY = 9,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player26
+            x=48,
+            y=290,
+            width=24,
+            height=38,
+
+            sourceX = 19,
+            sourceY = 9,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player27
+            x=24,
+            y=290,
+            width=24,
+            height=38,
+
+            sourceX = 19,
+            sourceY = 9,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player28
+            x=0,
+            y=252,
+            width=24,
+            height=38,
+
+            sourceX = 19,
+            sourceY = 9,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player29
+            x=48,
+            y=404,
+            width=24,
+            height=40,
+
+            sourceX = 19,
+            sourceY = 7,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player30
+            x=72,
+            y=404,
+            width=24,
+            height=40,
+
+            sourceX = 19,
+            sourceY = 7,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player31
+            x=100,
+            y=290,
+            width=24,
+            height=38,
+
+            sourceX = 19,
+            sourceY = 9,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player32
+            x=24,
+            y=404,
+            width=24,
+            height=40,
+
+            sourceX = 19,
+            sourceY = 7,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player33
+            x=28,
+            y=328,
+            width=24,
+            height=38,
+
+            sourceX = 19,
+            sourceY = 9,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player34
+            x=0,
+            y=444,
+            width=24,
+            height=40,
+
+            sourceX = 19,
+            sourceY = 7,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player35
+            x=0,
+            y=328,
+            width=28,
+            height=38,
+
+            sourceX = 16,
+            sourceY = 8,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player36
+            x=86,
+            y=108,
             width=36,
             height=36,
 
@@ -219,45 +447,33 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player18
-            x=1,
-            y=351,
-            width=32,
-            height=40,
+            -- player37
+            x=0,
+            y=36,
+            width=34,
+            height=36,
 
-            sourceX = 8,
+            sourceX = 6,
             sourceY = 10,
             sourceWidth = 60,
             sourceHeight = 66
         },
         {
-            -- player19
-            x=1,
-            y=445,
-            width=30,
-            height=50,
+            -- player38
+            x=0,
+            y=486,
+            width=44,
+            height=42,
 
             sourceX = 16,
-            sourceY = 9,
+            sourceY = 10,
             sourceWidth = 60,
             sourceHeight = 66
         },
         {
-            -- player20
-            x=69,
-            y=397,
-            width=42,
-            height=46,
-
-            sourceX = 16,
-            sourceY = 9,
-            sourceWidth = 60,
-            sourceHeight = 66
-        },
-        {
-            -- player21
-            x=27,
-            y=229,
+            -- player39
+            x=50,
+            y=366,
             width=44,
             height=38,
 
@@ -267,9 +483,33 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player22
-            x=1,
-            y=309,
+            -- player40
+            x=28,
+            y=366,
+            width=22,
+            height=38,
+
+            sourceX = 20,
+            sourceY = 9,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player41
+            x=44,
+            y=486,
+            width=22,
+            height=42,
+
+            sourceX = 20,
+            sourceY = 5,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player42
+            x=80,
+            y=252,
             width=32,
             height=38,
 
@@ -279,33 +519,45 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player23
-            x=35,
-            y=309,
-            width=40,
-            height=38,
-
-            sourceX = 20,
-            sourceY = 9,
-            sourceWidth = 60,
-            sourceHeight = 66
-        },
-        {
-            -- player24
-            x=77,
-            y=309,
+            -- player43
+            x=48,
+            y=530,
             width=32,
-            height=40,
+            height=50,
 
-            sourceX = 22,
+            sourceX = 19,
+            sourceY = 8,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player44
+            x=80,
+            y=530,
+            width=26,
+            height=50,
+
+            sourceX = 17,
+            sourceY = 8,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- player45
+            x=34,
+            y=36,
+            width=28,
+            height=36,
+
+            sourceX = 16,
             sourceY = 9,
             sourceWidth = 60,
             sourceHeight = 66
         },
         {
-            -- player25
-            x=1,
-            y=75,
+            -- player46
+            x=90,
+            y=36,
             width=36,
             height=36,
 
@@ -315,10 +567,10 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player26
-            x=1,
-            y=397,
-            width=36,
+            -- player47
+            x=66,
+            y=486,
+            width=40,
             height=44,
 
             sourceX = 18,
@@ -327,33 +579,33 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player27
-            x=39,
-            y=397,
-            width=28,
+            -- player48
+            x=0,
+            y=530,
+            width=48,
             height=46,
 
-            sourceX = 16,
+            sourceX = 0,
             sourceY = 0,
             sourceWidth = 60,
             sourceHeight = 66
         },
         {
-            -- player28
-            x=77,
-            y=351,
-            width=44,
-            height=44,
+            -- player49
+            x=64,
+            y=444,
+            width=46,
+            height=42,
 
             sourceX = 0,
-            sourceY = 1,
+            sourceY = 4,
             sourceWidth = 60,
             sourceHeight = 66
         },
         {
-            -- player29
-            x=1,
-            y=113,
+            -- player50
+            x=62,
+            y=72,
             width=34,
             height=36,
 
@@ -363,9 +615,9 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player30
-            x=39,
-            y=75,
+            -- player51
+            x=0,
+            y=72,
             width=34,
             height=36,
 
@@ -375,9 +627,9 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player31
-            x=83,
-            y=1,
+            -- player52
+            x=52,
+            y=0,
             width=34,
             height=34,
 
@@ -387,9 +639,9 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player32
-            x=29,
-            y=1,
+            -- player53
+            x=0,
+            y=0,
             width=26,
             height=30,
 
@@ -399,9 +651,9 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player33
-            x=1,
-            y=1,
+            -- player54
+            x=26,
+            y=0,
             width=26,
             height=30,
 
@@ -411,9 +663,9 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player34
-            x=27,
-            y=37,
+            -- player55
+            x=0,
+            y=108,
             width=28,
             height=36,
 
@@ -423,9 +675,9 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player35
-            x=57,
-            y=37,
+            -- player56
+            x=56,
+            y=108,
             width=30,
             height=36,
 
@@ -435,9 +687,9 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player36
-            x=1,
-            y=189,
+            -- player57
+            x=52,
+            y=328,
             width=32,
             height=38,
 
@@ -447,9 +699,9 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player37
-            x=35,
-            y=351,
+            -- player58
+            x=24,
+            y=444,
             width=40,
             height=42,
 
@@ -459,9 +711,9 @@ SheetInfo.sheet =
             sourceHeight = 66
         },
         {
-            -- player38
-            x=67,
-            y=113,
+            -- player59
+            x=96,
+            y=72,
             width=28,
             height=36,
 
@@ -470,58 +722,10 @@ SheetInfo.sheet =
             sourceWidth = 60,
             sourceHeight = 66
         },
-        {
-            -- player39
-            x=1,
-            y=37,
-            width=24,
-            height=34,
-
-            sourceX = 18,
-            sourceY = 11,
-            sourceWidth = 60,
-            sourceHeight = 66
-        },
-        {
-            -- player40
-            x=57,
-            y=1,
-            width=24,
-            height=34,
-
-            sourceX = 18,
-            sourceY = 12,
-            sourceWidth = 60,
-            sourceHeight = 66
-        },
-        {
-            -- player41
-            x=35,
-            y=189,
-            width=24,
-            height=38,
-
-            sourceX = 18,
-            sourceY = 11,
-            sourceWidth = 60,
-            sourceHeight = 66
-        },
-        {
-            -- player42
-            x=61,
-            y=189,
-            width=24,
-            height=38,
-
-            sourceX = 18,
-            sourceY = 11,
-            sourceWidth = 60,
-            sourceHeight = 66
-        },
     },
     
-    sheetContentWidth = 124,
-    sheetContentHeight = 496
+    sheetContentWidth = 126,
+    sheetContentHeight = 580
 }
 
 SheetInfo.frameIndex =
@@ -569,6 +773,23 @@ SheetInfo.frameIndex =
     ["player40"] = 40,
     ["player41"] = 41,
     ["player42"] = 42,
+    ["player43"] = 43,
+    ["player44"] = 44,
+    ["player45"] = 45,
+    ["player46"] = 46,
+    ["player47"] = 47,
+    ["player48"] = 48,
+    ["player49"] = 49,
+    ["player50"] = 50,
+    ["player51"] = 51,
+    ["player52"] = 52,
+    ["player53"] = 53,
+    ["player54"] = 54,
+    ["player55"] = 55,
+    ["player56"] = 56,
+    ["player57"] = 57,
+    ["player58"] = 58,
+    ["player59"] = 59,
 }
 
 function SheetInfo:getSheet()

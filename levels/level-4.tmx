@@ -315,19 +315,26 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="door-objects">
+ <objectgroup name="objects">
   <properties>
    <property name="objects:bodyType" value="static"/>
    <property name="physics:enabled" value="true"/>
   </properties>
   <object id="50" x="688" y="112" width="64" height="32">
    <properties>
-    <property name="door" value="!json! [[21,3],[21,4],[22,3],[22,4],[23,3],[23,4]]"/>
+    <property name="doorId" value="1"/>
+    <property name="lockYOffset" value="-45"/>
+    <property name="name" value="door"/>
+    <property name="tiles" value="!json! [[21,3],[21,4],[22,3],[22,4],[23,3],[23,4]]"/>
    </properties>
   </object>
   <object id="55" x="872" y="352" width="16" height="64">
    <properties>
-    <property name="door" value="!json! [[27,10],[27,11],[27,12]]"/>
+    <property name="doorId" value="2"/>
+    <property name="lockXOffset" value="3"/>
+    <property name="lockYOffset" value="-10"/>
+    <property name="name" value="door"/>
+    <property name="tiles" value="!json! [[27,10],[27,11],[27,12]]"/>
    </properties>
   </object>
  </objectgroup>
@@ -354,7 +361,7 @@
   <object id="53" x="848" y="336" width="144" height="32"/>
  </objectgroup>
  <objectgroup name="entities">
-  <object id="21" name="player" x="712" y="296" width="32" height="32">
+  <object id="21" name="player" x="88" y="208" width="32" height="32">
    <properties>
     <property name="name" value="player"/>
    </properties>
