@@ -387,7 +387,7 @@ function update()
 
     if playerWeapon.isAttacking
       and _G.h.hasCollided(playerWeapon, enemySprite)
-      and enemy.state ~= 'stunned' then
+      and enemy.state.name ~= 'stunned' then
       enemy:setState('injured', player)
     end
 
