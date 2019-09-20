@@ -29,7 +29,7 @@ function Public.new(ent)
         ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
         self.stoppedTimer = _G.m.addTimer(200, function()
-          ent:setState('stopped', player)
+          ent:setState('stunned', player)
         end)
       end
     end

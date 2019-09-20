@@ -44,7 +44,7 @@ function Public.new(ent, args)
     sprite.fill.effect.intensity = 1
 
     _G.m.addTimer(50, function()
-      sprite.fill.effect = ""
+      sprite.fill.effect.intensity = 0
     end)
 
     local time = 15

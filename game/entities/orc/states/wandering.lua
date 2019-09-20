@@ -10,7 +10,7 @@ function Public.new(ent)
   State.rotationSpeed = 200
   State.speed = 60
   State.range = 130
-  State.chaseDistance = 30
+  State.chaseDistance = 100
 
   function State:update(player)
     self:superUpdate(player)

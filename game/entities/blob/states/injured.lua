@@ -9,7 +9,7 @@ function Public.new(ent)
   end
 
   function State:start(player)
-    -- print('im here')
+
     ent.health = ent.health - 1
 
     _G.h.oscillate(3, 20, 'y', 500)(_G.m.map)
@@ -26,7 +26,7 @@ function Public.new(ent)
       _G.m.addTimer(
         1000,
         function()
-          ent:setState('stopped', player)
+          ent:setState('stunned', player)
         end
       )
     else

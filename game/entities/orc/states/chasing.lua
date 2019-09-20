@@ -1,4 +1,3 @@
-local rand = math.random
 local Public = {}
 
 function Public.new(ent)
@@ -10,6 +9,7 @@ function Public.new(ent)
   State.range = 180
 
   function State:update(player)
+
     if not self.curAngle then
       self.curAngle = _G.p.newFromSubtraction(player, ent):angle()
     end
@@ -39,8 +39,8 @@ function Public.new(ent)
 
     if entPt:distanceTo(player) > 200 then
       ent:setState('wandering', player)
-    elseif entPt:distanceTo(player) <= ent.attackDistance + 10 and rand() < 0.75 then
-      ent:setState('blocking', player)
+    elseif entPt:distanceTo(player) <= ent.attackDistance then
+      ent:setState('attacking', player)
     end
   end
 

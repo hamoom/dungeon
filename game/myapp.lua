@@ -6,7 +6,7 @@ MyApp.isPaused = false
 MyApp.timers = {}
 MyApp.map = nil
 MyApp.currentLevel = 4
-MyApp.spritesList = {}
+MyApp.spriteList = {}
 
 MyApp.enterFrameFunctions = nil
 
@@ -42,18 +42,21 @@ function MyApp.addTimer(delay, fn, iterations)
   return thisTimer
 end
 
-function MyApp.pauseToggle()
-  MyApp.isPaused = not MyApp.isPaused
-  if not MyApp.isPaused then
-    MyApp.pause()
-  else
-    MyApp.resume()
-  end
-end
+-- function MyApp.pauseToggle()
+--   if not MyApp.isPaused then
+--     MyApp.pause()
+--   else
+--     MyApp.resume()
+--   end
+--   MyApp.isPaused = not MyApp.isPaused
+-- end
 
 function MyApp.pause()
+  MyApp.isPaused = true
   physics.pause()
-
+  for _, v in pairs(MyApp.spriteList) do
+    v:pause()
+  end
   for _, v in pairs(MyApp.timers) do
     timer.pause(v)
   end
@@ -61,7 +64,11 @@ function MyApp.pause()
 end
 
 function MyApp.resume()
+  MyApp.isPaused = false
   physics.start()
+  for _, v in pairs(MyApp.spriteList) do
+    v:play()
+  end
   for _, v in pairs(MyApp.timers) do
     timer.resume(v)
   end

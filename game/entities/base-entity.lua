@@ -4,6 +4,7 @@ local stateList = require('lib.state-machine.create-states')
 function Public.new(ent, name, initialState, otherEnt)
   ent.components = {}
   ent.name = name
+  ent.isEntity = true
 
   local states = stateList.new(ent, name)
 

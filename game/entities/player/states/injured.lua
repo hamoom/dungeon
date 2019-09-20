@@ -11,7 +11,7 @@ function Public.new(ent)
   end
 
   function State:start(enemy)
-    ent.health = ent.health - 1
+    -- ent.health = ent.health - 1
 
     local BloodComponent = ent.components.blood
     BloodComponent:splash()

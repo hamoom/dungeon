@@ -194,6 +194,7 @@ function Helper.getAngle(x, lastX, y, lastY)
   local avx, avy = mround(mabs(real_vx)), mround(mabs(real_vy))
   local angle
 
+
   if avy > avx then
     if real_vy < 0 then
       angle = -180
@@ -234,6 +235,16 @@ function Helper.getAngleFromDir(dir)
   return angles[dir]
 end
 
+function Helper.getDirFromAngle(angle)
+  local directions = {
+    [-180] = 'top',
+    [0] = 'bottom',
+    [-90] = 'right',
+    [90] = 'left'
+  }
+  return directions[angle]
+end
+
 
 function Helper.rotateToward(obj1, obj2)
   local angle
@@ -261,10 +272,6 @@ function Helper.stutter()
 
   physics.pause()
 
-  for _, v in pairs(_G.m.spriteList) do
-    if v.pause then v:pause() end
-  end
-
   for _, v in pairs(_G.m.timers) do
     if not v._expired then
       timer.pause(v)
@@ -274,10 +281,6 @@ function Helper.stutter()
 
   timer.performWithDelay(100, function()
     physics.start()
-
-    for _, v in pairs(_G.m.spriteList) do
-      if v.play then v:play() end
-    end
 
     for _, v in pairs(_G.m.timers) do
       if not v._expired then

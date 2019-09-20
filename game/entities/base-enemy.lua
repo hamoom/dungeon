@@ -1,6 +1,6 @@
 local physics = require('physics')
 local BaseEntity = require('entities.base-entity')
-local animation = require('plugin.animation')
+-- local animation = require('plugin.animation')
 local Public = {}
 
 function Public.new(obj, name, initialState, player)
@@ -59,19 +59,20 @@ function Public.new(obj, name, initialState, player)
     end
   end
 
-  function Enemy:destroy()
+  function Enemy:destroy(player)
     self.state:exit()
     transition.cancel(self)
     physics.removeBody(self)
+    if player then player.isTouchingEnt = false end
     -- transition.to(self, {alpha = 0.5, time = 2000})
 
-    local spriteComponent = self.components.sprite
-    if spriteComponent then
-      local sprite = spriteComponent:getSprite()
+    -- local spriteComponent = self.components.sprite
+    -- if spriteComponent then
+    --   local sprite = spriteComponent:getSprite()
 
-      sprite.fill.effect = 'filter.saturate'
-      animation.to(sprite.fill.effect, {intensity = 0.2}, {time = 1000})
-    end
+    --   sprite.fill.effect = 'filter.saturate'
+    --   animation.to(sprite.fill.effect, {intensity = 0.2}, {time = 1000})
+    -- end
   end
 
   function Enemy:bounce()

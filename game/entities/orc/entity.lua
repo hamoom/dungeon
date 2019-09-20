@@ -10,6 +10,7 @@ function Public.new(group, ogObj, player)
   local obj = display.newGroup()
   obj.x, obj.y = ogObj.x, ogObj.y
   group:insert(obj)
+  obj.states = {'attacking', 'blocking', 'chasing', 'death', 'injured', 'stunned', 'wandering'}
 
   local Orc = BaseEnemy.new(obj, 'orc', 'wandering', player)
   Orc.display = display.newRect(Orc, 0, 0, 32, 32)

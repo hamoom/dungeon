@@ -1,7 +1,7 @@
 local sheetInfo = require('sprites.player')
 local myImageSheet = graphics.newImageSheet('sprites/player.png', sheetInfo:getSheet())
 local sequenceData = {
-  {name = 'stopped-f', start = 1, count = 8, time = 2000},
+  {name = 'stopped-f', start = 1, count = 8, time = 1000},
   {name = 'stopped-b', start = 9, count = 7, time = 1000},
   {name = 'stopped-s', start = 23, count = 7, time = 1000},
   {name = 'running-f', start = 20, count = 3, time = 300},

@@ -11,6 +11,7 @@ local Weapon = require('components.items.weapon')
 function Public.new(group, x, y)
   local obj = display.newGroup()
   obj.x, obj.y = x, y
+  obj.states = {'attacking', 'dashing', 'death', 'injured', 'running', 'stopped'}
   local Player = BaseEntity.new(obj, 'player', 'stopped')
   group:insert(Player)
   Player:toFront()
@@ -42,7 +43,7 @@ function Public.new(group, x, y)
       radius = 14
     }
   )
-  Player.isFixedRotation = false
+  Player.isFixedRotation = true
   Player.linearDamping = 16
 
   -----------------------------
@@ -62,6 +63,7 @@ function Public.new(group, x, y)
   end
 
   function Player:update(vx, vy)
+
     local sprite = self.components.sprite:getSprite()
     local WeaponComponent = self.components.weapon
 
@@ -71,7 +73,9 @@ function Public.new(group, x, y)
 
     WeaponComponent:updateWeaponDir(sprite, self.facing)
     self.shadow.x, self.shadow.y = sprite.x, sprite.y + 10
-    self:setFacing()
+
+    local newFacing = _G.h.getFacing(vx, 0, vy, 0)
+    if newFacing then self.facing = newFacing end
   end
 
   function Player:destroy()

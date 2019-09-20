@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:75384ed434fccf4272149ca99c9ea0c9:a3f9292c6e07dead3f85f53e221b79d1:89e2aed1b7b7c496e4cca688c27d0ad4$
+-- $TexturePacker:SmartUpdate:9ffd904ff11d788ed83308c431590b4c:db6b842dd8716347db4e76536f8ee95a:89e2aed1b7b7c496e4cca688c27d0ad4$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -16,7 +16,7 @@ SheetInfo.sheet =
     
         {
             -- blob1
-            x=1,
+            x=95,
             y=1,
             width=22,
             height=16,
@@ -28,7 +28,7 @@ SheetInfo.sheet =
         },
         {
             -- blob2
-            x=25,
+            x=69,
             y=1,
             width=24,
             height=16,
@@ -40,8 +40,8 @@ SheetInfo.sheet =
         },
         {
             -- blob3
-            x=51,
-            y=1,
+            x=93,
+            y=19,
             width=24,
             height=14,
 
@@ -52,8 +52,8 @@ SheetInfo.sheet =
         },
         {
             -- blob4
-            x=77,
-            y=1,
+            x=39,
+            y=21,
             width=26,
             height=14,
 
@@ -64,8 +64,8 @@ SheetInfo.sheet =
         },
         {
             -- blob5
-            x=105,
-            y=1,
+            x=63,
+            y=37,
             width=22,
             height=16,
 
@@ -76,8 +76,8 @@ SheetInfo.sheet =
         },
         {
             -- blob6
-            x=129,
-            y=1,
+            x=69,
+            y=19,
             width=22,
             height=16,
 
@@ -88,8 +88,8 @@ SheetInfo.sheet =
         },
         {
             -- blob7
-            x=153,
-            y=1,
+            x=87,
+            y=37,
             width=22,
             height=16,
 
@@ -100,8 +100,8 @@ SheetInfo.sheet =
         },
         {
             -- blob8
-            x=177,
-            y=1,
+            x=37,
+            y=37,
             width=24,
             height=16,
 
@@ -112,32 +112,44 @@ SheetInfo.sheet =
         },
         {
             -- blob9
-            x=203,
+            x=39,
             y=1,
-            width=24,
-            height=14,
+            width=28,
+            height=18,
 
-            sourceX = 18,
+            sourceX = 16,
             sourceY = 33,
             sourceWidth = 60,
             sourceHeight = 66
         },
         {
             -- blob10
-            x=229,
-            y=1,
-            width=24,
-            height=14,
+            x=1,
+            y=33,
+            width=34,
+            height=18,
 
-            sourceX = 18,
-            sourceY = 33,
+            sourceX = 11,
+            sourceY = 34,
+            sourceWidth = 60,
+            sourceHeight = 66
+        },
+        {
+            -- blob11
+            x=1,
+            y=1,
+            width=36,
+            height=30,
+
+            sourceX = 10,
+            sourceY = 28,
             sourceWidth = 60,
             sourceHeight = 66
         },
     },
     
-    sheetContentWidth = 254,
-    sheetContentHeight = 18
+    sheetContentWidth = 118,
+    sheetContentHeight = 54
 }
 
 SheetInfo.frameIndex =
@@ -153,6 +165,7 @@ SheetInfo.frameIndex =
     ["blob8"] = 8,
     ["blob9"] = 9,
     ["blob10"] = 10,
+    ["blob11"] = 11,
 }
 
 function SheetInfo:getSheet()

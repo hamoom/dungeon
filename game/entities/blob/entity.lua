@@ -9,6 +9,8 @@ function Public.new(group, ogObj, player)
   local obj = display.newGroup()
   obj.x, obj.y = ogObj.x, ogObj.y
   group:insert(obj)
+  obj.states = {'attacking', 'colliding', 'death', 'injured', 'stunned', 'wandering'}
+
   local Blob = BaseEnemy.new(obj, 'blob', 'wandering', player)
 
   Blob.superUpdate = Blob.update

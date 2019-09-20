@@ -15,6 +15,7 @@ function Public.new(ent)
 
   function SpriteComponent:setAnim(sequence)
     local sprite = self.sprite
+
     if sprite.sequence ~= sequence then
       sprite:setSequence(sequence)
       sprite:play()
@@ -26,8 +27,13 @@ function Public.new(ent)
     return self.sprite
   end
 
-  function SpriteComponent:setFacing(front, back, side, dontSwitchDir)
+  function SpriteComponent:setFacing(front, back, side, dontSwitchDir, reset)
+
     local sprite = self.sprite
+
+    if reset then
+      self:setAnim(nil)
+     end
 
     if front and ent.facing == 'bottom' then
       self:setAnim(front)
@@ -35,10 +41,8 @@ function Public.new(ent)
       self:setAnim(back)
     elseif side and ent.facing == 'right' or ent.facing == 'left' then
       self:setAnim(side)
-      local vx = ent.x - ent.lastX
-
-      if not dontSwitchDir
-      and not ent.isColliding then
+      local vx = ent.vx or ent.x - ent.lastX
+      if not dontSwitchDir then
         if vx > 0.1 then
           sprite.xScale = 1
         elseif vx < -0.1 then

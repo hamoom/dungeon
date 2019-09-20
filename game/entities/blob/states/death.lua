@@ -9,7 +9,7 @@ function Public.new(ent)
   function State:start()
     local SpriteComponent = ent.components.sprite
     SpriteComponent:setAnim('death')
-
+    display.remove(ent.shadow)
     self.timer = _G.m.addTimer(1000, function()
       ent:destroy()
     end)

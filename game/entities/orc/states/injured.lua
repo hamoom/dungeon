@@ -4,40 +4,43 @@ function Public.new(ent)
   local State = {}
 
   function State:update()
-    if self.prevStateName ~= 'blocking' then
-      local BloodComponent = ent.components.blood
-      BloodComponent:createStreak()
-    end
+    local BloodComponent = ent.components.blood
+    BloodComponent:createStreak()
   end
 
   function State:start(player)
     _G.h.oscillate(3, 20, 'y', 500)(_G.m.map)
 
-    local impulseSpeed = 20
+    local impulseSpeed = 30
     local diff = _G.p.newFromSubtraction(ent, player):normalize()
 
     ent:setLinearVelocity(0, 0)
     ent:applyLinearImpulse(impulseSpeed * diff.x, impulseSpeed * diff.y, ent.x, ent.y)
 
-    if self.prevStateName ~= 'blocking' then
-      local BloodComponent = ent.components.blood
-      BloodComponent:splash()
-    end
+    local BloodComponent = ent.components.blood
+    BloodComponent:splash()
+
+    local SpriteComponent = ent.components.sprite
+    local sprite = SpriteComponent:getSprite()
+    SpriteComponent:setFacing('running-f', 'running-b', 'running-s')
+    sprite:pause()
 
     _G.m.addTimer(
-      600,
+      200,
       function()
-        if self.prevStateName == 'blocking' then
-          ent:setState('chasing', player)
-        else
-          ent.health = ent.health - 1
 
-          if ent.health > 0 then
-            ent:setState('chasing', player)
-          elseif ent.health <= 0 and ent.item then
+        ent.health = ent.health - 1
+
+        if ent.health > 0 then
+          ent:setState('stunned', player)
+        elseif ent.health <= 0 then
+          if ent.item then
             ent:dropItem()
           end
+          SpriteComponent:setAnim(nil)
+          ent:setState('death', player)
         end
+
       end
     )
   end

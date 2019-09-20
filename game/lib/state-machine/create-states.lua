@@ -1,18 +1,8 @@
-local lfs = require('lfs')
 local Public = {}
 
 function Public.new(ent, name)
 
-  local doc_path = system.pathForFile('entities/' .. name .. '/states', system.ResourceDirectory )
-
-  local states = {}
-  for file in lfs.dir( doc_path ) do
-    if string.find( file, '.lua' ) then
-      file = string.gsub(file, '.lua', '')
-      table.insert(states, file)
-    end
-  end
-
+  local states = ent.states
   local list = {}
 
   for _, v in pairs(states) do

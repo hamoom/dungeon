@@ -5,7 +5,7 @@ local scene = composer.newScene()
 local physics = require('physics')
 physics.start()
 physics.setGravity(0, 0)
-
+-- physics.setDrawMode('hybrid')
 _G.m.spriteList = {}
 _G.controls = require('ui.controls'):new()
 _G.controls.group:toFront()
@@ -26,6 +26,10 @@ local Enemies = {
 local Objects = {
   spike = require('objects.spike'),
   door = require('objects.door')
+}
+
+local Decorations = {
+  torch = require('decorations.torch')
 }
 
 local SceneTransition = require('lib.scene-transition')
@@ -59,28 +63,32 @@ function scene:create()
   sceneGroup:insert(mapContainer)
   local transitionGroup = display.newGroup()
   sceneGroup:insert(transitionGroup)
-  SceneTransition.new({
-    transition = 'exiting',
-    direction = 'left'
-  }, transitionGroup)
+  -- SceneTransition.new({
+  --   transition = 'exiting',
+  --   direction = 'left'
+  -- }, transitionGroup)
 
   mapContainer:insert(_G.m.map)
 
   for object in _G.m.map.layer['entities'].objects() do
-    if object.name == 'player' then
+    if object._name == 'player' then
       player = Player.new(_G.m.map.layer['entities'], object.x, object.y)
       player:addEventListener('preCollision', preCollision)
     end
   end
 
   for object in _G.m.map.layer['entities'].objects() do
-    if object.name ~= 'player' then
-      enemies[#enemies + 1] = Enemies[object.name].new(_G.m.map.layer['entities'], object, player)
+    if object._name ~= 'player' then
+      enemies[#enemies + 1] = Enemies[object._name].new(_G.m.map.layer['entities'], object, player)
     end
   end
 
   for object in _G.m.map.layer['objects'].objects() do
-    objects[#objects + 1] = Objects[object.name].new(_G.m.map.layer['objects'], object)
+    objects[#objects + 1] = Objects[object._name].new(_G.m.map.layer['objects'], object)
+  end
+
+  for object in _G.m.map.layer['decorations'].objects() do
+    Decorations[object._name].new(_G.m.map.layer['decorations'], object)
   end
 
   player:toFront()
@@ -128,7 +136,8 @@ function scene:create()
 end
 
 function pauseToggle()
-  if not _G.m.paused then
+  print(_G.m.isPaused)
+  if not _G.m.isPaused then
     pause()
   else
     resume()
@@ -167,6 +176,7 @@ function scene:hide(event)
   if event.phase == 'will' then
     _G.m.eachFrameRemoveAll()
     _G.m.cancelAllTimers()
+    _G.m.spriteList = {}
     Runtime:removeEventListener('enterFrame', update)
     Runtime:removeEventListener('collision', onCollision)
     Runtime:removeEventListener('key', keysPressed)
@@ -219,9 +229,9 @@ function preCollision(event)
 end
 
 function onCollision(event)
+  local obj1, obj2 = event.object1, event.object2
+
   if event.phase == 'began' then
-    local obj1,
-      obj2 = event.object1, event.object2
 
     if obj1.findNewCoord then
       obj1:findNewCoord()
@@ -248,21 +258,16 @@ function onCollision(event)
         otherObj = obj1
       end
 
-      if otherObj.name == 'key' then
-        -- elseif otherObj.name == 'spike' then
-        --
-        -- 	if otherObj.isAttacking then
-        -- 		player:setState('injured', otherObj)
-        -- 	end
-        -- display.remove(otherObj)
-        -- thePlayer.item = 'key'
-        -- theDoor:open()
-      elseif otherObj.name == 'door' then
-        -- and otherObj.isOpen
-        -- and player.item == 'key' then
-        -- nextLevel()
-      end
+      -- if obj1.isEntity and obj2.isEntity then
+      --   obj1.isTouchingEnt = true
+      --   obj2.isTouchingEnt = true
+      -- end
     end
+  elseif event.phase == 'ended' then
+    -- if obj1.isEntity and obj2.isEntity then
+    --   obj1.isTouchingEnt = false
+    --   obj2.isTouchingEnt = false
+    -- end
   end
 end
 
@@ -340,8 +345,7 @@ end
 function update()
   getDeltaTime()
 
-  local vx,
-    vy = joystick.pos:normalized():getPosition()
+  local vx, vy = joystick.pos:normalized():getPosition()
   player:update(vx, vy)
 
   local activeEnemies = {}
@@ -378,8 +382,12 @@ function update()
 
   for _, enemy in pairs(activeEnemies) do
     local playerWeapon = player.components.weapon:getHitBox()
+    -- local playerSprite = player.components.sprite:getSprite()
+    local enemySprite = enemy.components.sprite:getSprite()
 
-    if playerWeapon.isAttacking and _G.h.hasCollided(playerWeapon, enemy) then
+    if playerWeapon.isAttacking
+      and _G.h.hasCollided(playerWeapon, enemySprite)
+      and enemy.state ~= 'stunned' then
       enemy:setState('injured', player)
     end
 

@@ -10,6 +10,9 @@ function Public.new(ent)
 
   function State:start(player)
     ent.fixedRotation = true
+
+    local SpriteComponent = ent.components.sprite
+    SpriteComponent:setFacing('block-f', 'block-b', 'block-s', true)
     self.attackTimer = _G.m.addTimer(200, function()
       ent:setState('attacking', player)
     end)
