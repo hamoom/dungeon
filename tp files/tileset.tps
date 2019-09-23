@@ -93,7 +93,7 @@
         <key>fixedTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>340</int>
+            <int>400</int>
             <key>height</key>
             <int>-1</int>
         </QSize>
@@ -218,6 +218,40 @@
             <key type="filename">scratch/better-tileset_33.png</key>
             <key type="filename">scratch/better-tileset_34.png</key>
             <key type="filename">scratch/better-tileset_35.png</key>
+            <key type="filename">scratch/better-tileset_36.png</key>
+            <key type="filename">scratch/better-tileset_37.png</key>
+            <key type="filename">scratch/better-tileset_38.png</key>
+            <key type="filename">scratch/better-tileset_39.png</key>
+            <key type="filename">scratch/better-tileset_40.png</key>
+            <key type="filename">scratch/better-tileset_41.png</key>
+            <key type="filename">scratch/better-tileset_42.png</key>
+            <key type="filename">scratch/better-tileset_43.png</key>
+            <key type="filename">scratch/better-tileset_44.png</key>
+            <key type="filename">scratch/better-tileset_45.png</key>
+            <key type="filename">scratch/better-tileset_46.png</key>
+            <key type="filename">scratch/better-tileset_47.png</key>
+            <key type="filename">scratch/better-tileset_48.png</key>
+            <key type="filename">scratch/better-tileset_49.png</key>
+            <key type="filename">scratch/better-tileset_50.png</key>
+            <key type="filename">scratch/better-tileset_51.png</key>
+            <key type="filename">scratch/better-tileset_52.png</key>
+            <key type="filename">scratch/better-tileset_53.png</key>
+            <key type="filename">scratch/better-tileset_54.png</key>
+            <key type="filename">scratch/better-tileset_55.png</key>
+            <key type="filename">scratch/better-tileset_56.png</key>
+            <key type="filename">scratch/better-tileset_57.png</key>
+            <key type="filename">scratch/better-tileset_58.png</key>
+            <key type="filename">scratch/better-tileset_59.png</key>
+            <key type="filename">scratch/better-tileset_60.png</key>
+            <key type="filename">scratch/better-tileset_61.png</key>
+            <key type="filename">scratch/better-tileset_62.png</key>
+            <key type="filename">scratch/better-tileset_63.png</key>
+            <key type="filename">scratch/better-tileset_64.png</key>
+            <key type="filename">scratch/better-tileset_65.png</key>
+            <key type="filename">scratch/better-tileset_66.png</key>
+            <key type="filename">scratch/better-tileset_67.png</key>
+            <key type="filename">scratch/better-tileset_68.png</key>
+            <key type="filename">scratch/better-tileset_69.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -261,6 +295,40 @@
             <filename>scratch/better-tileset_33.png</filename>
             <filename>scratch/better-tileset_34.png</filename>
             <filename>scratch/better-tileset_35.png</filename>
+            <filename>scratch/better-tileset_36.png</filename>
+            <filename>scratch/better-tileset_37.png</filename>
+            <filename>scratch/better-tileset_38.png</filename>
+            <filename>scratch/better-tileset_39.png</filename>
+            <filename>scratch/better-tileset_40.png</filename>
+            <filename>scratch/better-tileset_41.png</filename>
+            <filename>scratch/better-tileset_42.png</filename>
+            <filename>scratch/better-tileset_43.png</filename>
+            <filename>scratch/better-tileset_44.png</filename>
+            <filename>scratch/better-tileset_45.png</filename>
+            <filename>scratch/better-tileset_46.png</filename>
+            <filename>scratch/better-tileset_47.png</filename>
+            <filename>scratch/better-tileset_48.png</filename>
+            <filename>scratch/better-tileset_49.png</filename>
+            <filename>scratch/better-tileset_50.png</filename>
+            <filename>scratch/better-tileset_51.png</filename>
+            <filename>scratch/better-tileset_52.png</filename>
+            <filename>scratch/better-tileset_53.png</filename>
+            <filename>scratch/better-tileset_54.png</filename>
+            <filename>scratch/better-tileset_55.png</filename>
+            <filename>scratch/better-tileset_56.png</filename>
+            <filename>scratch/better-tileset_57.png</filename>
+            <filename>scratch/better-tileset_58.png</filename>
+            <filename>scratch/better-tileset_59.png</filename>
+            <filename>scratch/better-tileset_60.png</filename>
+            <filename>scratch/better-tileset_61.png</filename>
+            <filename>scratch/better-tileset_62.png</filename>
+            <filename>scratch/better-tileset_63.png</filename>
+            <filename>scratch/better-tileset_64.png</filename>
+            <filename>scratch/better-tileset_65.png</filename>
+            <filename>scratch/better-tileset_66.png</filename>
+            <filename>scratch/better-tileset_67.png</filename>
+            <filename>scratch/better-tileset_68.png</filename>
+            <filename>scratch/better-tileset_69.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

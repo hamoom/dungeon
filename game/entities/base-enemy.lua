@@ -9,6 +9,7 @@ function Public.new(obj, name, initialState, player)
 
   Enemy.type = 'enemy'
   Enemy.lastX, Enemy.lastY = Enemy.x, Enemy.y
+  Enemy.isHittable = true
 
   function Enemy:dropItem()
     local item = display.newRect(self.parent, self.x, self.y, 16, 16)
@@ -52,6 +53,9 @@ function Public.new(obj, name, initialState, player)
       self:setState(initialState, player)
     end
 
+    -- if self.name == 'orc' then
+    --   print(self.state.name, self.state.update)
+    -- end
     self.state:update(player)
 
     if not self.fixedRotation then
@@ -60,19 +64,11 @@ function Public.new(obj, name, initialState, player)
   end
 
   function Enemy:destroy(player)
+
     self.state:exit()
     transition.cancel(self)
     physics.removeBody(self)
-    if player then player.isTouchingEnt = false end
-    -- transition.to(self, {alpha = 0.5, time = 2000})
 
-    -- local spriteComponent = self.components.sprite
-    -- if spriteComponent then
-    --   local sprite = spriteComponent:getSprite()
-
-    --   sprite.fill.effect = 'filter.saturate'
-    --   animation.to(sprite.fill.effect, {intensity = 0.2}, {time = 1000})
-    -- end
   end
 
   function Enemy:bounce()

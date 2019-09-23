@@ -7,6 +7,7 @@ function Public.new(ent)
   State.rotationSpeed = 130
   State.speed = 120
   State.range = 180
+  State.attackTimer = nil
 
   function State:update(player)
 
@@ -37,14 +38,19 @@ function Public.new(ent)
 
     spriteComponent:setFacing('running-f-chasing', 'running-b-chasing', 'running-s-chasing')
 
+
     if entPt:distanceTo(player) > 200 then
       ent:setState('wandering', player)
     elseif entPt:distanceTo(player) <= ent.attackDistance then
-      ent:setState('attacking', player)
+      self.attackTimer = self.attackTimer - _G.m.dt
+      -- if self.attackTimer <= 0 then
+        ent:setState('attacking', player)
+      -- end
     end
   end
 
   function State:start()
+    self.attackTimer = 0.1
   end
 
   function State:exit()

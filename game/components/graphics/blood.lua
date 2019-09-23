@@ -1,3 +1,4 @@
+local Puddle = require('decorations.blood')
 local mrand = math.random
 local Public = {}
 Public.name = 'blood'
@@ -34,8 +35,12 @@ function Public.new(ent, args)
     end
   end
 
+  function BloodComponent:puddle()
+    Puddle.new(_G.m.map.layer['ground top'], {x = ent.x, y = ent.y})
+  end
+
   function BloodComponent:splash()
-    local group = _G.m.map.layer['ground']
+    local group = _G.m.map.layer['ground top']
 
     local sprite = ent.components.sprite:getSprite()
     if sprite then

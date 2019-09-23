@@ -8,6 +8,7 @@ function Public.new(group, obj)
   table.insert(_G.m.spriteList, sprite)
   sprite:play()
 
+  return sprite
 end
 
 return Public

@@ -15,7 +15,7 @@ function Public.new(mapPath)
   Map.camSpeedSizeMax = 0.016
   Map.camZoomDir = nil
 
-  local padding = 100
+  local padding = 0
 
   Map.setCameraBounds({
 		xMin = display.contentWidth/2 - padding,

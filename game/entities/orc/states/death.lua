@@ -7,8 +7,16 @@ function Public.new(ent)
   end
 
   function State:start(player)
-    local SpriteComponent = ent.components.sprite
-    SpriteComponent:setAnim('death')
+    ent.isHittable = false
+    local BloodComponent = ent.components.blood
+
+    local spriteComponent = ent.components.sprite
+    spriteComponent:setAnim('death', function(event)
+      if event.phase == 'ended' then
+        display.remove(ent.shadow)
+        BloodComponent:puddle()
+      end
+    end)
 
     self.timer = _G.m.addTimer(1000, function()
       ent:destroy(player)

@@ -10,7 +10,7 @@ local sequenceData = {
   {name = 'attacking-f', start = 35, count = 4, time = 300, loopCount = 1},
   {name = 'attacking-s', start = 40, count = 4, time = 200, loopCount = 1},
   {name = 'attacking-b', start = 45, count = 4, time = 250, loopCount = 1},
-  {name = 'death', start = 50, count = 9, time = 800, loopCount = 1}
+  {name = 'death', start = 50, count = 6, time = 800, loopCount = 1}
 }
 
 return {

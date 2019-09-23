@@ -31,8 +31,8 @@ function Public.new(group, ogObj, player)
         bounce = 0.5,
         density = 2,
         filter = {
-          categoryBits = 2,
-          maskBits = 1
+          -- categoryBits = 2,
+          -- maskBits = 1
         }
       }
     )

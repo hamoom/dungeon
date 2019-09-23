@@ -10,7 +10,7 @@ function Public.new(group, ogObj, player)
   local obj = display.newGroup()
   obj.x, obj.y = ogObj.x, ogObj.y
   group:insert(obj)
-  obj.states = {'attacking', 'blocking', 'chasing', 'death', 'injured', 'stunned', 'wandering'}
+  obj.states = {'attacking', 'blocking', 'chasing', 'death', 'injured', 'struck', 'stunned', 'wandering'}
 
   local Orc = BaseEnemy.new(obj, 'orc', 'wandering', player)
   Orc.display = display.newRect(Orc, 0, 0, 32, 32)
@@ -23,7 +23,7 @@ function Public.new(group, ogObj, player)
   Orc.facing = 'bottom'
 
   Orc.attackDistance = 40
-  Orc.shadow = display.newImageRect(Orc, 'graphics/shadow.png', 28, 7)
+  Orc.shadow = display.newImageRect(_G.m.map.layer['ground'], 'graphics/shadow.png', 28, 7)
 
   Orc:addComponent(Weapon, 56, 48)
   Orc:addComponent(Blood)
@@ -40,8 +40,8 @@ function Public.new(group, ogObj, player)
         density = 2,
         radius = 14,
         filter = {
-          categoryBits = 2,
-          maskBits = 1
+          -- categoryBits = 2,
+          -- maskBits = 1
         }
       }
     )
@@ -51,6 +51,8 @@ function Public.new(group, ogObj, player)
 
   function Orc:update()
     self:superUpdate()
+
+    self.shadow.x, self.shadow.y = self.x, self.y + 12
 
     local sprite = self.components.sprite:getSprite()
     local playerSprite = player.components.sprite:getSprite()
@@ -63,7 +65,6 @@ function Public.new(group, ogObj, player)
       end
     end
 
-    self.shadow.x, self.shadow.y = sprite.x, sprite.y + 12
 
     WeaponComponent:updateWeaponDir(sprite, self.facing)
     self:setFacing()

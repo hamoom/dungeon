@@ -15,15 +15,22 @@ function Public.new(ent, name, initialState, otherEnt)
   function ent:setState(state, obj)
     local newState = states:getState(state)
 
-
     if self.state.name ~= newState.name then
       local prevStateName = self.state.name
       newState.prevStateName = prevStateName
       self.state:exit(newState)
       newState:start(obj)
       self.state = newState
-
     end
+  end
+
+  function ent:hasState(state)
+    for _, val in ipairs(self.states) do
+      if state == val then
+        return true
+      end
+    end
+    return false
   end
 
   function ent:setFacing()

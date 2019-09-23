@@ -13,8 +13,12 @@ function Public.new(ent)
 
   table.insert(_G.m.spriteList, SpriteComponent.sprite)
 
-  function SpriteComponent:setAnim(sequence)
+  function SpriteComponent:setAnim(sequence, fn)
     local sprite = self.sprite
+
+    if fn then
+      sprite:addEventListener('sprite', fn)
+    end
 
     if sprite.sequence ~= sequence then
       sprite:setSequence(sequence)
@@ -42,7 +46,8 @@ function Public.new(ent)
     elseif side and ent.facing == 'right' or ent.facing == 'left' then
       self:setAnim(side)
       local vx = ent.vx or ent.x - ent.lastX
-      if not dontSwitchDir then
+      if not dontSwitchDir
+      and not ent.dontRotate then
         if vx > 0.1 then
           sprite.xScale = 1
         elseif vx < -0.1 then

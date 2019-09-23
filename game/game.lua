@@ -105,6 +105,14 @@ function scene:create()
   _G.controls.attackBtnFn = function(event)
     if event.phase == 'began' then
       player:attack()
+      event.target:setEnabled(false)
+      timer.performWithDelay(
+        700,
+        function()
+          event.target:setEnabled(true)
+        end,
+        1
+      )
     end
   end
 
@@ -184,7 +192,7 @@ function scene:hide(event)
 
     -- INSERT code here to pause the scene
     -- e.g. stop timers, stop animation, unload sounds, etc.)
-    physics.stop()
+
   elseif phase == 'did' then
   -- Called when the scene is now off screen
   end
@@ -207,7 +215,7 @@ function scene:destroy()
   health:destroy()
   player:destroy()
   _G.m.map.destroy()
-
+  physics.stop()
   -- package.loaded[physics] = nil
   -- physics = nil
 end
@@ -240,6 +248,11 @@ function onCollision(event)
       obj2:findNewCoord()
     end
 
+    if obj1.name ~= player and obj2.name ~= player then
+      obj1.dontRotate = true
+      obj2.dontRotate = true
+    end
+
     if obj1.collisionCallBack and obj2.name ~= 'player' then
       obj1:collisionCallBack()
     end
@@ -264,6 +277,12 @@ function onCollision(event)
       -- end
     end
   elseif event.phase == 'ended' then
+
+    if obj1.name ~= player and obj2.name ~= player then
+      obj1.dontRotate = false
+      obj2.dontRotate = false
+    end
+
     -- if obj1.isEntity and obj2.isEntity then
     --   obj1.isTouchingEnt = false
     --   obj2.isTouchingEnt = false
@@ -354,7 +373,7 @@ function update()
   for k, enemy in pairs(enemies) do
     if enemy.health <= 0 then
       table.remove(enemies, k)
-    elseif _G.h.isActive(enemy) then
+    elseif _G.h.isActive(enemy, 100, 100) then
       activeEnemies[#activeEnemies + 1] = enemy
     end
   end
@@ -387,8 +406,12 @@ function update()
 
     if playerWeapon.isAttacking
       and _G.h.hasCollided(playerWeapon, enemySprite)
-      and enemy.state.name ~= 'stunned' then
-      enemy:setState('injured', player)
+      and enemy.isHittable then
+      if enemy:hasState('struck') then
+        enemy:setState('struck', player)
+      else
+        enemy:setState('injured', player)
+      end
     end
 
     enemy:update()
